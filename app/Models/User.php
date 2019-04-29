@@ -13,9 +13,13 @@ class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
+
     protected $guard_name = 'web';
-
     protected $fillable = ['username', 'password', 'lastlogin', 'status'];
-
     protected $hidden = ['password', 'remember_token'];
+
+    public function pegawai()
+    {
+        return $this->hasOne(Pegawai::class);
+    }
 }

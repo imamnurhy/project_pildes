@@ -27,12 +27,6 @@ class CreatePegawaisTable extends Migration
             $table->string('initial', 50);
             $table->unsignedInteger('rumpun_id');
             $table->timestamps();
-
-            $table->foreign('rumpun_id')
-                ->references('id')
-                ->on('rumpuns')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
         });
         
         Schema::create('unitkerjas', function (Blueprint $table) {

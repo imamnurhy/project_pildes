@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rumpun extends Model
 {
-    protected $fillable = ['n_rumpuns', 'ket'];
+    protected $fillable = ['n_rumpun', 'ket'];
 }
