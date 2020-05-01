@@ -21,7 +21,8 @@
             <div class="row justify-content-between">
                 <ul class="nav nav-material nav-material-white responsive-tab" id="v-pegawai-tab" role="tablist">
                     <li>
-                        <a class="nav-link" href="{{ route('role.index') }}"><i class="icon icon-arrow_back"></i>Semua Role</a>
+                        <a class="nav-link" href="{{ route('role.index') }}"><i class="icon icon-arrow_back"></i>Semua
+                            Role</a>
                     </li>
                 </ul>
             </div>
@@ -32,26 +33,33 @@
             <div class="card-body">
                 <div id="formPermission">
                     <div id="alert"></div>
-                    <div class="row">  
+                    <div class="row">
                         <div class="col-6">
                             <form class="needs-validation" id="form" method="POST" novalidate>
                                 @csrf
                                 {{ method_field('POST') }}
-                                <input type="hidden" id="id" name="id" value="{{ $role->id }}"/>
+                                <input type="hidden" id="id" name="id" value="{{ $role->id }}" />
                                 <div class="form-row form-inline">
                                     <div class="col-md-12">
+
                                         <div class="form-group m-0">
-                                            <label for="permission" class="col-form-label s-12 col-md-3">Permission</label>
+                                            <label for="permission"
+                                                class="col-form-label s-12 col-md-3">Permission</label>
                                             <div class="col-md-9">
-                                                <select name="permissions[]" id="permission" placeholder="" class="select2 form-control r-0 light s-12" multiple="multiple" required>
+                                                <select name="permissions[]" id="permission" placeholder=""
+                                                    class="select2 form-control r-0 light s-12" multiple="multiple"
+                                                    required>
                                                     @foreach($permissions as $key=>$permission)
-                                                    <option value="{{ $permission->name }}">{{ $permission->name }}</option>
+                                                    <option value="{{ $permission->name }}">{{ $permission->name }}
+                                                    </option>
                                                     @endforeach
-                                                <select>
+                                                    <select>
                                             </div>
                                         </div>
+
                                         <div class="card-body offset-md-3">
-                                            <button type="submit" class="btn btn-primary btn-sm" id="action2"><i class="icon-save mr-2"></i>Simpan</button>
+                                            <button type="submit" class="btn btn-primary btn-sm" id="action2"><i
+                                                    class="icon-save mr-2"></i>Simpan</button>
                                         </div>
                                     </div>
                                 </div>
@@ -138,7 +146,7 @@
             closeIcon: true,
             animation: 'scale',
             type: 'red',
-            buttons: {   
+            buttons: {
                 ok: {
                     text: "ok!",
                     btnClass: 'btn-primary',

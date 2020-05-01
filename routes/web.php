@@ -5,25 +5,49 @@ Route::get('/', function () {
 });
 
 Route::get('/logout', function () {
-    return "<center>Someting It's Wrong.</center>";;
+    return "<center>Someting It's Wrong.</center>";
 });
 
 Auth::routes();
 
 Route::prefix('home')->group(function () {
     Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/grafikLelang', 'HomeController@grafikLelang')->name('home.grafikLelang');
 });
 
-Route::prefix('pelamar')->group(function () {
-    Route::get('cekPelamar', 'PelamarController@index')->name('pelamar');
-    Route::post('api/pelamar', 'PelamarController@api')->name('api.pelamar');
-    Route::get('pelamar/edit/{id}', 'PelamarController@edit')->name('pelamar.edit');
-    Route::delete('pelamar/delete/{id}', 'PelamarController@delete')->name('pelamar.delete');
-    Route::post('pelamar/update/{id}', 'PelamarController@update')->name('pelamar.update');
-    Route::delete('pelamar/destroy/{id}', 'PelamarController@destroy')->name('pelamar.destroy');
+
+/* MASTER BRAND */
+Route::group(['middleware' => ['permission:master-brand']], function () {
+    Route::get('brand', 'Brand\BrandController@index')->name('brand.index');
+    Route::get('brand/api', 'Brand\BrandController@api')->name('brand.api');
+    Route::get('brand/create', 'Brand\BrandController@create')->name('brand.create');
+    Route::post('brand/store', 'Brand\BrandController@store')->name('brand.store');
+    Route::get('brand/show/{id}', 'Brand\BrandController@show')->name('brand.show');
+    Route::get('brand/edit/{id}', 'Brand\BrandController@edit')->name('brand.edit');
+    Route::patch('brand/update/{id}', 'Brand\BrandController@update')->name('brand.update');
+    Route::delete('brand/delete/{id}', 'Brand\BrandController@destroy')->name('brand.destroy');
+
+
+    Route::get('jenis', 'Brand\JenisAsetController@index')->name('jenis.index');
+    Route::get('jenis/api', 'Brand\JenisAsetController@api')->name('jenis.api');
+    Route::get('jenis/create', 'Brand\JenisAsetController@create')->name('jenis.create');
+    Route::post('jenis/store', 'Brand\JenisAsetController@store')->name('jenis.store');
+    Route::get('jenis/show/{id}', 'Brand\JenisAsetController@show')->name('jenis.show');
+    Route::get('jenis/edit/{id}', 'Brand\JenisAsetController@edit')->name('jenis.edit');
+    Route::patch('jenis/update/{id}', 'Brand\JenisAsetController@update')->name('jenis.update');
+    Route::delete('jenis/delete/{id}', 'Brand\JenisAsetController@destroy')->name('jenis.destroy');
 });
 
+
+/* MASTER ASET */
+Route::group(['middleware' => ['permission:master-aset']], function () {
+    Route::prefix('aset')->namespace('Aset')->name('aset.')->group(function () {
+        Route::get('masuk/api', 'AsetMasukController@api')->name('masuk.api');
+        Route::resource('masuk', 'AsetMasukController');
+
+        Route::get('keluar/api', 'AsetKeluarController@api')->name('keluar.api');
+        Route::resource('keluar', 'AsetKeluarController');
+    });
+});
 
 Route::prefix('account')->group(function () {
     Route::get('profile', 'AccountController@profile')->name('account.profile');
@@ -31,88 +55,6 @@ Route::prefix('account')->group(function () {
 
     Route::get('password', 'AccountController@password')->name('account.password');
     Route::patch('password', 'AccountController@updatePassword')->name('account.password');
-});
-
-/* MAIN MENU SELEKSI PELAMAR */
-Route::group(['middleware' => ['permission:petugas-panselnas']], function () {
-    Route::prefix('seleksi')->group(function () {
-        Route::get('pansel', 'Seleksi\PanselnasController@index')->name('panselnas');
-        Route::post('api/pansel', 'Seleksi\PanselnasController@api')->name('api.panselnas');
-        Route::get('pansel/{id}', 'Seleksi\PanselnasController@edit')->name('panselnas.edit');
-        Route::patch('pansel/{id}', 'Seleksi\PanselnasController@update')->name('panselnas.update');
-        Route::patch('pansel/{id}/mutasi', 'Seleksi\PanselnasController@updateMutasi')->name('panselnas.updateMutasi');
-    });
-});
-
-Route::group(['middleware' => ['permission:petugas-panselnas-admin']], function () {
-    Route::prefix('seleksi')->group(function () {
-        Route::get('admin-pansel', 'Seleksi\AdminController@index')->name('admin.panselnas');
-        Route::post('api/admin-pansel', 'Seleksi\AdminController@api')->name('api.admin.panselnas');
-        Route::get('admin-pansel/{id}', 'Seleksi\AdminController@edit')->name('admin.panselnas.edit');
-        Route::patch('admin-pansel/{id}', 'Seleksi\AdminController@update')->name('admin.panselnas.update');
-        Route::patch('admin-pansel/{id}/mutasi', 'Seleksi\AdminController@updateMutasi')->name('admin.panselnas.updateMutasi');
-
-        Route::get('arsipSetuju', 'Seleksi\ArsipSetujuController@index')->name('arsipSetuju');
-        Route::post('api/arsipSetuju', 'Seleksi\ArsipSetujuController@api')->name('api.arsipSetuju');
-        Route::get('arsipSetuju/{id}', 'Seleksi\ArsipSetujuController@edit')->name('arsipSetuju.edit');
-        Route::get('arsipTolak', 'Seleksi\ArsipTolakController@index')->name('arsipTolak');
-        Route::post('api/arsipTolak', 'Seleksi\ArsipTolakController@api')->name('api.arsipTolak');
-        Route::get('arsipTolak/{id}', 'Seleksi\ArsipTolakController@edit')->name('arsipTolak.edit');
-
-        Route::patch('arsipSetuju/{id}/pemenang', 'Seleksi\ArsipSetujuController@pemenang')->name('arsipSetuju.pemenang');
-        Route::patch('arsipSetuju/{id}/cekPemenang', 'Seleksi\ArsipSetujuController@cekPemenang')->name('arsipSetuju.cekPemenang');
-    });
-});
-
-/* REPORT */
-Route::group(['middleware' => ['permission:report-lelang']], function () {
-    Route::prefix('report')->group(function () {
-        Route::get('registrasi', 'Report\RegistrasiController@index')->name('registrasi.report');
-        Route::post('api/registrasi', 'Report\RegistrasiController@api')->name('api.registrasi.report');
-        Route::get('registrasi/exportToExcel/{d_dari}/{d_sampai}', 'Report\RegistrasiController@exportToExcel')->name('registrasi.report.exportToExcel');
-
-        Route::get('seleksi', 'Report\SeleksiController@index')->name('seleksi.report');
-        Route::post('api/seleksi', 'Report\SeleksiController@api')->name('api.seleksi.report');
-        Route::get('seleksi/exportToExcel/{d_dari}/{d_sampai}', 'Report\SeleksiController@exportToExcel')->name('seleksi.report.exportToExcel');
-    });
-});
-
-/* CONFIG LELANG JABATAN */
-Route::group(['middleware' => ['permission:config-lelang_jabatan']], function () {
-    Route::resource('lelang', 'Lelang\LelangController');
-    Route::get('api/lelang', 'Lelang\LelangController@api')->name('api.lelang');
-
-    Route::get('api/lelangsyarat/{lelang_id}', 'Lelang\LelangsyaratController@api')->name('api.lelangsyarat');
-    Route::get('lelangsyarat/{lelang_id}/index', 'Lelang\LelangsyaratController@index')->name('lelangsyarat.index');
-    Route::post('lelangsyarat', 'Lelang\LelangsyaratController@store')->name('lelangsyarat.store');
-    Route::delete('lelangsyarat/{id}', 'Lelang\LelangsyaratController@destroy')->name('lelangsyarat.destroy');
-    Route::patch('lelangsyarat/{id}', 'Lelang\LelangsyaratController@update')->name('lelangsyarat.update');
-    Route::get('lelangsyarat/{id}/edit', 'Lelang\LelangsyaratController@edit')->name('lelangsyarat.edit');
-
-    Route::resource('pengumuman', 'Lelang\PengumumanController');
-    Route::get('api/pengumuman', 'Lelang\PengumumanController@api')->name('api.pengumuman');
-
-    Route::resource('content', 'Lelang\ContentController');
-    Route::get('api/content', 'Lelang\ContentController@api')->name('api.content');
-
-    Route::resource('agenda', 'Lelang\AgendaController');
-    Route::get('api/agenda', 'Lelang\AgendaController@api')->name('api.agenda');
-
-    Route::resource('album', 'Lelang\AlbumController');
-    Route::get('api/album', 'Lelang\AlbumController@api')->name('api.album');
-
-    Route::get('api/albumfoto/{album_id}', 'Lelang\AlbumfotoController@api')->name('api.albumfoto');
-    Route::get('albumfoto/{album_id}/index', 'Lelang\AlbumfotoController@index')->name('albumfoto.index');
-    Route::post('albumfoto', 'Lelang\AlbumfotoController@store')->name('albumfoto.store');
-    Route::delete('albumfoto/{id}', 'Lelang\AlbumfotoController@destroy')->name('albumfoto.destroy');
-    Route::patch('albumfoto/{id}', 'Lelang\AlbumfotoController@update')->name('albumfoto.update');
-    Route::get('albumfoto/{id}/edit', 'Lelang\AlbumfotoController@edit')->name('albumfoto.edit');
-
-    Route::resource('filedownload', 'Lelang\FiledownloadController');
-    Route::get('api/filedownload', 'Lelang\FiledownloadController@api')->name('api.filedownload');
-
-    Route::resource('syarat', 'Lelang\SyaratController');
-    Route::get('api/syarat', 'Lelang\SyaratController@api')->name('api.syarat');
 });
 
 /* MASTER PEGAWAI */

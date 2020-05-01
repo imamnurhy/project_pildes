@@ -1,94 +1,118 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="page has-sidebar-left">
+<div class="page has-sidebar-left height-full">
     <header class="blue accent-3 relative nav-sticky">
         <div class="container-fluid text-white">
-            <div class="row">
+            <div class="row p-t-b-10 ">
                 <div class="col">
-                    <h4 class="my-2">
-                        <i class="icon icon-sailing-boat-water"></i> Dashboard
+                    <h4>
+                        <i class="icon-box"></i>
+                        Dashboard
                     </h4>
                 </div>
             </div>
         </div>
     </header>
-    <div class="blue accent-3 pl-3 pr-3 pb-3">
-        <div id="myfirstchart" style="height: 365px;"></div>
-    </div>
+    <div class="container-fluid relative animatedParent animateOnce">
+        <div class="tab-content pb-3" id="v-pills-tabContent">
 
-    <div class="container-fluid animatedParent animateOnce no-p">
-        <div class="animated fadeInUpShort">
-            <div class="card no-b shadow">
-                <div class="card-body p-0">
-                    <div class="lightSlider" data-item="4" data-item-md="2" data-item-sm="1" data-pause="7000" data-pager="false" data-auto="true">
-                     <!-- data-item="6" data-item-xl="4" data-item-md="2" data-item-sm="1" data-pause="7000" data-pager="false" data-auto="true" data-loop="true"> -->
-                        <div class="p-5 light clone">
-                            <h5 class="font-weight-normal s-14">Lowongan Jabatan</h5>
-                            <span class="s-48 font-weight-lighter" id="lowonganTotal">...</span>
-                            <div><small>Sedang berlangsung</small></div>
+            <!--Today Tab Start-->
+            <div class="tab-pane animated fadeInUpShort show active" id="v-pills-1">
+
+                {{-- Card --}}
+                <div class="row my-3">
+
+                    {{-- Jumlah  Merk --}}
+                    <div class="col-md-3">
+                        <div class="counter-box white r-5 p-3">
+                            <div class="p-4">
+                                <div class="float-right">
+                                    <span class="icon icon-notebook-list s-48"></span>
+                                </div>
+                                <div class="counter-title">Merk</div>
+                                <h5 class="sc-counter mt-3">{{ $tmmerk }}</h5>
+                            </div>
+                            <div class="progress progress-xs r-0">
+                                <div class="progress-bar" role="progressbar" style="width:{{ $tmmerk }}%;"
+                                    aria-valuenow="25" aria-valuemin="0"></div>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="p-5 lighten-3">
-                            <h5 class="font-weight-normal s-14">Pelamar</h5>
-                            <span class="s-48 font-weight-lighter text-primary" id="pelamarTotal">...</span>
-                            <div><small>Berkas pelamar</small></div>
+                    {{-- Jumlah Aset--}}
+                    <div class="col-md-3">
+                        <div class="counter-box white r-5 p-3">
+                            <div class="p-4">
+                                <div class="float-right">
+                                    <span class="icon icon-notebook-list s-48"></span>
+                                </div>
+                                <div class="counter-title ">Aset</div>
+                                <h5 class="sc-counter mt-3">{{ $tmjenis_aset }}</h5>
+                            </div>
+                            <div class="progress progress-xs r-0">
+                                <div class="progress-bar" role="progressbar" style="width: {{ $tmjenis_aset }}%;"
+                                    aria-valuenow="25" aria-valuemin="0"></div>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="p-5 indigo lighten-2 text-white">
-                            <h5 class="font-weight-normal s-14">Dalam Proses</h5>
-                            <span class="s-48 font-weight-lighter text-primary" id="prosesTotal">...</span>
-                            <div><small>Berkas dalam proses</small></div>
+                    {{-- Jumlah Aset Masuk --}}
+                    <div class="col-md-3">
+                        <div class="counter-box white r-5 p-3">
+                            <div class="p-4">
+                                <div class="float-right">
+                                    <span class="icon icon-input s-48"></span>
+                                </div>
+                                <div class="counter-title">Aset Masuk</div>
+                                <h5 class="sc-counter mt-3">{{ $tmaset }}</h5>
+                            </div>
+                            <div class="progress progress-xs r-0">
+                                <div class="progress-bar" role="progressbar" style="width:{{ $tmaset }}%;"
+                                    aria-valuenow="25" aria-valuemin="0"></div>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="p-5 text-danger">
-                            <h5 class="font-weight-normal s-14">Ditolak</h5>
-                            <span class="s-48 font-weight-lighter" id="tolakTotal">...</span>
-                            <div><small>Dinyatakan tidak lolos</small></div>
-                        </div>
-
-                        <div class="p-5 light-green-text">
-                            <h5 class="font-weight-normal s-14">Lulus</h5>
-                            <span class="s-48 font-weight-lighter" id="lulusTotal">...</span>
-                            <div><small>Dinyatakan lolos</small></div>
+                    {{-- Jumlah Aset Keluar --}}
+                    <div class="col-md-3">
+                        <div class="counter-box white r-5 p-3">
+                            <div class="p-4">
+                                <div class="float-right">
+                                    <span class="icon icon-arrow_back s-48"></span>
+                                </div>
+                                <div class="counter-title">Aset Keluar</div>
+                                <h5 class="sc-counter mt-3">{{ $tmopd_aset }}</h5>
+                            </div>
+                            <div class="progress progress-xs r-0">
+                                <div class="progress-bar" role="progressbar" style="width:{{ $tmopd_aset }}%;"
+                                    aria-valuenow="25" aria-valuemin="0"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                {{-- Image --}}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white p-5 r-5">
+                            <div class="card-title">
+                                <h5> -- </h5>
+                            </div>
+
+                            <div align="center">
+                                <img src="{{ asset('assets/img/icon/icon-plane.png')}}" width="300" height="280">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
+            <!--Today Tab End-->
+
         </div>
     </div>
-
 </div>
-@endsection
-
-@section('script')
-<script>
-$.get
-
-$.get("{!! route('home.grafikLelang') !!}", function(data){
-    grafikLelang(data.grafik);
-    $('#lowonganTotal').html(data.lowonganTotal);
-    $('#pelamarTotal').html(data.pelamarTotal);
-    $('#prosesTotal').html(data.prosesTotal);
-    $('#tolakTotal').html(data.tolakTotal);
-    $('#lulusTotal').html(data.lulusTotal);
-
-}, 'JSON');
-
-function grafikLelang(grafikLelangData)
-{
-    new Morris.Bar({
-        element: 'myfirstchart',
-        gridLineColor: '#5796ff',
-        gridTextColor: '#a2c5ff',
-        pointFillColors: '#000',
-        data: grafikLelangData,
-        xkey: 'y',
-        ykeys: ['a', 'b', 'c', 'd'],
-        labels: ['Pelamar', 'Dalam Proses', 'Ditolak', 'Lulus'],
-        barColors: ['#95bcfc', '#0b62a4', '#c66767', '#70c667'],
-        hideHover: 'auto'
-    });
-}
-</script>
 @endsection

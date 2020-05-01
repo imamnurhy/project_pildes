@@ -98,12 +98,12 @@ class PegawaiController extends Controller
     {
         $request->validate([
 
-            'nip' => 'required|string|min:18|max:18|unique:pegawais,nip,'.$id,
+            'nip' => 'required|string|min:18|max:18|unique:pegawais,nip,' . $id,
             'n_pegawai' => 'required',
-            'telp' => 'required|string|min:10|max:14|unique:pegawais,telp,'.$id,
+            'telp' => 'required|string|min:10|max:14|unique:pegawais,telp,' . $id,
             'unitkerja_id' => 'required',
             'opd_id' => 'required',
-            'nik' => 'required|string|min:16|max:16|unique:pegawais,nik,'.$id,
+            'nik' => 'required|string|min:16|max:16|unique:pegawais,nik,' . $id,
             't_lahir' => 'required',
             'd_lahir' => 'required',
             'jk' => 'required',
@@ -132,8 +132,8 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::findOrFail($id);
         $lastFoto = $pegawai->foto;
-        if($lastFoto != ''){
-            Storage::disk('sftp')->delete('foto/'.$lastFoto);
+        if ($lastFoto != '') {
+            Storage::disk('sftp')->delete('foto/' . $lastFoto);
         }
 
         User::destroy($pegawai->user_id);
@@ -148,28 +148,28 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::with(['unitkerja:id,n_unitkerja', 'opd:id,n_opd']);
         return Datatables::of($pegawai)
-            ->editColumn('user_id', function($p) {
-                if($p->user_id == ""){
-                    return "Tidak <a href='".route('user.add_user', $p->id)."' class='float-right text-success' title='Tambah sebagai pengguna aplikasi'><i class='icon-user-plus'></i></a>";
-                }else{
-                    return "Ya <a href='".route('user.edit', $p->user_id)."' class='float-right' title='Edit akun user'><i class='icon-user'></i></a>";
+            ->editColumn('user_id', function ($p) {
+                if ($p->user_id == "") {
+                    return "Tidak <a href='" . route('user.add_user', $p->id) . "' class='float-right text-success' title='Tambah sebagai pengguna aplikasi'><i class='icon-user-plus'></i></a>";
+                } else {
+                    return "Ya <a href='" . route('user.edit', $p->user_id) . "' class='float-right' title='Edit akun user'><i class='icon-user'></i></a>";
                 }
             })
-            ->editColumn('foto', function($p) {
-                if($p->foto == ""){
+            ->editColumn('foto', function ($p) {
+                if ($p->foto == "") {
                     $img = "Tidak";
-                }else{
-                    $img = "<img src='".env("SFTP_SRC").'foto/'.$p->foto."' alt='img' align='center'/>";
+                } else {
+                    $img = "<img src='" . env("SFTP_SRC") . 'foto/' . $p->foto . "' alt='img' align='center'/>";
                 }
-                return $img."<br/><a onclick='editFoto(".$p->id.")' href='javascript:;' data-fancybox data-src='#formUpload' data-modal='true' title='Upload foto pegawai' class='btn btn-xs'>Unggah Foto <i class='icon-upload'></i></a>";
+                return $img . "<br/><a onclick='editFoto(" . $p->id . ")' href='javascript:;' data-fancybox data-src='#formUpload' data-modal='true' title='Upload foto pegawai' class='btn btn-xs'>Unggah Foto <i class='icon-upload'></i></a>";
             })
-            ->editColumn('opd_id', function($p){
+            ->editColumn('opd_id', function ($p) {
                 return $p->opd_id;
             })
-            ->addColumn('action', function($p){
+            ->addColumn('action', function ($p) {
                 return
-                    "<a onclick='edit(".$p->id.")' data-fancybox data-src='#formAdd' data-modal='true' href='javascript:;' title='Edit Pegawai'><i class='icon-pencil mr-1'></i></a>
-                    <a href='#' onclick='remove(".$p->id.")' class='text-danger' title='Hapus Pegawai' id='del_".$p->id."'><i class='icon-remove'></i></a>";
+                    "<a onclick='edit(" . $p->id . ")' data-fancybox data-src='#formAdd' data-modal='true' href='javascript:;' title='Edit Pegawai'><i class='icon-pencil mr-1'></i></a>
+                    <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Pegawai' id='del_" . $p->id . "'><i class='icon-remove'></i></a>";
             })
             ->removeColumn('unitkerja_id')
             ->removeColumn('opd_id')
@@ -188,14 +188,14 @@ class PegawaiController extends Controller
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "http://103.219.112.59/cek_nik/nik.php",
+            CURLOPT_URL => "http://192.168.200.20/cek_nik.php",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "{\n\t\"username\":\"WADITRA\",\n\t\"password\":\"Abcde12345\",\n\t\"nik\":\"$v_identitas\"\n}"
+            CURLOPT_POSTFIELDS => "{\n\t\"username\":\"KOMINFO\",\n\t\"password\":\"Abcde!@#$%\",\n\t\"nik\":\"$v_identitas\"\n}"
         ));
 
         $response = curl_exec($curl);
@@ -210,24 +210,18 @@ class PegawaiController extends Controller
             ], 422);
         } else {
             $obj = json_decode($response);
-            if($obj == "")
-            {
+            if ($obj == "") {
                 return response()->json([
                     'message' => "Terdapat masalah saat melakukan get KTP ke Server Dukcapil. Silahkan tunggu beberapa saat sampai koneksi ke Server Dukcapil kembali normal."
                 ], 422);
-            }
-            else
-            {
-                if(isset($obj->content[0]->RESPONSE_CODE))
-                {
+            } else {
+                if (isset($obj->content[0]->RESPONSE_CODE)) {
                     return response()->json([
                         'message' => "Data KTP tidak ditemukan."
                     ], 422);
-                }
-                else
-                {
+                } else {
 
-                        //--- CEK ALAMAT
+                    //--- CEK ALAMAT
                     $provinsi_id = '';
                     $kabupaten_id = '';
                     $kecamatan_id = '';
@@ -238,54 +232,42 @@ class PegawaiController extends Controller
                     $msg_err = '';
 
                     $no_prop = $obj->content[0]->NO_PROP;
-                    $no_kab = $no_prop.'.'.sprintf("%02s", $obj->content[0]->NO_KAB);
-                    $no_kec = $no_kab.'.'.sprintf("%02s", $obj->content[0]->NO_KEC);
-                    $no_kel = $no_kec.'.'.sprintf("%04s", $obj->content[0]->NO_KEL);
+                    $no_kab = $no_prop . '.' . sprintf("%02s", $obj->content[0]->NO_KAB);
+                    $no_kec = $no_kab . '.' . sprintf("%02s", $obj->content[0]->NO_KEC);
+                    $no_kel = $no_kec . '.' . sprintf("%04s", $obj->content[0]->NO_KEL);
 
                     $provinsi = Provinsi::select('id', 'n_provinsi')->wherekode($no_prop)->first();
-                    if(!$provinsi)
-                    {
-                        $msg_err = "Kode provinsi ".$no_pro." ".$obj->content[0]->PROP_NAME;
-                    }
-                    else
-                    {
+                    if (!$provinsi) {
+                        $msg_err = "Kode provinsi " . $no_prop . " " . $obj->content[0]->PROP_NAME;
+                    } else {
                         $provinsi_id = $provinsi->id;
                         $kabupatens = $this->getKabupaten($provinsi_id);
 
                         $kabupaten = Kabupaten::select('id')->wherekode($no_kab)->first();
-                        if(!$kabupaten)
-                        {
-                            $msg_err = "Kode kabupaten ".$no_kab." ".$obj->content[0]->KAB_NAME;
-                        }
-                        else
-                        {
+                        if (!$kabupaten) {
+                            $msg_err = "Kode kabupaten " . $no_kab . " " . $obj->content[0]->KAB_NAME;
+                        } else {
                             $kabupaten_id = $kabupaten->id;
                             $kecamatans = $this->getKecamatan($kabupaten_id);
 
                             $kecamatan = Kecamatan::select('id')->wherekode($no_kec)->first();
-                            if(!$kecamatan)
-                            {
-                                $msg_err = "Kode kecamatan ".$no_kab." ".$obj->content[0]->KEC_NAME;
-                            }
-                            else
-                            {
+                            if (!$kecamatan) {
+                                $msg_err = "Kode kecamatan " . $no_kab . " " . $obj->content[0]->KEC_NAME;
+                            } else {
                                 $kecamatan_id = $kecamatan->id;
                                 $kelurahans = $this->getKelurahan($kecamatan_id);
 
                                 $kelurahan = Kelurahan::select('id')->wherekode($no_kel)->first();
-                                if(!$kelurahan)
-                                {
-                                    $msg_err = "Kode kecamatan ".$no_kab." ".$obj->content[0]->KEL_NAME;
-                                }
-                                else
-                                {
+                                if (!$kelurahan) {
+                                    $msg_err = "Kode kecamatan " . $no_kab . " " . $obj->content[0]->KEL_NAME;
+                                } else {
                                     $kelurahan_id = $kelurahan->id;
                                 }
                             }
                         }
                     }
 
-                        //--- RESPON NIK
+                    //--- RESPON NIK
                     return response()->json([
                         'status' => 1,
                         'NAMA_LGKP' => $obj->content[0]->NAMA_LGKP,
@@ -296,7 +278,6 @@ class PegawaiController extends Controller
                         'NO_RT' => $obj->content[0]->NO_RT,
                         'TMPT_LHR' => $obj->content[0]->TMPT_LHR,
                         'PDDK_AKH' => $obj->content[0]->PDDK_AKH,
-                        'GOL_DARAH' => $obj->content[0]->GOL_DARAH,
                         'JENIS_KLMIN' => $obj->content[0]->JENIS_KLMIN,
                         'TGL_LHR' => $obj->content[0]->TGL_LHR,
 
@@ -329,7 +310,7 @@ class PegawaiController extends Controller
         return Kelurahan::select('id', 'kode', 'n_kelurahan')->wherekecamatan_id($kelurahan_id)->get();
     }
 
-        //--- Foto
+    //--- Foto
     public function updateFoto(Request $request, $id)
     {
         $request->validate([
@@ -339,14 +320,13 @@ class PegawaiController extends Controller
         $pegawai = Pegawai::findOrFail($id);
         $lastFoto = $pegawai->foto;
         $foto = $request->file('foto');
-        $nameFoto = $pegawai->nip.'_'.rand().'.'.$foto->getClientOriginalExtension();
+        $nameFoto = $pegawai->nip . '_' . rand() . '.' . $foto->getClientOriginalExtension();
         $foto->storeAs('foto', $nameFoto, 'sftp', 'public');
         $pegawai->foto = $nameFoto;
         $pegawai->save();
 
-        if($lastFoto != '')
-        {
-            Storage::disk('sftp')->delete('foto/'.$lastFoto);
+        if ($lastFoto != '') {
+            Storage::disk('sftp')->delete('foto/' . $lastFoto);
         }
 
         return response()->json([
