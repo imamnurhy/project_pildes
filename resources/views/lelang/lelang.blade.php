@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col">
                     <h3 class="my-2">
-                        <i class="icon icon-event_seat"></i> Data Lelang
+                        <i class="icon icon-event_seat"></i> Data Lahan
                     </h3>
                 </div>
             </div>

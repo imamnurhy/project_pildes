@@ -15,15 +15,25 @@ Route::prefix('home')->group(function () {
     Route::get('/grafikLelang', 'HomeController@grafikLelang')->name('home.grafikLelang');
 });
 
-Route::prefix('account')->group(function() {
+Route::prefix('pelamar')->group(function () {
+    Route::get('cekPelamar', 'PelamarController@index')->name('pelamar');
+    Route::post('api/pelamar', 'PelamarController@api')->name('api.pelamar');
+    Route::get('pelamar/edit/{id}', 'PelamarController@edit')->name('pelamar.edit');
+    Route::delete('pelamar/delete/{id}', 'PelamarController@delete')->name('pelamar.delete');
+    Route::post('pelamar/update/{id}', 'PelamarController@update')->name('pelamar.update');
+    Route::delete('pelamar/destroy/{id}', 'PelamarController@destroy')->name('pelamar.destroy');
+});
+
+
+Route::prefix('account')->group(function () {
     Route::get('profile', 'AccountController@profile')->name('account.profile');
     Route::post('profile/updateFoto', 'AccountController@updateFoto')->name('account.updateFoto');
-    
+
     Route::get('password', 'AccountController@password')->name('account.password');
     Route::patch('password', 'AccountController@updatePassword')->name('account.password');
 });
 
-    /* MAIN MENU SELEKSI JABATAN */
+/* MAIN MENU SELEKSI PELAMAR */
 Route::group(['middleware' => ['permission:petugas-panselnas']], function () {
     Route::prefix('seleksi')->group(function () {
         Route::get('pansel', 'Seleksi\PanselnasController@index')->name('panselnas');
@@ -48,23 +58,26 @@ Route::group(['middleware' => ['permission:petugas-panselnas-admin']], function 
         Route::get('arsipTolak', 'Seleksi\ArsipTolakController@index')->name('arsipTolak');
         Route::post('api/arsipTolak', 'Seleksi\ArsipTolakController@api')->name('api.arsipTolak');
         Route::get('arsipTolak/{id}', 'Seleksi\ArsipTolakController@edit')->name('arsipTolak.edit');
+
+        Route::patch('arsipSetuju/{id}/pemenang', 'Seleksi\ArsipSetujuController@pemenang')->name('arsipSetuju.pemenang');
+        Route::patch('arsipSetuju/{id}/cekPemenang', 'Seleksi\ArsipSetujuController@cekPemenang')->name('arsipSetuju.cekPemenang');
     });
 });
 
-    /* REPORT */
+/* REPORT */
 Route::group(['middleware' => ['permission:report-lelang']], function () {
     Route::prefix('report')->group(function () {
         Route::get('registrasi', 'Report\RegistrasiController@index')->name('registrasi.report');
         Route::post('api/registrasi', 'Report\RegistrasiController@api')->name('api.registrasi.report');
         Route::get('registrasi/exportToExcel/{d_dari}/{d_sampai}', 'Report\RegistrasiController@exportToExcel')->name('registrasi.report.exportToExcel');
-        
+
         Route::get('seleksi', 'Report\SeleksiController@index')->name('seleksi.report');
         Route::post('api/seleksi', 'Report\SeleksiController@api')->name('api.seleksi.report');
         Route::get('seleksi/exportToExcel/{d_dari}/{d_sampai}', 'Report\SeleksiController@exportToExcel')->name('seleksi.report.exportToExcel');
     });
 });
 
-    /* CONFIG LELANG JABATAN */
+/* CONFIG LELANG JABATAN */
 Route::group(['middleware' => ['permission:config-lelang_jabatan']], function () {
     Route::resource('lelang', 'Lelang\LelangController');
     Route::get('api/lelang', 'Lelang\LelangController@api')->name('api.lelang');
@@ -78,7 +91,7 @@ Route::group(['middleware' => ['permission:config-lelang_jabatan']], function ()
 
     Route::resource('pengumuman', 'Lelang\PengumumanController');
     Route::get('api/pengumuman', 'Lelang\PengumumanController@api')->name('api.pengumuman');
-    
+
     Route::resource('content', 'Lelang\ContentController');
     Route::get('api/content', 'Lelang\ContentController@api')->name('api.content');
 
@@ -102,7 +115,7 @@ Route::group(['middleware' => ['permission:config-lelang_jabatan']], function ()
     Route::get('api/syarat', 'Lelang\SyaratController@api')->name('api.syarat');
 });
 
-    /* MASTER PEGAWAI */
+/* MASTER PEGAWAI */
 Route::group(['middleware' => ['permission:master-pegawai']], function () {
     Route::resource('pegawai', 'Master\PegawaiController');
     Route::get('api/pegawai', 'Master\PegawaiController@api')->name('api.pegawai');
@@ -121,7 +134,7 @@ Route::group(['middleware' => ['permission:master-pegawai']], function () {
 
     Route::resource('unitkerja', 'Master\UnitkerjaController');
     Route::get('api/unitkerja', 'Master\UnitkerjaController@api')->name('api.unitkerja');
-    
+
     Route::resource('golongan', 'Master\GolonganController');
     Route::get('api/golongan', 'Master\GolonganController@api')->name('api.golongan');
 
@@ -135,7 +148,7 @@ Route::group(['middleware' => ['permission:master-pegawai']], function () {
     Route::delete('user/{name}/destroyRole', 'Master\UserController@destroyRole')->name('user.destroyRole');
 });
 
-    /* MASTER WILAYAH */
+/* MASTER WILAYAH */
 Route::group(['middleware' => ['permission:master-wilayah']], function () {
     Route::resource('provinsi', 'Master\ProvinsiController');
     Route::get('api/provinsi', 'Master\ProvinsiController@api')->name('api.provinsi');
@@ -146,14 +159,14 @@ Route::group(['middleware' => ['permission:master-wilayah']], function () {
     Route::delete('kabupaten/{kabupaten}', 'Master\KabupatenController@destroy')->name('kabupaten.destroy');
     Route::patch('kabupaten/{kabupaten}', 'Master\KabupatenController@update')->name('kabupaten.update');
     Route::get('kabupaten/{kabupaten}/edit', 'Master\KabupatenController@edit')->name('kabupaten.edit');
-    
+
     Route::get('kecamatan/{provinsi_id}/api', 'Master\KecamatanController@api')->name('api.kecamatan');
     Route::get('kecamatan/{provinsi_id}/index', 'Master\KecamatanController@index')->name('kecamatan.index');
     Route::post('kecamatan', 'Master\KecamatanController@store')->name('kecamatan.store');
     Route::delete('kecamatan/{kecamatan}', 'Master\KecamatanController@destroy')->name('kecamatan.destroy');
     Route::patch('kecamatan/{kecamatan}', 'Master\KecamatanController@update')->name('kecamatan.update');
     Route::get('kecamatan/{kecamatan}/edit', 'Master\KecamatanController@edit')->name('kecamatan.edit');
-    
+
     Route::get('kelurahan/{provinsi_id}/api', 'Master\KelurahanController@api')->name('api.kelurahan');
     Route::get('kelurahan/{provinsi_id}/index', 'Master\KelurahanController@index')->name('kelurahan.index');
     Route::post('kelurahan', 'Master\KelurahanController@store')->name('kelurahan.store');
@@ -162,7 +175,7 @@ Route::group(['middleware' => ['permission:master-wilayah']], function () {
     Route::get('kelurahan/{kelurahan}/edit', 'Master\KelurahanController@edit')->name('kelurahan.edit');
 });
 
-    /* MASTER ROLE */
+/* MASTER ROLE */
 Route::group(['middleware' => ['permission:master-role']], function () {
     Route::resource('role', 'Master\RoleController');
     Route::get('api/role', 'Master\RoleController@api')->name('api.role');

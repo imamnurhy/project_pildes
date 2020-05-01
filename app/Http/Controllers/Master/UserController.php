@@ -68,6 +68,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = user::find($id);
+        dd($user);
         $roles = Role::all();
         return view('master._user.edit', compact('user', 'roles'));
     }
@@ -81,8 +82,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        switch($request->type)
-        {
+        switch ($request->type) {
             case 1:
                 $c_status = ($request->c_status == 'on' ? 1 : 0);
                 $user = User::findOrFail($id);
@@ -91,37 +91,37 @@ class UserController extends Controller
 
                 return response()->json([
                     'success' => true,
-                    'message' => 'Data user berhasil diperbaharui. Status user '.$c_status
+                    'message' => 'Data user berhasil diperbaharui. Status user ' . $c_status
                 ]);
                 break;
             case 2:
                 $request->validate([
-                    'username' => 'required|unique:users,username,'.$id
+                    'username' => 'required|unique:users,username,' . $id
                 ]);
-                
+
                 $username = $request->username;
                 $user = User::findOrFail($id);
                 $user->username = $username;
                 $user->save();
-                
+
                 return response()->json([
                     'success' => true,
-                    'message' => 'Data user berhasil diperbaharui. Username user '.$username
+                    'message' => 'Data user berhasil diperbaharui. Username user ' . $username
                 ]);
                 break;
             case 3:
                 $request->validate([
                     'password' => 'required|string|min:6|confirmed'
                 ]);
-                
+
                 $password = bcrypt($request->password);
                 $user = User::findOrFail($id);
                 $user->password = $password;
                 $user->save();
-                
+
                 return response()->json([
                     'success' => true,
-                    'message' => 'Data user berhasil diperbaharui. Password user '.$request->password
+                    'message' => 'Data user berhasil diperbaharui. Password user ' . $request->password
                 ]);
                 break;
             case 4:
@@ -146,7 +146,7 @@ class UserController extends Controller
     {
         Pegawai::where('user_id', $id)->update(['user_id' => 0]);
         User::destroy($id);
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Data user berhasil dihapus.'
@@ -156,8 +156,7 @@ class UserController extends Controller
     public function add_user($pegawai_id)
     {
         $pegawai = Pegawai::findOrFail($pegawai_id);
-        if($pegawai->user_id == 0)
-        {
+        if ($pegawai->user_id == 0) {
             $user = User::updateOrCreate([
                 'username' => $pegawai->nip,
                 'password' => bcrypt('123456'),
@@ -167,9 +166,7 @@ class UserController extends Controller
             $user_id = $user->id;
             $pegawai->user_id = $user_id;
             $pegawai->save();
-        }
-        else
-        {
+        } else {
             $user_id = $pegawai->user_id;
         }
         return redirect()->route('user.edit', $user_id);

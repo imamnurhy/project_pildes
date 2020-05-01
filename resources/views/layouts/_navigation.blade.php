@@ -49,7 +49,7 @@
     @endcan
 
     @can('config-lelang_jabatan')
-    <li class="header light"><strong>SETUP SELEKSI JABATAN</strong></li>
+    <li class="header light"><strong>SETUP SELEKSI LAHAN PARKIR</strong></li>
         <li class="treeview" id="menuLelang">
             <a href="#">
                 <i class="icon icon-event_seat light-green-text s-18"></i> <span>Lahan Parkir</span> <i class="icon icon-angle-left s-18 pull-right"></i>
@@ -67,6 +67,7 @@
                 </li>
             </ul>
         </li>
+
         <li class="treeview" id="menuPengumuman">
             <a href="#">
                 <i class="icon icon-bullhorn orange-text s-18"></i> <span>Pengumuman</span> <i class="icon icon-angle-left s-18 pull-right"></i>

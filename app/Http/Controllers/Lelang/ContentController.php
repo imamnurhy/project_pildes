@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Lelang;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Datatables;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Tmcontent;
 
 class ContentController extends Controller
 {
-    
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -47,13 +48,21 @@ class ContentController extends Controller
     {
         $request->validate([
             'n_content' => 'required|unique:tmcontents,n_content',
-            'ket' => 'required',
-            'c_status' => 'required',
-            'link' => 'required'
+            'file' => 'required|mimes:doc,docx,pdf|max:5000',
+            'c_status' => 'required'
         ]);
 
-        $input = $request->all();
-        Tmcontent::create($input);
+        $file = $request->file('file');
+        $nameFile = rand() . '.' . $file->getClientOriginalExtension();
+        // $file->storeAs('filedownload', $nameFile, 'sftp', 'public');
+        Storage::disk('sftp')->put('filecontent/' . $nameFile, fopen($request->file('file'), 'r+'));
+
+        Tmcontent::create([
+            'n_content' => $request->n_content,
+            'file' => $nameFile,
+            'ket' => $request->ket,
+            'c_status' => $request->c_status
+        ]);
 
         return response()->json([
             'success' => true,
@@ -93,14 +102,27 @@ class ContentController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'n_content' => 'required|unique:tmcontents,n_content,'.$id,
-            'ket' => 'required',
-            'c_status' => 'required',
-            'link' => 'required'
+            'n_content' => 'required|unique:tmcontents,n_content,' . $id,
+            'c_status' => 'required'
         ]);
 
         $input = $request->all();
         $tmcontent = Tmcontent::findOrFail($id);
+
+        if ($request->hasFile('file')) {
+            $request->validate([
+                'file' => 'mimes:doc,docx,pdf|max:5000',
+            ]);
+            $file = $request->file('file');
+            $nameFile = rand() . '.' . $file->getClientOriginalExtension();
+            // $file->storeAs('filedownload', $nameFile, 'sftp', 'public');
+            Storage::disk('sftp')->put('filecontent/' . $nameFile, fopen($request->file('file'), 'r+'));
+            $input['file'] = $nameFile;
+
+            $lastFile = $tmcontent->file;
+            Storage::disk('sftp')->delete('filecontent/' . $lastFile);
+        }
+
         $tmcontent->update($input);
 
         return response()->json([
@@ -129,18 +151,18 @@ class ContentController extends Controller
     {
         $tmcontent = Tmcontent::all();
         return Datatables::of($tmcontent)
-            ->editColumn('c_status', function($p){
-                if($p->c_status == 1){
+            ->editColumn('c_status', function ($p) {
+                if ($p->c_status == 1) {
                     $txt = "<span class='badge r-3 badge-primary'>Tampil</span>";
-                }else{
+                } else {
                     $txt = "<span class='badge r-3'>Tidak Tampil</span>";
                 }
                 return $txt;
             })
-            ->addColumn('action', function($p){
+            ->addColumn('action', function ($p) {
                 return "
-                    <a href='". route('content.show', $p->id) ."' title='Edit Konten'><i class='icon-pencil mr-1'></i></a>
-                    <a href='#' onclick='remove(".$p->id.")' class='text-danger' title='Hapus Konten'><i class='icon-remove'></i></a>";
+                    <a href='" . route('content.show', $p->id) . "' title='Edit Konten'><i class='icon-pencil mr-1'></i></a>
+                    <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Konten'><i class='icon-remove'></i></a>";
             })
             ->rawColumns(['c_status', 'action'])
             ->toJson();

@@ -81,7 +81,7 @@
         <div class="d-flex row">
             <div class="col-md-3 white">
                 <div class="pl-5 pt-5 pr-5 mt-5 pb-1">
-                    <img src="assets/img/basic/logo_.png" alt=""/>
+                    <img src="assets/img/basic/dishub.png" alt="" class="center"/>
                 </div>
                 <div class="p-5">
                     <h3>Selamat Datang</h3>

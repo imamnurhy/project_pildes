@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col">
                     <h3 class="my-2">
-                        <i class="icon icon-ban"></i> Data Arsip Ditolak 
+                        <i class="icon icon-ban"></i> Data Arsip Ditolak
                     </h3>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                         <div class="col-md-4 pr-0">
                             <div class="bg-light p-0" width="100%">
                                 <select name="tmlelang_id" id="tmlelang_id" placeholder="" class="form-control r-0 light s-12 col-md-12 custom-select select2" autocomplete="off">
-                                    <option value="99">Jabatan Yg Dilamar : Semua</option>
+                                    <option value="99">Lahan Parkir Yg Dilamar : Semua</option>
                                     @foreach($tmlelangs as $row=>$tmlelang)
                                     <option value="{!! $tmlelang->id !!}">{!! $tmlelang->n_lelang !!}</option>
                                     @endforeach
@@ -55,7 +55,9 @@
                             <th width="30">No</th>
                             <th width="120">No Registrasi</th>
                             <th width="160">Nama</th>
-                            <th>Jabatan Yg Dilamar</th>
+                            <th width="160">Perusahaan</th>
+                            <th>Lahan Parkir Yg Dilamar</th>
+                            <th width="125">Nilai Usulan Sewa</th>
                             <th width="40"></th>
                         </thead>
                         <tbody></tbody>
@@ -92,7 +94,7 @@
         ],
         processing: true,
         serverSide: true,
-        order: [ 1, 'asc' ],
+        order: [ 5, 'DESC' ],
         ajax: {
             url: "{{ route('api.arsipTolak') }}",
             method: 'POST',
@@ -104,8 +106,10 @@
         columns: [
             {data: 'tmregistrasi.id', name: 'id', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'no_pendaftaran', name: 'no_pendaftaran'},
-            {data: 'tmregistrasi.n_pegawai', name: 'tmregistrasi.n_pegawai'},
+            {data: 'tmregistrasi.nama_pl', name: 'tmregistrasi.nama_pl'},
+            {data: 'tmregistrasi.n_pr', name: 'tmregistrasi.n_pr'},
             {data: 'tmlelang.n_lelang', name: 'tmlelang.n_lelang'},
+            {data: 'penawaran', name: 'penawaran'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });

@@ -18,14 +18,14 @@
                     </tr>
                     <tr>
                               <td></td>
-                              <td colspan="23">Nomor  : 829/&nbsp; &nbsp;  &nbsp; &nbsp; -BA.SekrPANSELJPT/{{ Carbon\Carbon::parse($d_dari)->format('Y') }}</td>
+                              <td colspan="23">Nomor  : 829/&nbsp; &nbsp;  &nbsp; &nbsp; -BA.SekrPANSELLTP/{{ Carbon\Carbon::parse($d_dari)->format('Y') }}</td>
                     </tr>
                     <tr>
                               <td colspan="24">&nbsp;</td>
                     </tr>
                     <tr>
                               <td></td>
-                              <td colspan="23">REKAPITULASI PENDAFTARAN SELEKSI JPT PRATAMA ESELON II.b PEMERINTAH KOTA TANGERANG SELATAN</td>
+                              <td colspan="23">REKAPITULASI PENDAFTARAN PEMILIHAN MITRA SEWA DINAS PERHUBUNGAN KOTA TANGERANG SELTAN</td>
                     </tr>
                     <tr>
                               <td></td>
@@ -48,25 +48,15 @@
                               <th>NO</th>
                               <th>NIP</th>
                               <th>Nama</th>
-                              <th>Email</th>
                               <th>Telp</th>
                               <th>Alamat</th>
-                              <th>Unit Kerja</th>
-                              <th>OPD</th>
-                              <th>NIK</th>
                               <th>TTL</th>
                               <th>Jenis Kelamin</th>
                               <th>Pekerjaan</th>
-                              <th>Golongan</th>
-                              <th>TMT Golongan</th>
-                              <th>Eselon</th>
-                              <th>TMT Eselon</th>
-                              <th>Jabatan</th>
-                              <th>Instansi</th>
-                              <th>Foto</th>
+                              {{-- <th>Foto</th> --}}
                               <th><em>Verified</em></th>
                               <th>Tgl Registrasi</th>
-                              <th>Jabatan Yang Dilamar</th>
+                              <th>Lahan Parkir Yang Dilamar</th>
                               <th>Status</th>
                               <th>Tgl Melamar</th>
                     </tr>
@@ -76,28 +66,18 @@
                     @foreach($tmpelamars as $key=>$tmpelamar)
                     <tr>
                               <td>{{ $i++ }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->nip }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->n_pegawai }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->email }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->telp }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->alamat }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->n_unitkerja }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->n_opd }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->nik }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->t_lahir.', '.$tmpelamar->tmregistrasi->d_lahir }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->jk }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->pekerjaan }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->golongan->n_golongan }}</td>
-                              <td>{{ Carbon\Carbon::parse($tmpelamar->tmregistrasi->tmt_golongan)->format('d F Y') }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->eselon->n_eselon }}</td>
-                              <td>{{ Carbon\Carbon::parse($tmpelamar->tmregistrasi->tmt_eselon)->format('d F Y') }} </td>
-                              <td>{{ $tmpelamar->tmregistrasi->jabatan }}</td>
-                              <td>{{ $tmpelamar->tmregistrasi->instansi }}</td>
-                              <td>
+                              <td>{{ $tmpelamar->tmregistrasi->nik_pl }}</td>
+                              <td>{{ $tmpelamar->tmregistrasi->nama_pl }}</td>
+                              <td>{{ $tmpelamar->tmregistrasi->no_tlp_pl }}</td>
+                              <td>{{ $tmpelamar->tmregistrasi->alamat_pl }}</td>
+                              <td>{{ $tmpelamar->tmregistrasi->t_lahir_pl.', '.$tmpelamar->tmregistrasi->d_lahir_pl }}</td>
+                              <td>{{ $tmpelamar->tmregistrasi->jk_pl }}</td>
+                              <td>{{ $tmpelamar->tmregistrasi->pekerjaan_pl }}</td>
+                              {{-- <td>
                                         @if($tmpelamar->tmregistrasi->foto != '')
                                                   <img src="{{ env('SFTP_SRC').'syarat/'.$tmpelamar->tmregistrasi->foto }}" alt="foto" width="120px"/>
                                         @endif
-                              </td>
+                              </td> --}}
                               <td>{{ $tmpelamar->tmregistrasi->c_tangsel == 1 ? 'Ya' : 'Tidak' }}</td>
                               <td>{{ Carbon\Carbon::parse($tmpelamar->tmregistrasi->created_at)->format('d F Y H:i:s') }}</td>
                               <td>{{ $tmpelamar->tmlelang->n_lelang }}</td>

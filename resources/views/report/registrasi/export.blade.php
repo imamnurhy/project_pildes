@@ -2,7 +2,7 @@
           <thead>
                     <tr>
                               <th></th>
-                              <th colspan="20">REKAPITULASI REGISTRASI SELEKSI JPT PRATAMA ESELON II.b PEMERINTAH KOTA TANGERANG SELATAN</th>
+                              <th colspan="20">REKAPITULASI REGISTRASI PEMILIHAN CALON MITRA SEWA DINAS PERHUNGAN KOTA TANGERANG SELATAN</th>
                     </tr>
                     <tr>
                               <th></th>
@@ -22,24 +22,14 @@
           <thead>
                     <tr>
                               <th>NO</th>
-                              <th>NIP</th>
-                              <th>Nama</th>
-                              <th>Email</th>
-                              <th>Telp</th>
-                              <th>Alamat</th>
-                              <th>Unit Kerja</th>
-                              <th>OPD</th>
                               <th>NIK</th>
-                              <th>TTL</th>
-                              <th>Jenis Kelamin</th>
+                              <th>Nama</th>
+                              <th>Tempat Lahir</th>
+                              <th>Tanggal Lahir</th>
                               <th>Pekerjaan</th>
-                              <th>Golongan</th>
-                              <th>TMT Golongan</th>
-                              <th>Eselon</th>
-                              <th>TMT Eselon</th>
-                              <th>Jabatan</th>
-                              <th>Instansi</th>
-                              <th>Foto</th>
+                              <th>Alamat</th>
+                              <th>No Telp</th>
+                              {{-- <th>Foto</th> --}}
                               <th><em>Verified</em></th>
                               <th>Tgl Registrasi</th>
                     </tr>
@@ -49,28 +39,18 @@
                     @foreach($tmregistrasis as $key=>$tmregistrasi)
                     <tr>
                               <td>{{ $i++ }}</td>
-                              <td>{{ $tmregistrasi->nip }}</td>
-                              <td>{{ $tmregistrasi->n_pegawai }}</td>
-                              <td>{{ $tmregistrasi->email }}</td>
-                              <td>{{ $tmregistrasi->telp }}</td>
-                              <td>{{ $tmregistrasi->alamat }}</td>
-                              <td>{{ $tmregistrasi->n_unitkerja }}</td>
-                              <td>{{ $tmregistrasi->n_opd }}</td>
-                              <td>{{ $tmregistrasi->nik }}</td>
-                              <td>{{ $tmregistrasi->t_lahir.', '.$tmregistrasi->d_lahir }}</td>
-                              <td>{{ $tmregistrasi->jk }}</td>
-                              <td>{{ $tmregistrasi->pekerjaan }}</td>
-                              <td>{{ $tmregistrasi->golongan->n_golongan }}</td>
-                              <td>{{ Carbon\Carbon::parse($tmregistrasi->tmt_golongan)->format('d F Y') }}</td>
-                              <td>{{ $tmregistrasi->eselon->n_eselon }}</td>
-                              <td>{{ Carbon\Carbon::parse($tmregistrasi->tmt_eselon)->format('d F Y') }} </td>
-                              <td>{{ $tmregistrasi->jabatan }}</td>
-                              <td>{{ $tmregistrasi->instansi }}</td>
-                              <td>
-                                        @if($tmregistrasi->foto != '')
-                                                  <img src="{{ env('SFTP_SRC').'syarat/'.$tmregistrasi->foto }}" alt="foto" width="120px"/>
+                              <td>{{ $tmregistrasi->nik_pl }}</td>
+                              <td>{{ $tmregistrasi->nama_pl }}</td>
+                              <td>{{ $tmregistrasi->t_lahir_pl }}</td>
+                              <td>{{ Carbon\Carbon::parse($tmregistrasi->d_lahir_pl)->format('d F Y') }}</td>
+                              <td>{{ $tmregistrasi->pekerjaan_pl }}</td>
+                              <td>{{ $tmregistrasi->alamat_pl }}</td>
+                              <td>{{ $tmregistrasi->no_tlp_pl }}</td>
+                              {{-- <td>
+                                        @if($tmregistrasi->foto_pl != '')
+                                                  <img src="{{ env('SFTP_SRC').'register/'.$tmregistrasi->foto_pl }}" alt="foto" width='60'  height='60'/>
                                         @endif
-                              </td>
+                              </td> --}}
                               <td>{{ $tmregistrasi->c_tangsel == 1 ? 'Ya' : 'Tidak' }}</td>
                               <td>{{ $tmregistrasi->created_at }}</td>
                     </tr>

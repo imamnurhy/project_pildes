@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Data Seluruh Pelamar Jabatan')
+@section('title', 'Data Seluruh Pelamar Lahan Parkir')
 
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
@@ -14,13 +14,13 @@
                 <div class="col">
 					<div class="pb-3">
 						<div class="image mr-3  float-left">
-							@if($tmpelamar->tmregistrasi->foto != '')
-								<img class="user_avatar no-b no-p" src="{{ env('SFTP_SRC').'syarat/'.$tmpelamar->tmregistrasi->foto }}" alt="User Image">
+							@if($tmpelamar->tmregistrasi->foto_pl != '')
+								<img class="user_avatar no-b no-p" src="{{ env('SFTP_SRC').'register/'.$tmpelamar->tmregistrasi->foto_pl }}" alt="User Image">
 							@endif
 						</div>
 						<div>
-							<h5>{{ $tmpelamar->tmregistrasi->n_pegawai }} @if($tmpelamar->tmregistrasi->c_tangsel == 1)<i class="icon-check_circle"></i>@endif</h5>
-							{{ $tmpelamar->tmregistrasi->n_opd.' - '.$tmpelamar->tmregistrasi->instansi }}
+							<h5>{{ $tmpelamar->tmregistrasi->nama_pl }} @if($tmpelamar->tmregistrasi->c_tangsel == 1)<i class="icon-check_circle"></i>@endif</h5>
+							{{ $tmpelamar->tmregistrasi->nik_pl.' - '.$tmpelamar->tmregistrasi->kk_pl }}
 						</div>
 					</div>
                 </div>
@@ -28,7 +28,7 @@
             <div class="row justify-content-between">
                 <ul class="nav nav-material nav-material-white responsive-tab" id="v-pegawai-tab" role="tablist">
                     <li>
-                        <a class="nav-link" href="{{ route('panselnas') }}"><i class="icon icon-arrow_back"></i>Semua Pelamar Jabatan</a>
+                        <a class="nav-link" href="{{ route('panselnas') }}"><i class="icon icon-arrow_back"></i>Semua Pelamar Lahan</a>
                     </li>
                 </ul>
             </div>
@@ -38,8 +38,10 @@
     <div class="container-fluid my-3">
         <div id="alert"></div>
         <form class="needs-validation" id="form" method="POST" novalidate="">
+            {{-- onsubmit="confirm_form()" --}}
+
             @include('seleksi.pelamar')
-            
+
             <div class="card no-b no-r mt-3">
                 <div class="card-body">
                 <strong class="card-title">Kesimpulan</strong>
@@ -69,7 +71,7 @@
                             <textarea type="text" name="alasan_tolak" id="alasan_tolak" placeholder="" class="form-control r-0 light s-12 col-md-10" autocomplete="off">{{ $tmpelamar->alasan_tolak }}</textarea>
                         </div>
                         <div class="card-body offset-md-2">
-                            <button type="submit" class="btn btn-primary btn-sm" id="action" title="Simpan data"><i class="icon-save mr-2"></i>Simpan</button>
+                            <button type="button" onclick="confirm_form();" class="btn btn-primary btn-sm" id="action" title="Simpan data"><i class="icon-save mr-2"></i>Simpan</button>
                         </div>
                     </div>
                 </div>
@@ -90,14 +92,18 @@ $('#c_tolak1').click(function(){
     $('#v_alasan_tolak').show();
     $('#alasan_tolak').focus();
 });
+
+
+
 $('#form').on('submit', function (e) {
+
     if ($(this)[0].checkValidity() === false) {
         event.preventDefault();
         event.stopPropagation();
     }
     else{
         $('#alert').html('');
-        $('#action').attr('disabled', true);;
+        $('#action').attr('disabled', true);
         url = "{{ route('panselnas.update', ':id') }}".replace(':id', $('#id').val());
         $.ajax({
             url : url,
@@ -142,5 +148,60 @@ $('#form').on('submit', function (e) {
     }
     $(this).addClass('was-validated');
 });
+
+function alerts(){
+    $.alert({
+            title: 'Error',
+            content: 'Form Inputan Tidak Boleh Kosong Silahkan Pilih Minimal Satu Keputusan',
+            icon: 'icon-error',
+            type: 'red',
+            theme: 'material',
+            typeAnimated: true,
+            animation: 'top',
+            buttons: {
+                close: function () {
+                }
+            }
+        });
+}
+
+function confirm_form(){
+    var n = $('#alasan_tolak').val();
+    if(form.c_tolak0.checked != true && form.c_tolak1.checked != true ){
+       alerts();
+    } else {
+
+        if(form.c_tolak1.checked != false){
+            if(n == ''){
+                $('#alasan_tolak').focus();
+                alerts();
+                return false;
+            }
+        }
+
+        $.confirm({
+                title: '',
+                content: 'Apakah Anda yakin akan Menyimpan data ini?',
+                icon: 'icon-save',
+                theme: 'modern',
+                closeIcon: true,
+                animation: 'scale',
+                type: 'green',
+                    buttons: {
+                        'confirm': {
+                            text: 'Ya',
+                            btnClass: 'btn-blue',
+                            action: function () {
+                                  $('#form').submit();
+                            }
+                        },
+                        cancel: function () {
+                            //
+                        }
+                    }
+                });
+    }
+}
+
 </script>
 @endsection

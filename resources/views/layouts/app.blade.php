@@ -88,9 +88,13 @@
 <!-- <aside class="main-sidebar fixed offcanvas shadow bg-primary text-white no-b theme-dark"> -->
     <section class="sidebar">
         <div class="mt-3 mb-3 ml-4">
-            
-            <img src="{{ asset('assets/img/basic/logo_.png') }}" alt="" style="max-width:fit-content">
-        
+
+            <img src="{{ asset('assets/img/basic/dishub.png') }}" alt="" style="max-width:fit-content">
+
+        </div>
+        <div class="mt-3 mb-3 ml-4">
+            <p>SIPENCATRA<br>
+                (Sistem Pemilihan Calon Mitra Sewa)</p>
         </div>
         <!-- <div class="relative">
             <a data-toggle="collapse" href="#userSettingsCollapse" role="button" aria-expanded="false" aria-controls="userSettingsCollapse" class="btn-fab btn-fab-sm absolute fab-right-bottom fab-top btn-primary shadow1 ">

@@ -44,11 +44,11 @@
                     <table id="report-table" class="table table-striped" style="width:100%">
                         <thead>
                             <th width="30">No</th>
-                            <th width="110">Nip</th>
-                            <th>Nama</th>
-                            <th width="50">Email</th>
-                            <th width="50">Telp</th>
-                            <th width="50">OPD</th>
+                            <th width="110">Nik</th>
+                            <th width="50">Nama</th>
+                            <th width="50">Ttl</th>
+                            <th width="50">Pekerjaan</th>
+                            <th width="50">Alamat</th>
                             <th width="70">Tanggal</th>
                         </thead>
                         <tbody></tbody>
@@ -101,11 +101,11 @@
         },
         columns: [
             {data: 'id', name: 'id', orderable: false, searchable: false, align: 'center', className: 'text-center'},
-            {data: 'nip', name: 'nip'},
-            {data: 'n_pegawai', name: 'n_pegawai'},
-            {data: 'email', name: 'email'},
-            {data: 'telp', name: 'telp'},
-            {data: 'n_opd', name: 'n_opd'},
+            {data: 'nik_pl', name: 'nik_pl'},
+            {data: 'nama_pl', name: 'nama_pl'},
+            {data: 't_lahir_pl', name: 't_lahir_pl'},
+            {data: 'pekerjaan_pl', name: 'pekerjaan_pl'},
+            {data: 'alamat_pl', name: 'alamat_pl'},
             {data: 'created_at', name: 'created_at'},
         ]
     });

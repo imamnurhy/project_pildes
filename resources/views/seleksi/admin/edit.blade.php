@@ -42,10 +42,10 @@
     <div class="container-fluid my-3">
         <div id="alert"></div>
         @include('seleksi.pelamar')
-        
+
         <div class="card no-b no-r mt-3">
             <div class="card-body">
-                <strong class="card-title">Kesimpulan</strong>
+                <strong class="card-title">Kesimpulan Tim Panselnas</strong><br><br>
                 <div class="form-inline">
                     <div class="form-group m-0 col-md-12">
                         <label for="n_panselnas" class="col-form-label s-12 col-md-2">Nama Pansel</label>
@@ -70,8 +70,7 @@
         </div>
 
         <div class="card no-b no-r mt-3">
-            <div class="card-body">
-                <strong class="card-title">Keputusan</strong>
+              {{-- <strong class="card-title">Keputusan</strong>
                 <div class="form-inline">
                     <div class="form-group m-0 col-md-12">
                         <label for="c_tolak" class="col-form-label s-12 col-md-2">Keputusan</label>
@@ -83,31 +82,19 @@
                             @endif
                         </label>
                     </div>
-                </div>
-                
+                </div> --}}
+
                 <form class="needs-validation" id="form" method="POST" novalidate="">
                     @csrf
                     @method('PATCH')
-                    <div class="form-inline">
+                    {{-- <div class="form-inline">
                         @if($tmpelamar->c_tolak == 0)
-                        <strong class="card-title">Set Jadwal Seleksi</strong>
+                        <strong class="card-title">Set Jadwal Pengumuman</strong>
                         <div class="form-group m-0 col-md-12">
-                            <label for="c_tolak" class="col-form-label s-12 col-md-2">Tes Kesehatan</label>
-                            <input type="text" name="d_kesehatan_dari" id="d_kesehatan_dari" placeholder="" class="form-control r-0 light s-12 col-md-2" autocomplete="off" value="{!! substr($tmpelamar->d_kesehatan_dari, 0, -3) !!}" required>
+                            <label for="c_tolak" class="col-form-label s-12 col-md-2">Pengumuman</label>
+                            <input type="text" name="d_pengumuman_dari" id="d_pengumuman_dari" placeholder="" class="form-control r-0 light s-12 col-md-2" autocomplete="off" value="{!! substr($tmpelamar->d_pengumuman_dari, 0, -3) !!}" required>
                             <label class="col-md-1"> s.d. </label>
-                            <input type="text" name="d_kesehatan_sampai" id="d_kesehatan_sampai" placeholder="" class="form-control r-0 light s-12 col-md-2" autocomplete="off" value="{!! substr($tmpelamar->d_kesehatan_sampai, 0, -3) !!}" required>
-                        </div>
-                        <div class="form-group m-0 col-md-12">
-                            <label for="c_tolak" class="col-form-label s-12 col-md-2">Tes Assesment</label>
-                            <input type="text" name="d_assesment_dari" id="d_assesment_dari" placeholder="" class="form-control r-0 light s-12 col-md-2" autocomplete="off" value="{!! substr($tmpelamar->d_assesment_dari, 0, -3) !!}" required>
-                            <label class="col-md-1"> s.d. </label>
-                            <input type="text" name="d_assesment_sampai" id="d_assesment_sampai" placeholder="" class="form-control r-0 light s-12 col-md-2" autocomplete="off" value="{!! substr($tmpelamar->d_assesment_sampai, 0, -3) !!}" required>
-                        </div>
-                        <div class="form-group m-0 col-md-12">
-                            <label for="c_tolak" class="col-form-label s-12 col-md-2">Tes Wawancara</label>
-                            <input type="text" name="d_wawancara_dari" id="d_wawancara_dari" placeholder="" class="form-control r-0 light s-12 col-md-2" autocomplete="off" value="{!! substr($tmpelamar->d_wawancara_dari, 0, -3) !!}" required>
-                            <label class="col-md-1"> s.d. </label>
-                            <input type="text" name="d_wawancara_sampai" id="d_wawancara_sampai" placeholder="" class="form-control r-0 light s-12 col-md-2" autocomplete="off" value="{!! substr($tmpelamar->d_wawancara_sampai, 0, -3) !!}" required>
+                            <input type="text" name="d_pengumuman_sampai" id="d_pengumuman_sampai" placeholder="" class="form-control r-0 light s-12 col-md-2" autocomplete="off" value="{!! substr($tmpelamar->d_pengumuman_sampai, 0, -3) !!}" required>
                         </div>
                         <div class="card-body offset-md-2">
                             <button type="submit" class="btn btn-primary btn-sm" id="action" title="Simpan data"><i class="icon-save mr-2"></i>Simpan Keputusan</button>
@@ -117,11 +104,46 @@
                             <button type="submit" class="btn btn-danger btn-sm" id="action" title="Simpan data"><i class="icon-save mr-2"></i>Simpan Keputusan Ditolak</button>
                         </div>
                         @endif
-                        
+
                         <a class="btn btn-warning btn-sm" title="Kembalikan berkas" onclick="mutasiForward()"><i class="icon-mail-forward mr-2"></i>Kembalikan Berkas Ke Pansel</a>
-                    </div>
+                    </div> --}}
+                    <div class="card no-b no-r mt-3">
+                            <div class="card-body">
+                            <strong class="card-title">Kesimpulan Admin Panselnas</strong><br><br>
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="id" value="{!! $tmpelamar->id !!}" id="id"/>
+                                <div class="form-inline">
+                                    <div class="form-group m-0 col-md-12">
+                                        <label for="n_panselnas" class="col-form-label s-12 col-md-2">Nama Pansel</label>
+                        @php $n_pegawai = (Auth::user()->pegawai ? Auth::user()->pegawai->n_pegawai : '') @endphp
+                                        {{-- {{ dd($n_pegawai)}} --}}
+                                        <input type="text" name="n_panselnas" id="n_panselnas" placeholder="" class="form-control r-0 light s-12 col-md-10" autocomplete="off" value="{{ $n_pegawai }}" disabled="disabled">
+                                    </div>
+                                    <div class="form-group m-0 col-md-12">
+                                        <label for="c_tolak" class="col-form-label s-12 col-md-2">Keputusan</label>
+                                        <br>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" id="c_tolak0" name="c_tolak" value="0" class="custom-control-input"{{ $tmpelamar->c_tolak === 0 ? 'checked="checked"' : '' }} required>
+                                            <label class="custom-control-label m-0 text-success" for="c_tolak0"><strong>Disetujui</strong></label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" id="c_tolak1" name="c_tolak" value="1" class="custom-control-input"{{ $tmpelamar->c_tolak === 1 ? 'checked="checked"' : '' }} required>
+                                            <label class="custom-control-label m-0 text-danger" for="c_tolak1"><strong>Ditolak</strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-0 col-md-12" id="v_alasan_tolak2" {{ $tmpelamar->c_tolak === 1 ? '' : "style=display:none" }}>
+                                        <label for="alasan_tolak" class="col-form-label s-12 col-md-2">Alasan</label>
+                                        <textarea type="text" name="alasan_tolak" id="alasan_tolak" placeholder="" class="form-control r-0 light s-12 col-md-10" autocomplete="off">{{ $tmpelamar->alasan_tolak }}</textarea>
+                                    </div>
+                                    <div class="card-body offset-md-2">
+                                        <button type="button" onclick="confirm_form();" class="btn btn-primary btn-sm" id="action" title="Simpan data"><i class="icon-save mr-2"></i>Simpan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 </form>
-            </div>
+
         </div>
     </div>
 </div>
@@ -131,53 +153,27 @@
 <script src="{{ asset('assets/js/jquery-confirm.min.js') }}"></script>
 
 <script type="text/javascript">
-$('#d_kesehatan_dari').datetimepicker({
-    format:'Y-m-d H:i',
-    onShow:function( ct ){
-    this.setOptions({
-        maxDate:$('#d_kesehatan_sampai').val()?$('#d_kesehatan_sampai').val():false
-    })},
-    timepicker:true
+$('#c_tolak0').click(function(){
+    $('#v_alasan_tolak2').hide();
 });
-$('#d_kesehatan_sampai').datetimepicker({
-    format:'Y-m-d H:i',
-    onShow:function( ct ){
-    this.setOptions({
-        minDate:$('#d_kesehatan_dari').val()?$('#d_kesehatan_dari').val():false
-    })},
-    timepicker:true
+$('#c_tolak1').click(function(){
+    $('#v_alasan_tolak2').show();
+    $('#alasan_tolak').focus();
 });
 
-$('#d_assesment_dari').datetimepicker({
+$('#d_pengumuman_dari').datetimepicker({
     format:'Y-m-d H:i',
     onShow:function( ct ){
     this.setOptions({
-        maxDate:$('#d_assesment_sampai').val()?$('#d_assesment_sampai').val():false
+        maxDate:$('#d_pengumuman_dari').val()?$('#d_pengumuman_dari').val():false
     })},
     timepicker:true
 });
-$('#d_assesment_sampai').datetimepicker({
+$('#d_pengumuman_sampai').datetimepicker({
     format:'Y-m-d H:i',
     onShow:function( ct ){
     this.setOptions({
-        minDate:$('#d_assesment_dari').val()?$('#d_assesment_dari').val():false
-    })},
-    timepicker:true
-});
-
-$('#d_wawancara_dari').datetimepicker({
-    format:'Y-m-d H:i',
-    onShow:function( ct ){
-    this.setOptions({
-        maxDate:$('#d_wawancara_sampai').val()?$('#d_wawancara_sampai').val():false
-    })},
-    timepicker:true
-});
-$('#d_wawancara_sampai').datetimepicker({
-    format:'Y-m-d H:i',
-    onShow:function( ct ){
-    this.setOptions({
-        minDate:$('#d_wawancara_dari').val()?$('#d_wawancara_dari').val():false
+        minDate:$('#d_pengumuman_sampai').val()?$('#d_pengumuman_sampai').val():false
     })},
     timepicker:true
 });
@@ -234,6 +230,60 @@ $('#form').on('submit', function (e) {
     $(this).addClass('was-validated');
 });
 
+function alerts(){
+    $.alert({
+            title: 'Error',
+            content: 'Form Inputan Tidak Boleh Kosong Silahkan Pilih Minimal Satu Keputusan',
+            icon: 'icon-error',
+            type: 'red',
+            theme: 'material',
+            typeAnimated: true,
+            animation: 'top',
+            buttons: {
+                close: function () {
+                }
+            }
+        });
+}
+
+function confirm_form(){
+    var n = $('#alasan_tolak').val();
+    if(form.c_tolak0.checked != true && form.c_tolak1.checked != true ){
+       alerts();
+    } else {
+
+        if(form.c_tolak1.checked != false){
+            if(n == ''){
+                $('#alasan_tolak').focus();
+                alerts();
+                return false;
+            }
+        }
+
+        $.confirm({
+                title: '',
+                content: 'Apakah Anda yakin akan Menyimpan data ini?',
+                icon: 'icon-save',
+                theme: 'modern',
+                closeIcon: true,
+                animation: 'scale',
+                type: 'green',
+                    buttons: {
+                        'confirm': {
+                            text: 'Ya',
+                            btnClass: 'btn-blue',
+                            action: function () {
+                                  $('#form').submit();
+                            }
+                        },
+                        cancel: function () {
+                            //
+                        }
+                    }
+                });
+    }
+}
+
 function mutasiForward(){
     $.confirm({
         title: '',
@@ -243,7 +293,7 @@ function mutasiForward(){
         closeIcon: true,
         animation: 'scale',
         type: 'orange',
-        buttons: {   
+        buttons: {
             ok: {
                 text: "Ya",
                 btnClass: 'btn-primary',

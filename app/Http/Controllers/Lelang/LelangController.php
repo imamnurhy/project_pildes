@@ -8,6 +8,7 @@ use Yajra\DataTables\Datatables;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Tmlelang;
 use App\Models\Opd;
+use App\Models\Tmlelang_foto;
 
 class LelangController extends Controller
 {
@@ -45,6 +46,7 @@ class LelangController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
         $request->validate([
@@ -58,7 +60,9 @@ class LelangController extends Controller
             'luas_lahan' => 'required',
             'alamat' => 'required',
             'c_status' => 'required',
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'd_pengumuman_dari' => 'required|date',
+            'd_pengumuman_sampai' => 'required|date',
         ]);
 
         // Handle Upload Foto
@@ -70,19 +74,24 @@ class LelangController extends Controller
             // Get Just Ext file
             $extensions = $request->file('foto')->getClientOriginalExtension();
             // Filename To Store
-            $fileNameToStore = $filename.'_'.time().'.'.$extensions;
+            $fileNameToStore = $filename . '_' . time() . '.' . $extensions;
             // Upload Image To Local
-            // $Path = $request->file('foto')->storeAs('lelang/parkir', $fileNameToStore);
+            //  $request->file('foto')->storeAs('lelang/parkir', $fileNameToStore);
 
             //Upload Image To Server <--114-->
             // Storage::disk('sftp')->put($fileNameToStore, fopen($request->file('foto'), 'r+'));
             // $extensions->storeAs('foto', $fileNameToStore, 'sftp', 'public');
 
-            Storage::disk('sftp')->put('parkir/'.$fileNameToStore, fopen($request->file('foto'), 'r+'));
-
+            Storage::disk('sftp')->put('parkir/' . $fileNameToStore, fopen($request->file('foto'), 'r+'));
         } else {
             $fileNameToStore = 'noimage.jpg';
         }
+
+        $nilai = $request->nilai_sewa;
+        $repleace = str_replace(".", "", $nilai);
+
+        $nilai2 = $request->luas_lahan;
+        $repleace2 = str_replace(".", "", $nilai2);
 
         // Create Lelang
         $post = Tmlelang::create([
@@ -91,12 +100,15 @@ class LelangController extends Controller
             'd_dari' => $request->d_dari,
             'd_sampai' => $request->d_sampai,
             'jumlah_mobil' => $request->jumlah_mobil,
-            'nilai_sewa' => $request->nilai_sewa,
+            'nilai_sewa' => $repleace,
             'jumlah_motor' => $request->jumlah_motor,
-            'luas_lahan' => $request->luas_lahan,
+            'luas_lahan' => $repleace2,
             'alamat' => $request->alamat,
             'c_status' => $request->c_status,
             'foto' => $fileNameToStore,
+            'd_pengumuman_dari' => $request->d_pengumuman_dari,
+            'd_pengumuman_sampai' => $request->d_pengumuman_sampai,
+
         ]);
 
 
@@ -152,8 +164,12 @@ class LelangController extends Controller
             'luas_lahan' => 'required',
             'alamat' => 'required',
             'c_status' => 'required',
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'foto.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'd_pengumuman_dari' => 'required|date',
+            'd_pengumuman_sampai' => 'required|date',
         ]);
+
+        $tmlelang = Tmlelang::find($id);
 
         if ($request->hasFile('foto')) {
             // GET Filename With The Extentions
@@ -163,7 +179,7 @@ class LelangController extends Controller
             // Get Just Ext file
             $extensions = $request->file('foto')->getClientOriginalExtension();
             // Filename To Store
-            $fileNameToStore = time().'.'.$extensions;
+            $fileNameToStore = time() . '.' . $extensions;
             // $fileNameToStore = $filename.$extensions;
             // Upload Image To Local
             // $Path = $request->file('foto')->storeAs('lelang/parkir', $fileNameToStore);
@@ -175,9 +191,16 @@ class LelangController extends Controller
 
             // Storage::disk('sftp')->put('parkir/'.$fileNameToStore, fopen($request->file('foto'), 'r+'));
 
+            Storage::disk('sftp')->put('parkir/' . $fileNameToStore, fopen($request->file('foto'), 'r+'));
         } else {
-            $fileNameToStore = 'noimage.jpg';
+            $fileNameToStore = $tmlelang->foto;
         }
+
+        $nilai = $request->nilai_sewa;
+        $repleace = str_replace(".", "", $nilai);
+
+        $nilai2 = $request->luas_lahan;
+        $repleace2 = str_replace(".", "", $nilai2);
 
         $post = [
             'n_lelang' => $request->n_lelang,
@@ -185,21 +208,21 @@ class LelangController extends Controller
             'd_dari' => $request->d_dari,
             'd_sampai' => $request->d_sampai,
             'jumlah_mobil' => $request->jumlah_mobil,
-            'nilai_sewa' => $request->nilai_sewa,
+            'nilai_sewa' => $repleace,
             'jumlah_motor' => $request->jumlah_motor,
-            'luas_lahan' => $request->luas_lahan,
+            'luas_lahan' => $repleace2,
             'alamat' => $request->alamat,
             'c_status' => $request->c_status,
             'foto' => $fileNameToStore,
+            'd_pengumuman_dari' => $request->d_pengumuman_dari,
+            'd_pengumuman_sampai' => $request->d_pengumuman_sampai,
         ];
 
-        $tmlelang = Tmlelang::find($id);
 
-        if($tmlelang->foto != ''){
-            Storage::disk('sftp')->delete('parkir/'.$tmlelang->foto);
-        }
+        // if($tmlelang->foto != ''){
+        //     Storage::disk('sftp')->delete('parkir/'.$tmlelang->foto);
+        // }
 
-        Storage::disk('sftp')->put('parkir/'.$fileNameToStore, fopen($request->file('foto'), 'r+'));
         $tmlelang->update($post);
 
         return response()->json([
@@ -228,29 +251,110 @@ class LelangController extends Controller
     {
         $tmlelang = Tmlelang::select('id', 'opd_id', 'n_lelang', 'd_dari', 'd_sampai', 'c_status')->with(['opd:id,n_opd']);
         return Datatables::of($tmlelang)
-            ->editColumn('d_dari', function($p){
+            ->editColumn('d_dari', function ($p) {
                 return \Carbon\Carbon::parse($p->d_dari)->format('d F Y');
             })
-            ->editColumn('d_sampai', function($p){
+            ->editColumn('d_sampai', function ($p) {
                 return \Carbon\Carbon::parse($p->d_sampai)->format('d F Y');
             })
-            ->editColumn('c_status', function($p){
-                if($p->c_status == 1){
+            ->editColumn('c_status', function ($p) {
+                if ($p->c_status == 1) {
                     $txt = "<span class='badge r-3 badge-primary'>Tampil</span>";
-                }else{
+                } else {
                     $txt = "<span class='badge r-3'>Tidak Tampil</span>";
                 }
                 return $txt;
             })
-            ->addColumn('syarats', function($p){
-                return $p->trlelang_syarats()->count()." <a href='".route('lelangsyarat.index', $p->id)."' class='text-success pull-right' title='Edit Syarat'><i class='icon-notebook-list2 mr-1'></i></a>";
+            ->addColumn('syarats', function ($p) {
+                return $p->trlelang_syarats()->count() . " <a href='" . route('lelangsyarat.index', $p->id) . "' class='text-success pull-right' title='Edit Syarat'><i class='icon-notebook-list2 mr-1'></i></a>";
             })
-            ->addColumn('action', function($p){
+            ->addColumn('action', function ($p) {
                 return "
-                    <a href='". route('lelang.show', $p->id) ."' title='Edit Lelang'><i class='icon-pencil mr-1'></i></a>
-                    <a href='#' onclick='remove(".$p->id.")' class='text-danger' title='Hapus Lelang'><i class='icon-remove'></i></a>";
+                    <a href='" . route('lelang.show', $p->id) . "' title='Edit Lahan'><i class='icon-pencil mr-1'></i></a>
+                    <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Lelang'><i class='icon-remove'></i></a>";
             })
             ->rawColumns(['syarats', 'c_status', 'action'])
             ->toJson();
     }
 }
+
+
+//Fungsi Upload Banyak Image
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'n_lelang' => 'required|unique:tmlelangs,n_lelang',
+    //         'ket' => 'required',
+    //         'd_dari' => 'required|date',
+    //         'd_sampai' => 'required|date',
+    //         'nilai_sewa' => 'required',
+    //         'jumlah_mobil' => 'required',
+    //         'jumlah_motor' => 'required',
+    //         'luas_lahan' => 'required',
+    //         'alamat' => 'required',
+    //         'c_status' => 'required',
+    //         'foto.*' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+    //     ]);
+
+    //     // Handle Upload Foto
+    //     // if ($request->hasFile('foto')) {
+    //     //     // GET Filename With The Extentions
+    //     //     $filenameWithExt = $request->file('foto')->getClientOriginalName();
+    //     //     // Get Just Filename
+    //     //     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+    //     //     // Get Just Ext file
+    //     //     $extensions = $request->file('foto')->getClientOriginalExtension();
+    //     //     // Filename To Store
+    //     //     $fileNameToStore = $filename.'_'.time().'.'.$extensions;
+    //     //     // Upload Image To Local
+    //     //     // $Path = $request->file('foto')->storeAs('lelang/parkir', $fileNameToStore);
+
+    //     //     //Upload Image To Server <--114-->
+    //     //     // Storage::disk('sftp')->put($fileNameToStore, fopen($request->file('foto'), 'r+'));
+    //     //     // $extensions->storeAs('foto', $fileNameToStore, 'sftp', 'public');
+
+    //     //     Storage::disk('sftp')->put('parkir/'.$fileNameToStore, fopen($request->file('foto'), 'r+'));
+
+    //     // } else {
+    //     //     $fileNameToStore = 'noimage.jpg';
+    //     // }
+
+
+    //     // Create Lelang
+    //     $post = Tmlelang::create([
+    //         'n_lelang' => $request->n_lelang,
+    //         'ket' => $request->ket,
+    //         'd_dari' => $request->d_dari,
+    //         'd_sampai' => $request->d_sampai,
+    //         'jumlah_mobil' => $request->jumlah_mobil,
+    //         'nilai_sewa' => $request->nilai_sewa,
+    //         'jumlah_motor' => $request->jumlah_motor,
+    //         'luas_lahan' => $request->luas_lahan,
+    //         'alamat' => $request->alamat,
+    //         'c_status' => $request->c_status,
+    //         // 'foto' => $fileNameToStore,
+    //     ]);
+
+    //     if ($image = $request->file('foto')) {
+    //         foreach ($image as $files) {
+    //         if ($files->isValid()) {
+
+    //         $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+
+    //         Storage::disk('sftp')->put('parkir/'.$profileImage, file_get_contents($files));
+
+    //         Tmlelang_foto::create([
+    //             'tmlelang_id' => $post->id,
+    //             'foto' => $profileImage,
+    //         ]);
+
+    //             }
+    //         }
+    //     }
+
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Data lelang berhasil tersimpan.'
+    //     ]);
+    // }

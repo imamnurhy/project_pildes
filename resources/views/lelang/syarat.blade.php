@@ -28,8 +28,9 @@
                             <table id="tmsyarat-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <th width="30">No</th>
-                                    <th width="300">Nama</th>
+                                    <th width="300">Persyaratan</th>
                                     <th>Keterangan</th>
+                                    <th>File</th>
                                     <th width="40"></th>
                                 </thead>
                                 <tbody></tbody>
@@ -54,6 +55,11 @@
                             <div class="form-group m-0">
                                 <label for="ket" class="col-form-label s-12 col-md-4">Keterangan</label>
                                 <textarea name="ket" id="ket" placeholder="" class="form-control r-0 light s-12 col-md-8" required></textarea>
+                            </div>
+                            <div class="form-group m-2">
+                                <label for="file" class="col-form-label s-12 col-md-4">File</label>
+                                <input type="file" name="file" id="file" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                <small class="col-md-8 offset-md-4">(doc|docx|pdf)</small>
                             </div>
                             <div class="card-body offset-md-3">
                                 <button type="submit" class="btn btn-primary btn-sm" id="action"><i class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
@@ -81,6 +87,7 @@
             {data: 'id', name: 'id', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'n_syarat', name: 'n_syarat'},
             {data: 'ket', name: 'ket'},
+            {data: 'file', name: 'file'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
@@ -136,7 +143,7 @@
             closeIcon: true,
             animation: 'scale',
             type: 'red',
-            buttons: {   
+            buttons: {
                 ok: {
                     text: "ok!",
                     btnClass: 'btn-primary',

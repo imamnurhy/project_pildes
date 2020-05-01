@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Lelang')
+@section('title', 'Tambah Data')
 
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
@@ -13,14 +13,15 @@
             <div class="row">
                 <div class="col">
                     <h4>
-                        <i class="icon icon-event_seat"></i> Tambah Data Lelang
+                        <i class="icon icon-event_seat"></i> Tambah Data Lahan
                     </h4>
                 </div>
             </div>
             <div class="row justify-content-between">
                 <ul class="nav nav-material nav-material-white responsive-tab" id="v-pegawai-tab" role="tablist">
                     <li>
-                        <a class="nav-link" href="{{ route('lelang.index') }}"><i class="icon icon-arrow_back"></i>Semua Lelang</a>
+                        <a class="nav-link" href="{{ route('lelang.index') }}"><i class="icon icon-arrow_back"></i>Semua
+                            Data Lahan</a>
                     </li>
                 </ul>
             </div>
@@ -29,19 +30,19 @@
 
     <div class="container-fluid my-3">
         <div id="alert"></div>
-            <form class="needs-validation" id="form" method="POST" novalidate enctype="multipart/form-data">
-                @csrf
-                @method('POST')
-                <input type="hidden" id="id" name="id"/>
+        <form class="needs-validation" id="form" method="POST" novalidate enctype="multipart/form-data">
+            @csrf
+            @method('POST')
+            <input type="hidden" id="id" name="id" />
 
-                <div class="card no-b  no-r">
-                    <div class="card-body">
-                        <h5 class="card-title" id="formTitle">Tambah Data</h5>
-                        <div class="form-row form-inline" style="align-items: baseline">
-                            <div class="col-md-12">
+            <div class="card no-b  no-r">
+                <div class="card-body">
+                    <h5 class="card-title" id="formTitle">Tambah Data</h5>
+                    <div class="form-row form-inline" style="align-items: baseline">
+                        <div class="col-md-12">
 
-                                {{-- Form Input OPD --}}
-                                {{-- <div class="form-group mb-1">
+                            {{-- Form Input OPD --}}
+                            {{-- <div class="form-group mb-1">
                                     <div class="col-md-2">
                                         <label for="opd_id" class="col-form-label s-12">OPD</label>
                                     </div>
@@ -50,77 +51,106 @@
                                             <option value="">Pilih</option>
                                             @foreach($opds as $key=>$opd)
                                             <option value="{{ $opd->id }}">{{ $opd->n_opd }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div> --}}
+                            @endforeach
+                            </select>
+                        </div>
+                    </div> --}}
 
-                                <div class="form-group m-0">
-                                    <label for="n_lelang" class="col-form-label s-12 col-md-2">Nama</label>
-                                    <input type="text" name="n_lelang" id="n_lelang" placeholder="" class="form-control light r-0 s-12 col-md-8" autocomplete="off" required/>
-                                </div>
-                                <div class="form-group m-0">
-                                    <label for="d_dari" class="col-form-label s-12 col-md-2">Periode</label>
-                                    <input type="text" name="d_dari" id="d_dari" placeholder="" class="form-control r-0 light s-12 col-md-2" autocomplete="off" required/>
+                    <div class="form-group m-0">
+                        <label for="n_lelang" class="col-form-label s-12 col-md-2">Nama</label>
+                        <input type="text" name="n_lelang" id="n_lelang" placeholder=""
+                            class="form-control light r-0 s-12 col-md-8" autocomplete="off" required />
+                    </div>
+                    <div class="form-group m-0">
+                        <label for="d_dari" class="col-form-label s-12 col-md-2">Periode</label>
+                        <input type="text" name="d_dari" id="d_dari" placeholder=""
+                            class="form-control r-0 light s-12 col-md-2" autocomplete="off" required />
 
-                                    <label for="d_sampai" class="col-form-label s-12 col-md-1">s/d</label>
-                                    <input type="text" name="d_sampai" id="d_sampai" placeholder="" class="form-control r-0 light s-12 col-md-2" autocomplete="off" required/>
-                                </div>
-                                <div class="form-group m-0">
-                                        <label for="nilai_sewa" class="col-form-label s-12 col-md-2">Nilai Sewa</label>
-                                        <input type="number" name="nilai_sewa" id="nilai_sewa" placeholder="" class="form-control light r-0 s-12 col-md-8" autocomplete="off" required/>
-                                 </div>
-                                 <div class="form-group m-0">
-                                        <label for="jumlah_mobil" class="col-form-label s-12 col-md-2">Jumlah Mobil</label>
-                                        <input type="number" name="jumlah_mobil" id="jumlah_mobil" placeholder="" class="form-control light r-0 s-12 col-md-8" autocomplete="off" required/>
-                                </div>
-                                <div class="form-group m-0">
-                                        <label for="jumlah_motor" class="col-form-label s-12 col-md-2">Jumlah Motor</label>
-                                        <input type="number" name="jumlah_motor" id="jumlah_motor" placeholder="" class="form-control light r-0 s-12 col-md-8" autocomplete="off" required/>
-                                </div>
-                                <div class="form-group m-0">
-                                        <label for="luas_lahan" class="col-form-label s-12 col-md-2">luas Lahan</label>
-                                        <input type="number" name="luas_lahan" id="luas_lahan" placeholder="" class="form-control light r-0 s-12 col-md-8" autocomplete="off" required/>
-                                </div>
-                                <div class="form-group m-0">
-                                        <label for="alamat" class="col-form-label s-12 col-md-2">Alamat</label>
-                                        <input type="text" name="alamat" id="alamat" placeholder="" class="form-control light r-0 s-12 col-md-8" autocomplete="off" required/>
-                                    </div>
-                                <div class="form-group m-0">
-                                    <label for="foto" class="col-form-label s-12 col-md-2">Foto</label>
-                                    <input type="file" name="foto" id="fileUpload" placeholder="" class="form-control light r-0 s-12 col-md-8" autocomplete="off" required/>
-                                </div>
-                                <div class="form-group m-0">
-                                        <label for="foto" class="col-form-label s-12 col-md-2" ></label>
-                                    <div id="image-holder" class="r-0 s-12 col-md-8"> </div>
-                                </div>
-                                <div class="form-group m-0 mb-1">
-                                    <label for="ket" class="col-form-label s-12 col-md-2">Keterangan</label>
-                                </div>
-                                <div class="form-group m-2" style="align-items:flex-start">
-                                    <div class="col-md-12 card-body border no-p">
-                                        <textarea name="ket" id="ket" placeholder="" class="form-control r-0 s-12 editor" style="width:100%" required></textarea>
-                                    </div>
-                                </div>
-                                <div class="form-group m-0">
-                                    <label for="c_status" class="col-form-label s-12 col-md-2">Status</label>
-                                    <select name="c_status" id="c_status" placeholder="" class="form-control r-0 light s-12 col-md-2" required>
-                                        <option value="">Pilih</option>
-                                        <option value="1">Tampil</option>
-                                        <option value="0">Tidak Tampil</option>
-                                    </select>
-                                </div>
-                                <div class="card-body offset-md-3">
-                                    <button type="submit" class="btn btn-primary btn-sm" id="action" title="Simpan data"><i class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
-                                    <a class="btn btn-sm" onclick="add()" id="reset" title="Reset inputan">Reset</a>
-                                </div>
-                            </div>
+                        <label for="d_sampai" class="col-form-label s-12 col-md-1">s/d</label>
+                        <input type="text" name="d_sampai" id="d_sampai" placeholder=""
+                            class="form-control r-0 light s-12 col-md-2" autocomplete="off" required />
+                    </div>
+                    <div class="form-group m-0">
+                        <label for="nilai_sewa" class="col-form-label s-12 col-md-2">Nilai Sewa</label>
+                        <input type="text" name="nilai_sewa" id="nilai_sewa" placeholder=""
+                            class="form-control light r-0 s-12 col-md-8" autocomplete="off" required />
+                    </div>
+                    <div class="form-group m-0">
+                        <label for="jumlah_mobil" class="col-form-label s-12 col-md-2">Jumlah SRP</label>
+                        <input type="number" name="jumlah_mobil" id="jumlah_mobil" placeholder=""
+                            class="form-control light r-0 s-12 col-md-8" autocomplete="off" required />
+                    </div>
+                    <div class="form-group m-0">
+                        <label for="jumlah_motor" class="col-form-label s-12 col-md-2">Jumlah Motor</label>
+                        <input type="number" name="jumlah_motor" id="jumlah_motor" placeholder=""
+                            class="form-control light r-0 s-12 col-md-8" autocomplete="off" required />
+                    </div>
+                    <div class="form-group m-0">
+                        <label for="luas_lahan" class="col-form-label s-12 col-md-2">luas Lahan</label>
+                        <input type="text" name="luas_lahan" id="luas_lahan" placeholder=""
+                            class="form-control light r-0 s-12 col-md-8" autocomplete="off" required />
+                    </div>
+                    <div class="form-group m-0">
+                        <label for="alamat" class="col-form-label s-12 col-md-2">Alamat</label>
+                        <input type="text" name="alamat" id="alamat" placeholder=""
+                            class="form-control light r-0 s-12 col-md-8" autocomplete="off" required />
+                    </div>
+                    <div class="form-group m-0">
+                        <label for="foto" class="col-form-label s-12 col-md-2">Foto</label>
+                        <input type="file" name="foto" id="fileUpload" placeholder=""
+                            class="form-control light r-0 s-12 col-md-8" autocomplete="off" required />
+                    </div>
+                    <div class="form-group m-0">
+                        <label class="col-form-label s-12 col-md-2"></label>
+                        <div class="r-0 s-12 col-md-8"> <span hidden id="span" style="color:#00f60f; font-size:12px">
+                                <li id="li"></li>
+                            </span> </div>
+                    </div>
+                    <div class="form-group m-0">
+                        <label for="foto" class="col-form-label s-12 col-md-2"></label>
+                        <div id="image-holder" class="r-0 s-12 col-md-8"> </div>
+                    </div>
+                    <br>
+                    <div class="form-group m-0">
+                        <label for="d_pengumuman_dari" class="col-form-label s-12 col-md-2">Pengumuman</label>
+                        <input type="text" name="d_pengumuman_dari" id="d_pengumuman_dari" placeholder=""
+                            class="form-control r-0 light s-12 col-md-2" autocomplete="off" required />
+
+                        <label for="d_pengumuman_sampai" class="col-form-label s-12 col-md-1">s/d</label>
+                        <input type="text" name="d_pengumuman_sampai" id="d_pengumuman_sampai" placeholder=""
+                            class="form-control r-0 light s-12 col-md-2" autocomplete="off" required />
+                    </div>
+
+                    <div class="form-group m-0 mb-1">
+                        <label for="ket" class="col-form-label s-12 col-md-2">Keterangan</label>
+                    </div>
+                    <div class="form-group m-2" style="align-items:flex-start">
+                        <div class="col-md-12 card-body border no-p">
+                            <textarea name="ket" id="ket" placeholder="" class="form-control r-0 s-12 editor"
+                                style="width:100%" required></textarea>
                         </div>
                     </div>
+                    <div class="form-group m-0">
+                        <label for="c_status" class="col-form-label s-12 col-md-2">Status</label>
+                        <select name="c_status" id="c_status" placeholder=""
+                            class="form-control r-0 light s-12 col-md-2" required>
+                            <option value="">Pilih</option>
+                            <option value="1">Tampil</option>
+                            <option value="0">Tidak Tampil</option>
+                        </select>
+                    </div>
+                    <div class="card-body offset-md-3">
+                        <button type="submit" class="btn btn-primary btn-sm" id="action" title="Simpan data"><i
+                                class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
+                        <a class="btn btn-sm" onclick="add()" id="reset" title="Reset inputan">Reset</a>
+                    </div>
                 </div>
-            </form>
-        </div>
+            </div>
     </div>
+</div>
+</form>
+</div>
+</div>
 </div>
 @endsection
 
@@ -130,25 +160,77 @@
 <script type="text/javascript">
     $('#menuLelang').addClass('active');
     $('.select2').addClass('light');
+
     $('#d_dari').datetimepicker({
-        format:'Y-m-d',
+        format:'Y-m-d H:i',
         onShow:function( ct ){
         this.setOptions({
             maxDate:$('#d_sampai').val()?$('#d_sampai').val():false
         })
         },
-        timepicker:false
+        timepicker:true
     });
 
     $('#d_sampai').datetimepicker({
-        format:'Y-m-d',
+        format:'Y-m-d H:i',
         onShow:function( ct ){
         this.setOptions({
             minDate:$('#d_dari').val()?$('#d_dari').val():false
         })
         },
+        timepicker:true
+    });
+
+    $('#d_pengumuman_dari').datetimepicker({
+        format:'Y-m-d H:i',
+        onShow:function( ct ){
+        this.setOptions({
+            maxDate:$('#d_pengumuman_sampai').val()?$('#d_pengumuman_sampai').val():false
+        })
+        },
         timepicker:false
     });
+
+    $('#d_pengumuman_sampai').datetimepicker({
+        format:'Y-m-d H:i',
+        onShow:function( ct ){
+        this.setOptions({
+            minDate:$('#d_pengumuman_dari').val()?$('#d_pengumuman_dari').val():false
+        })
+        },
+        timepicker:false
+    });
+
+    var rupiah = document.getElementById('nilai_sewa');
+		rupiah.addEventListener('keyup', function(e){
+			// gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+			rupiah.value = formatRupiah(this.value);
+		});
+
+    var rupiah2 = document.getElementById('luas_lahan');
+		rupiah2.addEventListener('keyup', function(e){
+			// gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+			rupiah2.value = formatRupiah(this.value);
+		});
+
+		/* Fungsi formatRupiah */
+		function formatRupiah(angka, prefix){
+			var number_string = angka.replace(/[^,\d]/g, '').toString(),
+			split   		= number_string.split(','),
+			sisa     		= split[0].length % 3,
+			rupiah     		= split[0].substr(0, sisa),
+			ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+
+			// tambahkan titik jika yang di input sudah menjadi angka ribuan
+			if(ribuan){
+				separator = sisa ? '.' : '';
+				rupiah += separator + ribuan.join('.');
+            }
+
+
+			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
 
     {{ $id == 0 ? 'add()' : 'edit('.$id.')' }}
     function add(){
@@ -165,6 +247,9 @@
         $('#txtAction').html(" Perubahan");
         $('#reset').hide();
         $('#form input[name=_method]').val('PATCH');
+        $('#fileUpload').removeAttr('required', true);
+        $('#span').removeAttr('hidden');
+        $('#li').html('Abaikan Bila Tidak Ingin Mengganti.')
         $.ajax({
             url: "{{ route('lelang.edit', ':id') }}".replace(':id', id),
             type: "GET",
@@ -185,6 +270,8 @@
                 $('#c_status').val(data.c_status);
                 // $('#fileUpload').val(data.foto);
                 $('#ket').trumbowyg('html', data.ket);
+                $('#d_pengumuman_dari').val(data.d_pengumuman_dari);
+                $('#d_pengumuman_sampai').val(data.d_pengumuman_sampai);
             },
             error : function() {
                 console.log("Nothing Data");

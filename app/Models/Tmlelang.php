@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tmlelang extends Model
 {
-    protected $fillable = ['n_lelang', 'ket', 'd_dari', 'd_sampai', 'c_status', 'nilai_sewa', 'jumlah_mobil', 'jumlah_motor', 'luas_lahan', 'foto', 'alamat'];
+    protected $fillable = ['n_lelang', 'ket', 'd_dari', 'd_sampai', 'c_status', 'nilai_sewa', 'jumlah_mobil', 'jumlah_motor', 'luas_lahan', 'foto', 'alamat', 'd_pengumuman_dari', 'd_pengumuman_sampai'];
 
     public function opd()
     {

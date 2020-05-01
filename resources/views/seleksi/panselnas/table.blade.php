@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col">
                     <h3 class="my-2">
-                        <i class="icon icon-package"></i> Data Seluruh Pelamar Jabatan
+                        <i class="icon icon-package"></i> Data Seluruh Pelamar Lahan
                     </h3>
                 </div>
             </div>
@@ -32,18 +32,23 @@
                         </div>
                         <div class="col-md-3 pr-0">
                             <div class="bg-light" width="100%">
-                                <select name="tmpelamar_status_id" id="tmpelamar_status_id" placeholder="Semua" class="form-control r-0 light s-12 col-md-12 custom-select select2" autocomplete="off">
+                                <select name="tmpelamar_status_id" id="tmpelamar_status_id" placeholder="Semua"
+                                    class="form-control r-0 light s-12 col-md-12 custom-select select2"
+                                    autocomplete="off">
                                     <option value="99">Status Berkas : Semua</option>
                                     @foreach($tmpelamar_statuses as $row=>$tmpelamar_status)
-                                    <option value="{!! $tmpelamar_status->id !!}">{!! $tmpelamar_status->n_status !!}</option>
+                                    <option value="{!! $tmpelamar_status->id !!}">{!! $tmpelamar_status->n_status !!}
+                                    </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4 pr-0">
                             <div class="bg-light p-0" width="100%">
-                                <select name="tmlelang_id" id="tmlelang_id" placeholder="" class="form-control r-0 light s-12 col-md-12 custom-select select2" autocomplete="off">
-                                    <option value="99">Jabatan Yg Dilamar : Semua</option>
+                                <select name="tmlelang_id" id="tmlelang_id" placeholder=""
+                                    class="form-control r-0 light s-12 col-md-12 custom-select select2"
+                                    autocomplete="off">
+                                    <option value="99">Lahan Yg Dilamar : Semua</option>
                                     @foreach($tmlelangs as $row=>$tmlelang)
                                     <option value="{!! $tmlelang->id !!}">{!! $tmlelang->n_lelang !!}</option>
                                     @endforeach
@@ -52,7 +57,9 @@
                         </div>
                         <div class="col-md-3 pr-0">
                             <div class="bg-light p-0" width="100%">
-                                <select name="c_tolak" id="c_tolak" placeholder="" class="form-control r-0 light s-12 col-md-12 custom-select select2" autocomplete="off">
+                                <select name="c_tolak" id="c_tolak" placeholder=""
+                                    class="form-control r-0 light s-12 col-md-12 custom-select select2"
+                                    autocomplete="off">
                                     <option value="99">Keputusan : Semua</option>
                                     <option value="0"><strong class="text-success">Disetujui</strong></option>
                                     <option value="1">Ditolak</option>
@@ -60,7 +67,8 @@
                             </div>
                         </div>
                         <div class="col-md-1">
-                            <a class="btn btn-sm" id="btnFilter" onclick="filterReset()" title="Reset Filter" style="display:none">Reset</a>
+                            <a class="btn btn-sm" id="btnFilter" onclick="filterReset()" title="Reset Filter"
+                                style="display:none">Reset</a>
                         </div>
                     </div>
                 </div>
@@ -73,7 +81,9 @@
                             <th width="30">No</th>
                             <th width="120">No Registrasi</th>
                             <th width="160">Nama</th>
-                            <th>Jabatan Yg Dilamar</th>
+                            <th width="160">Perusahaan</th>
+                            <th>Lahan Yg Dilamar</th>
+                            <th>Penawaran</th>
                             <th width="150">Status</th>
                             <th width="40"></th>
                         </thead>
@@ -112,7 +122,7 @@
         pageLength: 25,
         processing: true,
         serverSide: true,
-        order: [ 1, 'asc' ],
+        order: [ 2, 'desc' ],
         ajax: {
             url: "{{ route('api.panselnas') }}",
             method: 'POST',
@@ -125,8 +135,10 @@
         columns: [
             {data: 'tmregistrasi.id', name: 'id', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'no_pendaftaran', name: 'no_pendaftaran'},
-            {data: 'tmregistrasi.n_pegawai', name: 'tmregistrasi.n_pegawai'},
+            {data: 'tmregistrasi.nama_pl', name: 'tmregistrasi.nama_pl'},
+            {data: 'tmregistrasi.n_pr', name: 'tmregistrasi.n_pr'},
             {data: 'tmlelang.n_lelang', name: 'tmlelang.n_lelang'},
+            {data: 'penawaran', name: 'penawaran'},
             {data: 'tmpelamar_status.n_status', name: 'tmpelamar_status.n_status', className: 'text-center'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
@@ -150,7 +162,7 @@
             closeIcon: true,
             animation: 'scale',
             type: 'green',
-            buttons: {   
+            buttons: {
                 ok: {
                     text: "Ya",
                     btnClass: 'btn-primary',

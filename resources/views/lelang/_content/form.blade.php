@@ -39,22 +39,21 @@
                         <h5 class="card-title" id="formTitle">Tambah Data</h5>
                         <div class="form-row form-inline" style="align-items: baseline">
                             <div class="col-md-12">
-                                <div class="form-group m-0">
+                                {{-- <div class="form-group m-0">
                                     <label for="link" class="col-form-label s-12 col-md-2">Link</label>
                                     <input type="text" name="link" id="link" placeholder="" class="form-control r-0 light s-12 col-md-2" autocomplete="off" required/>
-                                </div>
+                                </div> --}}
                                 <div class="form-group m-0">
                                     <label for="n_content" class="col-form-label s-12 col-md-2">Judul</label>
                                     <input type="text" name="n_content" id="n_content" placeholder="" class="form-control light r-0 s-12 col-md-8" autocomplete="off" required/>
                                 </div>
-                                <div class="form-group m-0 mb-1">
-                                    <label for="ket" class="col-form-label s-12 col-md-2">Keterangan</label>
+
+                                <div class="form-group m-0">
+                                    <label for="file" class="col-form-label s-12 col-md-2">File</label>
+                                    <input type="file" name="file" id="file" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                    <small class="col-md-8 offset-md-2">(doc|docx|pdf)</small>
                                 </div>
-                                <div class="form-group m-2" style="align-items:flex-start">
-                                    <div class="col-md-12 card-body border no-p">
-                                        <textarea name="ket" id="ket" placeholder="" class="form-control r-0 s-12 editor" style="width:100%"" required></textarea>
-                                    </div>
-                                </div>
+                                <br>
                                 <div class="form-group m-0">
                                     <label for="c_status" class="col-form-label s-12 col-md-2">Status</label>
                                     <select name="c_status" id="c_status" placeholder="" class="form-control r-0 light s-12 col-md-2" required>
@@ -83,7 +82,7 @@
 <script type="text/javascript">
     $('#menuContent').addClass('active');
     $('.select2').addClass('light');
-    
+
     {{ $id == 0 ? 'add()' : 'edit('.$id.')' }}
     function add(){
         save_method = 'add';
@@ -124,7 +123,7 @@
                     type: 'orange',
                     autoClose: 'ok|10000',
                     escapeKey: 'cancelAction',
-                    buttons: {   
+                    buttons: {
                         ok: {
                             text: "ok!",
                             btnClass: 'btn-primary',

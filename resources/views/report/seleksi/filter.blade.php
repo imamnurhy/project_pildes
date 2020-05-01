@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan Lamaran Jabatan')
+@section('title', 'Laporan Lamaran Lahan Parkir')
 
 @section('content')
 <div class="page has-sidebar-left bg-light">
@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col">
                     <h3 class="my-2">
-                        <i class="icon icon-list3"></i> Laporan Lamaran Jabatan
+                        <i class="icon icon-list3"></i> Laporan Lamaran Lahan Parkir
                     </h3>
                 </div>
             </div>
@@ -46,7 +46,8 @@
                             <th width="30">No</th>
                             <th width="120">No Registrasi</th>
                             <th width="160">Nama</th>
-                            <th>Jabatan Yg Dilamar</th>
+                            <th width="160">Perusahaan</th>
+                            <th>Lahan Parkir Yg Dilamar</th>
                             <th width="150">Status</th>
                         </thead>
                         <tbody style="min-height:350px"></tbody>
@@ -101,7 +102,8 @@
         columns: [
             {data: 'tmregistrasi.id', name: 'id', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'no_pendaftaran', name: 'no_pendaftaran'},
-            {data: 'tmregistrasi.n_pegawai', name: 'tmregistrasi.n_pegawai'},
+            {data: 'tmregistrasi.nama_pl', name: 'tmregistrasi.nama_pl'},
+            {data: 'tmregistrasi.n_pr', name: 'tmregistrasi.n_pr'},
             {data: 'tmlelang.n_lelang', name: 'tmlelang.n_lelang'},
             {data: 'tmpelamar_status.n_status', name: 'tmpelamar_status.n_status', className: 'text-center'}
         ]

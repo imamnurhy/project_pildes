@@ -41,10 +41,10 @@
     <div class="container-fluid my-3">
         <div id="alert"></div>
         @include('seleksi.pelamar')
-        
+
         <div class="card no-b no-r mt-3">
             <div class="card-body">
-                <strong class="card-title">Kesimpulan</strong>
+                <strong class="card-title">Kesimpulan Tim Panselnas</strong>
                 <div class="form-inline">
                     <div class="form-group m-0 col-md-12">
                         <label for="n_panselnas" class="col-form-label s-12 col-md-2">Nama Pansel</label>
@@ -70,17 +70,25 @@
 
         <div class="card no-b no-r mt-3">
             <div class="card-body">
-                <strong class="card-title">Keputusan</strong>
+                <strong class="card-title">Kesimpulan Admin Panselnas</strong>
                 <div class="form-inline">
+                    <div class="form-group m-0 col-md-12">
+                        <label for="n_panselnas" class="col-form-label s-12 col-md-2">Nama Pansel</label>
+                        <label>{{ $tmpelamar->n_admin_panselnas }}</label>
+                    </div>
                     <div class="form-group m-0 col-md-12">
                         <label for="c_tolak" class="col-form-label s-12 col-md-2">Keputusan</label>
                         <label>
-                            @if($tmpelamar->c_tolak === 1)
+                            @if($tmpelamar->c_tolak_admin === 1)
                                 <strong class="text-danger">Ditolak</strong>
                             @else
                                 <strong class="text-success">Disetujui</strong>
                             @endif
                         </label>
+                    </div>
+                    <div class="form-group m-0 col-md-12" id="v_alasan_tolak" {{ $tmpelamar->c_tolak_admin === 1 ? '' : "style=display:none" }}>
+                        <label for="alasan_tolak" class="col-form-label s-12 col-md-2">Alasan</label>
+                        <label>{{ $tmpelamar->alasan_tolak_admin_panselnas }}</label>
                     </div>
                 </div>
             </div>

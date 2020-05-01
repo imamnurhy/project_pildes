@@ -27,7 +27,6 @@
                     <table id="content-table" class="table table-striped" style="width:100%">
                         <thead>
                             <th width="30">No</th>
-                            <th width="100px">Link</th>
                             <th>Judul</th>
                             <th width="70px">Status</th>
                             <th width="40"></th>
@@ -53,7 +52,6 @@
         ajax: "{{ route('api.content') }}",
         columns: [
             {data: 'id', name: 'id', orderable: false, searchable: false, className: 'text-center'},
-            {data: 'link', name: 'link'},
             {data: 'n_content', name: 'n_content'},
             {data: 'c_status', name: 'c_status', className: 'text-center'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
@@ -76,7 +74,7 @@
             closeIcon: true,
             animation: 'scale',
             type: 'red',
-            buttons: {   
+            buttons: {
                 ok: {
                     text: "ok!",
                     btnClass: 'btn-primary',

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tmsyarat extends Model
 {
-    protected $fillable = ['n_syarat', 'ket'];
+    protected $fillable = ['n_syarat', 'ket', 'file'];
 
     public function trlelang_syarats()
     {
