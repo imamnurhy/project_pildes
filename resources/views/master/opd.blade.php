@@ -28,10 +28,8 @@
                             <table id="opd-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <th width="30">No</th>
-                                    <th>Rumpun</th>
-                                    <th>Kode</th>
-                                    <th>Nama</th>
-                                    <th>Initial</th>
+                                    <th>Kategori</th>
+                                    <th>Lokasi</th>
                                     <th width="40"></th>
                                 </thead>
                                 <tbody></tbody>
@@ -40,39 +38,37 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Add --}}
             <div class="col-md-4 my-1">
                 <div id="alert"></div>
                 <form class="needs-validation" id="form" method="POST" novalidate>
                     @csrf
                     {{ method_field('POST') }}
-                    <input type="hidden" id="id" name="id"/>
-                    <h4 id="formTitle">Tambah Data</h4><hr>
+                    <input type="hidden" id="id" name="id" />
+                    <h4 id="formTitle">Tambah Data</h4>
+                    <hr>
                     <div class="form-row form-inline">
                         <div class="col-md-12">
                             <div class="form-group m-0">
-                                <label for="rumpun_id" class="col-form-label s-12 col-md-4">Rumpun</label>
-                                <select name="rumpun_id" id="rumpun_id" placeholder="" class="form-control r-0 light s-12 col-md-8" required>
-                                   <option value="">Pilih</option>
-                                    @foreach($rumpuns as $key=>$rumpun)
-                                   <option value="{{ $rumpun->id }}">{{ $rumpun->n_rumpun }}</option>
+                                <label for="tmkategori_id" class="col-form-label s-12 col-md-4">Kategori</label>
+                                <select name="tmkategori_id" id="tmkategori_id" placeholder=""
+                                    class="form-control r-0 light s-12 col-md-8" required>
+                                    <option value="">Pilih</option>
+                                    @foreach($tmkategoris as $key=>$tmkategori)
+                                    <option value="{{ $tmkategori->id }}">{{ $tmkategori->n_kategori }}</option>
                                     @endforeach
-                                   <option value="0">Tidak Ada</option>
+                                    <option value="0">Tidak Ada</option>
                                 </select>
                             </div>
                             <div class="form-group m-0">
-                                <label for="kode" class="col-form-label s-12 col-md-4">Kode</label>
-                                <input type="text" name="kode" id="kode" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                            </div>
-                            <div class="form-group m-0">
-                                <label for="n_opd" class="col-form-label s-12 col-md-4">Nama</label>
-                                <input type="text" name="n_opd" id="n_opd" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                            </div>
-                            <div class="form-group m-0">
-                                <label for="initial" class="col-form-label s-12 col-md-4">Initial</label>
-                                <input type="text" name="initial" id="initial" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                <label for="n_lokasi" class="col-form-label s-12 col-md-4">Lokasi</label>
+                                <input type="text" name="n_lokasi" id="n_lokasi" placeholder=""
+                                    class="form-control r-0 light s-12 col-md-8" autocomplete="off" required />
                             </div>
                             <div class="card-body offset-md-3">
-                                <button type="submit" class="btn btn-primary btn-sm" id="action"><i class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
+                                <button type="submit" class="btn btn-primary btn-sm" id="action"><i
+                                        class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
                                 <a class="btn btn-sm" onclick="add()" id="reset">Reset</a>
                             </div>
                         </div>
@@ -88,7 +84,7 @@
 <script src="{{ asset('assets/js/jquery-confirm.min.js') }}"></script>
 
 <script type="text/javascript">
-    $('#menuConfigInstansi').addClass('active');
+    $('#menuConfig').addClass('active');
     var table = $('#opd-table').dataTable({
         processing: true,
         serverSide: true,
@@ -96,10 +92,8 @@
         ajax: "{{ route('api.opd') }}",
         columns: [
             {data: 'id', name: 'id', orderable: false, searchable: false, className: 'text-center'},
-            {data: 'rumpun_id', name: 'rumpun_id'},
-            {data: 'kode', name: 'kode'},
-            {data: 'n_opd', name: 'n_opd'},
-            {data: 'initial', name: 'initial'},
+            {data: 'n_kategori', name: 'n_kategori'},
+            {data: 'n_lokasi', name: 'n_lokasi'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
@@ -136,10 +130,8 @@
             dataType: "JSON",
             success: function(data) {
                 $('#id').val(data.id);
-                $('#kode').val(data.kode).focus();
-                $('#n_opd').val(data.n_opd);
-                $('#initial').val(data.initial);
-                $('#rumpun_id').val(data.rumpun_id);
+                $('#tmkategori_id').val(data.tmkategori_id);
+                $('#n_lokasi').val(data.n_lokasi);
             },
             error : function() {
                 console.log("Nothing Data");
@@ -157,7 +149,7 @@
             closeIcon: true,
             animation: 'scale',
             type: 'red',
-            buttons: {   
+            buttons: {
                 ok: {
                     text: "ok!",
                     btnClass: 'btn-primary',

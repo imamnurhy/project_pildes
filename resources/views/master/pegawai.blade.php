@@ -21,10 +21,12 @@
             <div class="row justify-content-between">
                 <ul class="nav nav-material nav-material-white responsive-tab" id="v-pegawai-tab" role="tablist">
                     <li>
-                        <a class="nav-link active" id="v-pegawai-all-tab" data-toggle="pill" href="#v-pegawai-all" role="tab" aria-controls="v-pegawai-all"><i class="icon icon-home2"></i>Semua Pegawai</a>
+                        <a class="nav-link active" id="v-pegawai-all-tab" data-toggle="pill" href="#v-pegawai-all"
+                            role="tab" aria-controls="v-pegawai-all"><i class="icon icon-home2"></i>Semua Pegawai</a>
                     </li>
                     <li>
-                        <a class="nav-link" onclick="add()" data-fancybox data-src="#formAdd" data-modal="true" href="javascript:;"><i class="icon icon-plus"></i>Tambah Pegawai</a>
+                        <a class="nav-link" onclick="add()" data-fancybox data-src="#formAdd" data-modal="true"
+                            href="javascript:;"><i class="icon icon-plus"></i>Tambah Pegawai</a>
                     </li>
                 </ul>
             </div>
@@ -44,7 +46,6 @@
                                             <th width="80px">NIP</th>
                                             <th>Nama</th>
                                             <th width="100px">OPD</th>
-                                            <th width="100px">Unit Kerja</th>
                                             <th width="130px">Foto</th>
                                             <th width="120">Pengguna APP</th>
                                             <th width="40"></th>
@@ -64,33 +65,43 @@
 <div id="formAdd" style="width:690px;display:none">
     <div id="alert"></div>
     <form class="needs-validation" id="form" method="POST" novalidate>
-        <button type="button" data-fancybox-close="" class="fancybox-button fancybox-close-small" title="Close"><svg xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24"><path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"></path></svg></button>
+        <button type="button" data-fancybox-close="" class="fancybox-button fancybox-close-small" title="Close"><svg
+                xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24">
+                <path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"></path>
+            </svg></button>
         @csrf
         {{ method_field('POST') }}
-        <input type="hidden" id="id" name="id"/>
-        <h4 id="formTitle">Tambah Data</h4><hr>
+        <input type="hidden" id="id" name="id" />
+        <h4 id="formTitle">Tambah Data</h4>
+        <hr>
         <div class="form-row form-inline" style="align-items: baseline">
             <div class="col-md-6">
                 <div class="form-group m-0">
                     <label for="nik" class="col-form-label s-12 col-md-4">NIK</label>
-                    <input type="text" name="nik" id="nik" placeholder="" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
-                    <a href="#" class="btn btn-xs col-md-2" onclick="getNik()" id="getNik"><i class="icon-search"></i> Cari</a>
+                    <input type="text" name="nik" id="nik" placeholder="" class="form-control r-0 light s-12 col-md-6"
+                        autocomplete="off" required />
+                    <a href="#" class="btn btn-xs col-md-2" onclick="getNik()" id="getNik"><i class="icon-search"></i>
+                        Cari</a>
                 </div>
                 <div class="form-group m-0">
                     <label for="n_pegawai" class="col-form-label s-12 col-md-4">Nama</label>
-                    <input type="text" name="n_pegawai" id="n_pegawai" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                    <input type="text" name="n_pegawai" id="n_pegawai" placeholder=""
+                        class="form-control r-0 light s-12 col-md-8" autocomplete="off" required />
                 </div>
                 <div class="form-group m-0">
                     <label for="t_lahir" class="col-form-label s-12 col-md-4">Tempat L</label>
-                    <input type="text" name="t_lahir" id="t_lahir" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                    <input type="text" name="t_lahir" id="t_lahir" placeholder=""
+                        class="form-control r-0 light s-12 col-md-8" autocomplete="off" required />
                 </div>
                 <div class="form-group m-0">
                     <label for="d_lahir" class="col-form-label s-12 col-md-4">Tanggal L</label>
-                    <input type="text" name="d_lahir" id="d_lahir" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                    <input type="text" name="d_lahir" id="d_lahir" placeholder=""
+                        class="form-control r-0 light s-12 col-md-8" autocomplete="off" required />
                 </div>
                 <div class="form-group m-0">
                     <label for="jk" class="col-form-label s-12 col-md-4">Gender</label>
-                    <select name="jk" id="jk" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>
+                    <select name="jk" id="jk" placeholder="" class="form-control r-0 light s-12 col-md-8"
+                        autocomplete="off" required>
                         <option value="">Pilih</option>
                         <option value="Laki-Laki">Laki-Laki</option>
                         <option value="Perempuan">Perempuan</option>
@@ -98,11 +109,13 @@
                 </div>
                 <div class="form-group m-0">
                     <label for="pekerjaan" class="col-form-label s-12 col-md-4">Pekerjaan</label>
-                    <input type="text" name="pekerjaan" id="pekerjaan" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                    <input type="text" name="pekerjaan" id="pekerjaan" placeholder=""
+                        class="form-control r-0 light s-12 col-md-8" autocomplete="off" required />
                 </div>
                 <div class="form-group m-0">
                     <label for="provinsi_id" class="col-form-label s-12 col-md-4">Provinsi</label>
-                    <select name="provinsi_id" id="provinsi_id" placeholder="" class="form-control r-0 light s-12 col-md-8" onchange="getKabupaten()" required>
+                    <select name="provinsi_id" id="provinsi_id" placeholder=""
+                        class="form-control r-0 light s-12 col-md-8" onchange="getKabupaten()" required>
                         <option value="">Pilih</option>
                         @foreach($provinsis as $key=>$provinsi)
                         <option value="{{ $provinsi->id }}">{{ $provinsi->n_provinsi }}</option>
@@ -111,87 +124,55 @@
                 </div>
                 <div class="form-group m-0">
                     <label for="kabupaten_id" class="col-form-label s-12 col-md-4">Kabupaten</label>
-                    <select name="kabupaten_id" id="kabupaten_id" placeholder="" class="form-control r-0 light s-12 col-md-8" onchange="getKecamatan()" required>
+                    <select name="kabupaten_id" id="kabupaten_id" placeholder=""
+                        class="form-control r-0 light s-12 col-md-8" onchange="getKecamatan()" required>
                         <option value="">Pilih</option>
                     </select>
                 </div>
                 <div class="form-group m-0">
                     <label for="kecamatan_id" class="col-form-label s-12 col-md-4">Kecamatan</label>
-                    <select name="kecamatan_id" id="kecamatan_id" placeholder="" class="form-control r-0 light s-12 col-md-8" onchange="getKelurahan()" required>
+                    <select name="kecamatan_id" id="kecamatan_id" placeholder=""
+                        class="form-control r-0 light s-12 col-md-8" onchange="getKelurahan()" required>
                         <option value="">Pilih</option>
                     </select>
                 </div>
                 <div class="form-group m-0">
                     <label for="kelurahan_id" class="col-form-label s-12 col-md-4">Kelurahan</label>
-                    <select name="kelurahan_id" id="kelurahan_id" placeholder="" class="form-control r-0 light s-12 col-md-8" required>
+                    <select name="kelurahan_id" id="kelurahan_id" placeholder=""
+                        class="form-control r-0 light s-12 col-md-8" required>
                         <option value="">Pilih</option>
                     </select>
                 </div>
                 <div class="form-group m-0">
                     <label for="alamat" class="col-form-label s-12 col-md-4">Alamat</label>
-                    <textarea name="alamat" id="alamat" placeholder="" class="form-control r-0 light s-12 col-md-8" required></textarea>
+                    <textarea name="alamat" id="alamat" placeholder="" class="form-control r-0 light s-12 col-md-8"
+                        required></textarea>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group m-0">
                     <label for="nip" class="col-form-label s-12 col-md-4">NIP</label>
-                    <input type="text" name="nip" id="nip" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                    <input type="text" name="nip" id="nip" placeholder="" class="form-control r-0 light s-12 col-md-8"
+                        autocomplete="off" required />
                 </div>
                 <div class="form-group m-0">
                     <label for="telp" class="col-form-label s-12 col-md-4">Telp</label>
-                    <input type="text" name="telp" id="telp" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                    <input type="text" name="telp" id="telp" placeholder="" class="form-control r-0 light s-12 col-md-8"
+                        autocomplete="off" required />
                 </div>
                 <div class="form-group m-0">
-                    <label for="opd_id" class="col-form-label s-12 col-md-4">OPD</label>
-                    <select name="opd_id" id="opd_id" placeholder="" class="form-control r-0 light s-12 col-md-8" required>
+                    <label for="tmopd_id" class="col-form-label s-12 col-md-4">OPD</label>
+                    <select name="tmopd_id" id="tmopd_id" placeholder="" class="form-control r-0 light s-12 col-md-8"
+                        required>
                         <option value="">Pilih</option>
-                        @foreach($opds as $key=>$opd)
-                        <option value="{{ $opd->id }}">{{ $opd->n_opd }}</option>
+                        @foreach($tmopds as $key=>$tmopd)
+                        <option value="{{ $tmopd->id }}">{{ $tmopd->n_lokasi }}</option>
                         @endforeach
                     </select>
-                </div>
-                <div class="form-group m-0">
-                    <label for="unitkerja_id" class="col-form-label s-12 col-md-4">Unit Kerja</label>
-                    <select name="unitkerja_id" id="unitkerja_id" placeholder="" class="form-control r-0 light s-12 col-md-8" required>
-                        <option value="">Pilih</option>
-                    </select>
-                </div>
-                <div class="form-group m-0">
-                    <label for="golongan_id" class="col-form-label s-12 col-md-4">Gol</label>
-                    <select name="golongan_id" id="golongan_id" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>
-                        <option value="">Pilih</option>
-                        @foreach($golongans as $key=>$golongan)
-                        <option value="{{ $golongan->id }}">{{ $golongan->n_golongan }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group m-0">
-                    <label for="tmt_golongan" class="col-form-label s-12 col-md-4">TMT Gol</label>
-                    <input type="text" name="tmt_golongan" id="tmt_golongan" placeholder="" class="form-control date-time-picker r-0 light s-12 col-md-8" data-options='{"timepicker":false, "format":"Y-m-d"}' autocomplete="off" required/>
-                </div>
-                <div class="form-group m-0">
-                    <label for="eselon_id" class="col-form-label s-12 col-md-4">Eselon</label>
-                    <select name="eselon_id" id="eselon_id" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>
-                        <option value="">Pilih</option>
-                        @foreach($eselons as $key=>$eselon)
-                        <option value="{{ $eselon->id }}">{{ $eselon->n_eselon }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group m-0">
-                    <label for="tmt_eselon" class="col-form-label s-12 col-md-4">TMT Eselon</label>
-                    <input type="text" name="tmt_eselon" id="tmt_eselon" placeholder="" class="form-control date-time-picker r-0 light s-12 col-md-8" data-options='{"timepicker":false, "format":"Y-m-d"}' autocomplete="off" required/>
-                </div>
-                <div class="form-group m-0">
-                    <label for="jabatan" class="col-form-label s-12 col-md-4">Jabatan</label>
-                    <input type="text" name="jabatan" id="jabatan" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                </div>
-                <div class="form-group m-0">
-                    <label for="instansi" class="col-form-label s-12 col-md-4">Instansi</label>
-                    <input type="text" name="instansi" id="instansi" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" value="Pemerintah Kota Tangerang Selatan" required/>
                 </div>
                 <div class="card-body offset-md-3">
-                    <button type="submit" class="btn btn-primary btn-sm" id="action" title="Simpan data"><i class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="action" title="Simpan data"><i
+                            class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
                     <a class="btn btn-sm" onclick="add()" id="reset" title="Reset inputan">Reset</a>
                 </div>
             </div>
@@ -202,19 +183,25 @@
 <div id="formUpload" style="display:none">
     <div id="alert2"></div>
     <form class="needs-validation" id="form2" method="POST" enctype="multipart/form-data" novalidate>
-        <button type="button" data-fancybox-close="" class="fancybox-button fancybox-close-small" title="Close"><svg xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24"><path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"></path></svg></button>
+        <button type="button" data-fancybox-close="" class="fancybox-button fancybox-close-small" title="Close"><svg
+                xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24">
+                <path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"></path>
+            </svg></button>
         @csrf
         @method('PATCH')
-        <input type="hidden" id="id_foto" name="id_foto"/>
-        <h4>Unggah Foto</h4><hr>
+        <input type="hidden" id="id_foto" name="id_foto" />
+        <h4>Unggah Foto</h4>
+        <hr>
         <div class="form-row form-inline" style="align-items: baseline">
             <div class="col-md-12">
                 <div class="form-group m-0">
                     <label for="foto" class="col-form-label s-12 col-md-4">Foto</label>
-                    <input type="file" name="foto" id="foto" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" value="Pemerintah Kota Tangerang Selatan" required/>
+                    <input type="file" name="foto" id="foto" placeholder="" class="form-control r-0 light s-12 col-md-8"
+                        autocomplete="off" value="Pemerintah Kota Tangerang Selatan" required />
                 </div>
                 <div class="card-body offset-md-3">
-                    <button type="submit" class="btn btn-primary btn-sm" id="action2" title="Simpan data"><i class="icon-save mr-2"></i>Unggah<span id="txtAction"></span></button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="action2" title="Simpan data"><i
+                            class="icon-save mr-2"></i>Unggah<span id="txtAction"></span></button>
                 </div>
             </div>
         </div>
@@ -236,8 +223,7 @@
             {data: 'id', name: 'id', orderable: false, searchable: false, className: 'text-center'},
             {data: 'nip', name: 'nip'},
             {data: 'n_pegawai', name: 'n_pegawai'},
-            {data: 'opd.n_opd', name: 'n_opd'},
-            {data: 'unitkerja.n_unitkerja', name: 'n_unitkerja'},
+            {data: 'tmopds.n_lokasi', name: 'n_lokasi'},
             {data: 'foto', name: 'foto', orderable: false, searchable: false, className: 'text-center'},
             {data: 'user_id', name: 'user_id'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
@@ -295,12 +281,7 @@
                 $('#d_lahir').val(data.d_lahir);
                 $('#jk').val(data.jk);
                 $('#pekerjaan').val(data.pekerjaan);
-                $('#golongan_id').val(data.golongan_id);
-                $('#tmt_golongan').val(data.tmt_golongan);
-                $('#eselon_id').val(data.eselon_id);
-                $('#tmt_eselon').val(data.tmt_eselon);
-                $('#jabatan').val(data.jabatan);
-                $('#instansi').val(data.instansi);
+                $('#tmopd_id').val(data.tmopd_id);
             },
             error : function() {
                 console.log("Nothing Data");
@@ -319,7 +300,7 @@
                 closeIcon: true,
                 animation: 'scale',
                 type: 'red',
-                buttons: {   
+                buttons: {
                     ok: {
                         text: "ok!",
                         btnClass: 'btn-primary',
@@ -474,7 +455,7 @@
                 $('#pekerjaan').val(data.JENIS_PKRJN);
                 $('#alamat').val(data.ALAMAT + ' RT. ' + data.NO_RT + ' RW. ' + data.NO_RW);
                 getWilayah(data);
-                
+
                     //--- Error Wilayah
                 if(data.msg_err != ''){
                     $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Aplikasi tidak dapat menemukan! </strong> " + data.msg_err + "<br/>Silahkan lakukan pembaharuan data wilayah tersebut.</div>");

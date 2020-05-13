@@ -149,7 +149,7 @@ class AsetKeluarController extends Controller
     public function api()
     {
         $tmaset = DB::table('tmopd_asets')
-            ->select('tmopd_asets.id', 'tmopds.lokasi', 'tmjenis_asets.n_jenis_aset', 'tmasets.serial', 'tmmerks.n_merk', 'tmopd_asets.ket')
+            ->select('tmopd_asets.id', 'tmopds.n_lokasi', 'tmjenis_asets.n_jenis_aset', 'tmasets.serial', 'tmmerks.n_merk', 'tmopd_asets.ket')
             ->join('tmopds', 'tmopd_asets.opd_id', '=', 'tmopds.id')
             ->join('tmasets', 'tmopd_asets.aset_id', '=', 'tmasets.id')
             ->join('tmjenis_asets', 'tmasets.jenis_aset_id', '=', 'tmjenis_asets.id')

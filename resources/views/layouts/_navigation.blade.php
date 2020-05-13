@@ -14,43 +14,15 @@
         </a>
     </li>
 
-    @can('master-wilayah')
-    <li>
-        <a href="{{ route('provinsi.index') }}">
-            <i class="icon icon-map brown-text"></i> <span>Wilayah</span>
-        </a>
-    </li>
-    @endcan
-
-    <li class="treeview" id="menuConfigInstansi">
+    <li class="treeview" id="menuConfig">
         <a href="{{ route('pegawai.index') }}">
-            <i class="icon icon-settings2 s-18"></i> <span>Configurasi Instansi</span> <i
+            <i class="icon icon-settings2 s-18"></i> <span>Configurasi</span> <i
                 class="icon icon-angle-left s-18 pull-right"></i>
         </a>
         <ul class="treeview-menu">
             <li>
-                <a href="{{ route('rumpun.index') }}">
-                    <i class="icon icon-account_balance"></i> <span>Rumpun</span>
-                </a>
-            </li>
-            <li>
                 <a href="{{ route('opd.index') }}">
                     <i class="icon icon-building-o"></i> <span>OPD</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('unitkerja.index') }}">
-                    <i class="icon icon-sitemap"></i> <span>Unit Kerja</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('golongan.index') }}">
-                    <i class="icon icon-chess"></i> <span>Golongan</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('eselon.index') }}">
-                    <i class="icon icon-surround_sound"></i> <span>Eselon</span>
                 </a>
             </li>
         </ul>

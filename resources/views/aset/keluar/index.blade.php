@@ -69,8 +69,8 @@
             className: 'text-center'
         },
         {
-            data: 'lokasi',
-            name: 'lokasi'
+            data: 'n_lokasi',
+            name: 'n_lokasi'
         },
         {
             data: 'n_jenis_aset',

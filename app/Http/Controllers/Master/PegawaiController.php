@@ -19,6 +19,7 @@ use App\Models\Provinsi;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
+use App\Models\Tmopd;
 
 class PegawaiController extends Controller
 {
@@ -30,36 +31,27 @@ class PegawaiController extends Controller
 
     public function index()
     {
-        $opds = Opd::select('id', 'n_opd')->get();
-        $golongans = Golongan::select('id', 'n_golongan')->get();
-        $eselons = Eselon::select('id', 'n_eselon')->get();
+        $tmopds = Tmopd::select('id', 'n_lokasi')->get();
         $provinsis = Provinsi::select('id', 'kode', 'n_provinsi')->get();
-        $pegawai = Auth::User()->pegawai()->first();
+        $pegawai = Pegawai::find(Auth::user()->id);
         $auth_pegawai_id = ($pegawai) ? $pegawai->id : 0;
-        return view('master.pegawai', compact('provinsis', 'golongans', 'eselons', 'opds', 'auth_pegawai_id'));
+        return view('master.pegawai', compact('provinsis', 'tmopds', 'auth_pegawai_id'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nip' => 'required|string|min:18|max:18|unique:pegawais,nip',
-            'n_pegawai' => 'required',
-            'telp' => 'required|string|min:10|max:14|unique:pegawais,telp',
-            'unitkerja_id' => 'required',
-            'opd_id' => 'required',
             'nik' => 'required|string|min:16|max:16|unique:pegawais,nik',
+            'n_pegawai' => 'required',
             't_lahir' => 'required',
             'd_lahir' => 'required',
             'jk' => 'required',
             'pekerjaan' => 'required',
             'kelurahan_id' => 'required',
             'alamat' => 'required',
-            'golongan_id' => 'required',
-            'tmt_golongan' => 'required',
-            'eselon_id' => 'required',
-            'tmt_eselon' => 'required',
-            'jabatan' => 'required',
-            'instansi' => 'required'
+            'nip' => 'required|string|min:18|max:18|unique:pegawais,nip',
+            'telp' => 'required|string|min:10|max:14|unique:pegawais,telp',
+            'tmopd_id' => 'required'
         ]);
 
         $input = $request->all();
@@ -90,18 +82,17 @@ class PegawaiController extends Controller
             'kelurahan_id' => $pegawai->kelurahan_id,
             'kabupatens' => $kabupatens,
             'kecamatans' => $kecamatans,
-            'kelurahans' => $kelurahans
+            'kelurahans' => $kelurahans,
+            'tmopd_id' => $pegawai->tmopd_id
         ]);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-
             'nip' => 'required|string|min:18|max:18|unique:pegawais,nip,' . $id,
             'n_pegawai' => 'required',
             'telp' => 'required|string|min:10|max:14|unique:pegawais,telp,' . $id,
-            'unitkerja_id' => 'required',
             'opd_id' => 'required',
             'nik' => 'required|string|min:16|max:16|unique:pegawais,nik,' . $id,
             't_lahir' => 'required',
@@ -110,11 +101,6 @@ class PegawaiController extends Controller
             'pekerjaan' => 'required',
             'kelurahan_id' => 'required',
             'alamat' => 'required',
-            'golongan_id' => 'required',
-            'tmt_golongan' => 'required',
-            'eselon_id' => 'required',
-            'tmt_eselon' => 'required',
-            'jabatan' => 'required',
             'instansi' => 'required'
         ]);
 
@@ -146,7 +132,7 @@ class PegawaiController extends Controller
 
     public function api()
     {
-        $pegawai = Pegawai::with(['unitkerja:id,n_unitkerja', 'opd:id,n_opd']);
+        $pegawai = Pegawai::with(['tmopds:id,n_lokasi'])->get();
         return Datatables::of($pegawai)
             ->editColumn('user_id', function ($p) {
                 if ($p->user_id == "") {
@@ -163,16 +149,11 @@ class PegawaiController extends Controller
                 }
                 return $img . "<br/><a onclick='editFoto(" . $p->id . ")' href='javascript:;' data-fancybox data-src='#formUpload' data-modal='true' title='Upload foto pegawai' class='btn btn-xs'>Unggah Foto <i class='icon-upload'></i></a>";
             })
-            ->editColumn('opd_id', function ($p) {
-                return $p->opd_id;
-            })
             ->addColumn('action', function ($p) {
                 return
                     "<a onclick='edit(" . $p->id . ")' data-fancybox data-src='#formAdd' data-modal='true' href='javascript:;' title='Edit Pegawai'><i class='icon-pencil mr-1'></i></a>
                     <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Pegawai' id='del_" . $p->id . "'><i class='icon-remove'></i></a>";
             })
-            ->removeColumn('unitkerja_id')
-            ->removeColumn('opd_id')
             ->rawColumns(['foto', 'user_id', 'action'])
             ->toJson();
     }

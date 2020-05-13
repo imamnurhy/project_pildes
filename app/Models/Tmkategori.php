@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tmopd_aset extends Model
+class Tmkategori extends Model
 {
     protected $guarded = [];
 }

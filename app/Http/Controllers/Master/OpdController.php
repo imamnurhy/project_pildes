@@ -8,6 +8,8 @@ use Yajra\DataTables\Datatables;
 
 use App\Models\Rumpun;
 use App\Models\Opd;
+use App\Models\Tmkategori;
+use App\Models\Tmopd;
 
 class OpdController extends Controller
 {
@@ -19,21 +21,19 @@ class OpdController extends Controller
 
     public function index()
     {
-        $rumpuns = Rumpun::all();
-        return view('master.opd', compact('rumpuns'));
+        $tmkategoris = Tmkategori::all();
+        return view('master.opd', compact('tmkategoris'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'kode' => 'required|unique:opds,kode',
-            'n_opd' => 'required',
-            'initial' => 'required',
-            'rumpun_id' => 'required'
+            'tmkategori_id' => 'required',
+            'n_lokasi'      => 'required'
         ]);
 
         $input = $request->all();
-        Opd::create($input);
+        Tmopd::create($input);
 
         return response()->json([
             'success' => true,
@@ -43,22 +43,21 @@ class OpdController extends Controller
 
     public function edit($id)
     {
-        $opd = Opd::find($id);
-        return $opd;
+        $tmopd = Tmopd::find($id);
+
+        return $tmopd;
     }
-    
+
     public function update(Request $request, $id)
     {
         $request->validate([
-            'kode' => 'required|unique:opds,kode,'.$id,
-            'n_opd' => 'required',
-            'initial' => 'required',
-            'rumpun_id' => 'required'
+            'tmkategori_id' => 'required',
+            'n_lokasi'      => 'required'
         ]);
 
         $input = $request->all();
-        $opd = Opd::findOrFail($id);
-        $opd->update($input);
+        $tmopd = Tmopd::findOrFail($id);
+        $tmopd->update($input);
 
         return response()->json([
             'success' => true,
@@ -68,7 +67,7 @@ class OpdController extends Controller
 
     public function destroy($id)
     {
-        Opd::destroy($id);
+        Tmopd::destroy($id);
 
         return response()->json([
             'success' => true,
@@ -78,19 +77,15 @@ class OpdController extends Controller
 
     public function api()
     {
-        $opd = Opd::all();
-        return Datatables::of($opd)
-            ->editColumn('rumpun_id', function($p){
-                $rumpun = $p->rumpun()->first();
-                if($rumpun){
-                    return $rumpun->n_rumpun;
-                }
-                return '-';
+        $tmopd = Tmopd::with('tmkategoris')->get();
+        return Datatables::of($tmopd)
+            ->editColumn('n_kategori', function ($p) {
+                return $p->tmkategoris->n_kategori;
             })
-            ->addColumn('action', function($p){
+            ->addColumn('action', function ($p) {
                 return "
-                    <a href='#' onclick='edit(".$p->id.")' title='Edit Opd'><i class='icon-pencil mr-1'></i></a>
-                    <a href='#' onclick='remove(".$p->id.")' class='text-danger' title='Hapus Opd'><i class='icon-remove'></i></a>";
+                    <a href='#' onclick='edit(" . $p->id . ")' title='Edit Opd'><i class='icon-pencil mr-1'></i></a>
+                    <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Opd'><i class='icon-remove'></i></a>";
             })->rawColumns(['action'])
             ->toJson();
     }

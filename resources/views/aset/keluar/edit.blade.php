@@ -49,7 +49,7 @@
                                         class="form-control select2 light  r-0 s-12" autocomplete="off" required>
                                         <option value="">Pilih</option>
                                         @foreach($tmopds as $tmopd)
-                                        <option value="{{ $tmopd->id }}">{{ $tmopd->lokasi }}</option>
+                                        <option value="{{ $tmopd->id }}">{{ $tmopd->n_lokasi }}</option>
                                         @endforeach
                                     </select>
                                 </div>
