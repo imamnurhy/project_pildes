@@ -72,4 +72,18 @@
         </a>
     </li>
     @endcan
+
+    @can('master-pertanyaan')
+    <li class="header light"><strong>MASTER-PERTANYAAN</strong></li>
+    <li>
+        <a href="{{ route('pertanyaan.index')}}">
+            <i class="icon icon-comments-o blue-text s-18"></i> <span>Pertanyaan</span>
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('jenis_pertanyaan.index')}}">
+            <i class="icon icon-merge_type green-text s-18"></i> <span>Jenis Pertanyaan</span>
+        </a>
+    </li>
+    @endcan
 </ul>

@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tmjenis_aset extends Model
 {
-    protected $fillable = ['n_jenis_aset'];
+    protected $guarded = [];
+
+    public function trpertanyaan_details()
+    {
+        return $this->belongsTo(Trpertanyaan_detail::class, 'tmjenis_aset_id');
+    }
+
+    public function tmpertanyaans()
+    {
+        return $this->belongsToMany(Tmpertanyaan::class);
+    }
 }

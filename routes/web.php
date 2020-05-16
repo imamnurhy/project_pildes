@@ -49,6 +49,14 @@ Route::group(['middleware' => ['permission:master-aset']], function () {
     });
 });
 
+Route::group(['middleware' => ['permission:master-pertanyaan']], function () {
+    Route::get('pertanyaan/api', 'PertanyaanController@api')->name('pertanyaan.api');
+    Route::resource('pertanyaan', 'PertanyaanController');
+
+    Route::get('jenis_pertanyaan/api', 'JenisPertanyaanController@api')->name('jenis_pertanyaan.api');
+    Route::resource('jenis_pertanyaan', 'JenisPertanyaanController');
+});
+
 Route::prefix('account')->group(function () {
     Route::get('profile', 'AccountController@profile')->name('account.profile');
     Route::post('profile/updateFoto', 'AccountController@updateFoto')->name('account.updateFoto');
