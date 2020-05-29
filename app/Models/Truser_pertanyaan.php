@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tmmerk extends Model
+class Truser_pertanyaan extends Model
 {
     protected $guarded = [];
 }

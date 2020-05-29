@@ -42,6 +42,7 @@ Route::group(['middleware' => ['permission:master-brand']], function () {
 Route::group(['middleware' => ['permission:master-aset']], function () {
     Route::prefix('aset')->namespace('Aset')->name('aset.')->group(function () {
         Route::get('masuk/api', 'AsetMasukController@api')->name('masuk.api');
+        Route::get('getMerk/{id_nama_aset}', 'AsetMasukController@getMerk')->name('masuk.getMerk');
         Route::resource('masuk', 'AsetMasukController');
 
         Route::get('keluar/api', 'AsetKeluarController@api')->name('keluar.api');
@@ -49,12 +50,19 @@ Route::group(['middleware' => ['permission:master-aset']], function () {
     });
 });
 
+/* MASTER PERTANYAAN */
 Route::group(['middleware' => ['permission:master-pertanyaan']], function () {
     Route::get('pertanyaan/api', 'PertanyaanController@api')->name('pertanyaan.api');
     Route::resource('pertanyaan', 'PertanyaanController');
 
     Route::get('jenis_pertanyaan/api', 'JenisPertanyaanController@api')->name('jenis_pertanyaan.api');
     Route::resource('jenis_pertanyaan', 'JenisPertanyaanController');
+});
+
+/* MASTER USER PERTANYAAN */
+Route::group(['middleware' => ['permission:master-user-pertanyaan']], function () {
+    Route::get('pertanyaanMasuk/api', 'UserPertanyaanController@api')->name('pertanyaanMasuk.api');
+    Route::resource('pertanyaanMasuk', 'UserPertanyaanController');
 });
 
 Route::prefix('account')->group(function () {

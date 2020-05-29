@@ -6,6 +6,7 @@ use App\Models\Tmjenis_aset;
 use App\Models\Tmjenis_aset_tmpertanyaan;
 use App\Models\Tmpertanyaan;
 use App\Models\Trpertanyaan_detail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -39,7 +40,8 @@ class JenisPertanyaanController extends Controller
 
         Tmjenis_aset_tmpertanyaan::create([
             'tmjenis_aset_id' => $request->tmjenis_aset_id,
-            'tmpertanyaan_id' => $request->tmpertanyaan_id
+            'tmpertanyaan_id' => $request->tmpertanyaan_id,
+            'created_at' => Carbon::now()
         ]);
 
         return response()->json([
@@ -76,7 +78,8 @@ class JenisPertanyaanController extends Controller
         $data = Tmjenis_aset_tmpertanyaan::find($id);
         $data->update([
             'tmjenis_aset_id' => $request->tmjenis_aset_id,
-            'tmpertanyaan_id' => $request->tmpertanyaan_id
+            'tmpertanyaan_id' => $request->tmpertanyaan_id,
+            'updated_at' => Carbon::now()
         ]);
 
         return response()->json([
@@ -94,7 +97,6 @@ class JenisPertanyaanController extends Controller
     public function destroy($id)
     {
         Tmjenis_aset_tmpertanyaan::destroy($id);
-
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil dihapus.'

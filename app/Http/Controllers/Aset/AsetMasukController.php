@@ -178,6 +178,11 @@ class AsetMasukController extends Controller
         ]);
     }
 
+    public function getMerk($id_nama_aset)
+    {
+        return Tmmerk::select('id', 'n_merk', 'id_nama_aset')->where('id_nama_aset', $id_nama_aset)->get();
+    }
+
 
     public function api()
     {

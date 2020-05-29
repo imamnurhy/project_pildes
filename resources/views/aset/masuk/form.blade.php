@@ -58,7 +58,8 @@
                             <div class="form-group mb-1">
                                 <label for="jenis_aset_id" class="col-form-label s-12 col-md-4">Jenis Aset</label>
                                 <select name="jenis_aset_id" id="jenis_aset_id" placeholder=""
-                                    class="form-control light  r-0 s-12 col-md-6 ml-3" autocomplete="off" required>
+                                    class="form-control light  r-0 s-12 col-md-6 ml-3" autocomplete="off" required
+                                    onchange="getMerk()">
                                     <option value="">Pilih</option>
                                     @foreach($tmjenis_asets as $tmjenis_aset)
                                     <option value="{{ $tmjenis_aset->id }}">{{ $tmjenis_aset->n_jenis_aset }}</option>
@@ -67,20 +68,17 @@
                             </div>
 
                             <div class="form-group mb-1">
-                                <label for="serial" class="col-form-label s-12 col-md-4">Serial</label>
-                                <input type="text" name="serial" id="serial" placeholder=""
-                                    class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required />
-                            </div>
-
-                            <div class="form-group mb-1">
                                 <label for="merk_id" class="col-form-label s-12 col-md-4">Merek</label>
                                 <select name="merk_id" id="merk_id" placeholder=""
                                     class="form-control light  r-0 s-12 col-md-6 ml-3" autocomplete="off" required>
                                     <option value="">Pilih</option>
-                                    @foreach($tmmerks as $tmmerk)
-                                    <option value="{{ $tmmerk->id }}">{{ $tmmerk->n_merk }}</option>
-                                    @endforeach
                                 </select>
+                            </div>
+
+                            <div class="form-group mb-1">
+                                <label for="serial" class="col-form-label s-12 col-md-4">Serial</label>
+                                <input type="text" name="serial" id="serial" placeholder=""
+                                    class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required />
                             </div>
 
                             <div class="form-group mb-1">
@@ -232,6 +230,20 @@
                 });
             }
         })
+    }
+
+    function getMerk(id) {
+        $('#merk_id').html("<option value=''>Loading...</option>");
+        url = "{{ route('aset.masuk.getMerk', ':id') }}".replace(':id', $('#jenis_aset_id').val());
+        $.get(url, function (data) {
+            option = "<option value=''>Pilih</option>";
+            $.each(data, function (index, value) {
+                option += "<option value='" + value.id + "'>" + value.n_merk + "</li>";
+            });
+            $('#merk_id').html(option);
+        }, 'JSON').done(function () {
+            $('#merk_id').val(id);
+        });
     }
 
 </script>

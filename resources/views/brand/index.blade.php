@@ -36,6 +36,7 @@
                         <thead>
                             <th width="30">No</th>
                             <th>Merk</th>
+                            <th>Jenis Aset</th>
                             <th width="40"></th>
                         </thead>
                         <tbody></tbody>
@@ -66,6 +67,10 @@
         {
             data: 'n_merk',
             name: 'n_merk'
+        },
+        {
+            data: 'n_jenis_aset',
+            name: 'n_jenis_aset'
         },
         {
             data: 'action',

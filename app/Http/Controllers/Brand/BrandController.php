@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Brand;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Tmjenis_aset;
 use App\Models\Tmmerk;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class BrandController extends Controller
@@ -17,16 +19,19 @@ class BrandController extends Controller
     public function create()
     {
         $id = 0;
-        return view('brand.form', compact(['id']));
+        $tmjenis_asets = Tmjenis_aset::all();
+        return view('brand.form', compact(['id', 'tmjenis_asets']));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'n_merk' => 'required',
+            'tmjenis_aset_id' => 'required'
         ]);
 
         Tmmerk::create([
+            'id_nama_aset' => $request->tmjenis_aset_id,
             'n_merk' => $request->n_merk
         ]);
 
@@ -38,30 +43,28 @@ class BrandController extends Controller
 
     public function show($id)
     {
-        return view('brand.form', compact(['id']));
+        $tmjenis_asets = Tmjenis_aset::all();
+
+        return view('brand.form', compact(['id', 'tmjenis_asets']));
     }
 
     public function edit($id)
     {
-        $tmmerk = Tmmerk::find($id);
-
-        return response()->json(
-            [
-                'id'      => $tmmerk->id,
-                'n_merk' => $tmmerk->n_merk,
-            ]
-        );
+        return  Tmmerk::find($id);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'n_merk' => 'required',
+            'tmjenis_aset_id' => 'required'
+
         ]);
 
         $tmmerk = Tmmerk::find($id);
 
         $tmmerk->update([
+            'id_nama_aset' => $request->tmjenis_aset_id,
             'n_merk' => $request->n_merk
         ]);
 
@@ -83,7 +86,10 @@ class BrandController extends Controller
 
     public function api()
     {
-        $tmmerk = Tmmerk::all();
+        $tmmerk = DB::table('tmmerks')
+            ->select('tmmerks.id', 'tmmerks.n_merk', 'tmjenis_asets.n_jenis_aset')
+            ->join('tmjenis_asets', 'tmmerks.id_nama_aset', 'tmjenis_asets.id')
+            ->get();
 
         return DataTables::of($tmmerk)
             ->addColumn('action', function ($p) {

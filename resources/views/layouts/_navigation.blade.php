@@ -86,4 +86,13 @@
         </a>
     </li>
     @endcan
+
+    @can('master-user-pertanyaan')
+    <li class="header light"><strong>MASTER-USER-PERTANYAAN</strong></li>
+    <li>
+        <a href="{{ route('pertanyaanMasuk.index') }}">
+            <i class="icon icon-input red-text s-18"></i> <span>Pertanyaan Masuk</span>
+        </a>
+    </li>
+    @endcan
 </ul>

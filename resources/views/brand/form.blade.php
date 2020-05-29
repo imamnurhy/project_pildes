@@ -41,6 +41,16 @@
                     <div class="form-row form-inline">
                         <div class="col-md-6">
                             <div class="form-group mb-1">
+                                <label for="tmjenis_aset_id" class="col-form-label s-12 col-md-4">Jenis Aset</label>
+                                <select name="tmjenis_aset_id" id="tmjenis_aset_id" placeholder=""
+                                    class="form-control  r-0 s-12 col-md-6 ml-3" autocomplete="off" required>
+                                    <option value="">Pilih</option>
+                                    @foreach ($tmjenis_asets as $tmjenis_aset)
+                                    <option value="{{ $tmjenis_aset->id }}">{{ $tmjenis_aset->n_jenis_aset }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group mb-1">
                                 <label for="n_merk" class="col-form-label s-12 col-md-4">Merk</label>
                                 <input type="text" name="n_merk" id="n_merk" placeholder=""
                                     class="form-control  r-0 s-12 col-md-6 ml-3" autocomplete="off" required />
@@ -134,6 +144,7 @@
                 $('#form').show();
                 $('#id').val(data.id);
                 $('#n_merk').val(data.n_merk);
+                $('#tmjenis_aset_id').val(data.id_nama_aset);
             },
             error: function () {
                 console.log("Nothing Data");
