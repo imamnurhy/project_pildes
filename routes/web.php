@@ -46,6 +46,9 @@ Route::group(['middleware' => ['permission:master-aset']], function () {
         Route::resource('masuk', 'AsetMasukController');
 
         Route::get('keluar/api', 'AsetKeluarController@api')->name('keluar.api');
+        Route::get('keluar/apiDetail/{tmopd_id}', 'AsetKeluarController@apiDetailAsetKeluar')->name('keluar.apiDetailAsetKeluar');
+        Route::get('keluar/showDetail/{id}', 'AsetKeluarController@showDetail')->name('keluar.showDetail');
+        Route::patch('keluar/{id}/updateFoto', 'AsetKeluarController@updateFoto')->name('keluar.updateFoto');
         Route::resource('keluar', 'AsetKeluarController');
     });
 });

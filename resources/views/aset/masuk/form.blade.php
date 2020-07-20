@@ -50,13 +50,7 @@
                             </div>
 
                             <div class="form-group mb-1">
-                                <label for="no_aset" class="col-form-label s-12 col-md-4">No Aset</label>
-                                <input type="text" name="no_aset" id="no_aset" placeholder=""
-                                    class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required />
-                            </div>
-
-                            <div class="form-group mb-1">
-                                <label for="jenis_aset_id" class="col-form-label s-12 col-md-4">Jenis Aset</label>
+                                <label for="jenis_aset_id" class="col-form-label s-12 col-md-4">Barang</label>
                                 <select name="jenis_aset_id" id="jenis_aset_id" placeholder=""
                                     class="form-control light  r-0 s-12 col-md-6 ml-3" autocomplete="off" required
                                     onchange="getMerk()">

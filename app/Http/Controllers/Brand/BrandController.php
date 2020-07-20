@@ -90,12 +90,29 @@ class BrandController extends Controller
             ->select('tmmerks.id', 'tmmerks.n_merk', 'tmjenis_asets.n_jenis_aset')
             ->join('tmjenis_asets', 'tmmerks.id_nama_aset', 'tmjenis_asets.id')
             ->get();
+        $tmaset = DB::table('tmasets')
+            ->pluck('merk_id')
+            ->toArray();
+        // dd($tmaset);
+
+
 
         return DataTables::of($tmmerk)
-            ->addColumn('action', function ($p) {
-                return "
-                   <a href='" . route('brand.show', $p->id) . "' title='Edit Merek'><i class='icon-pencil mr-1'></i></a>
+            ->addColumn('action', function ($p) use ($tmaset) {
+
+                $buttonAction = '';
+                if (in_array($p->id, $tmaset)) {
+                    $buttonAction = "
+                    <a title='Edit Merek'><i class='icon-pencil mr-1'></i></a>
+                    <a title='Hapus Merek'><i class='icon-remove'></i></a>
+                    ";
+                } else {
+                    $buttonAction = "
+                   <a  href='" . route('brand.show', $p->id) . "' title='Edit Merek'><i class='icon-pencil mr-1'></i></a>
                     <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Merek'><i class='icon-remove'></i></a>";
+                }
+
+                return $buttonAction;
             })
             ->rawColumns(['action'])
             ->toJson();

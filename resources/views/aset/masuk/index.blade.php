@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Master Asset Masuk')
+@section('title', 'Master Barang')
 
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col">
                     <h3 class="my-2">
-                        <i class="icon-notebook-list"></i> Data Aset Masuk
+                        <i class="icon-notebook-list"></i> Data Barang
                     </h3>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                             <th width="30">No</th>
                             <th>Tanggal</th>
                             <th>No Aset</th>
-                            <th>Jenis Aset</th>
+                            <th>Barang</th>
                             <th>Serial</th>
                             <th>Merek</th>
                             <th>Tahun</th>

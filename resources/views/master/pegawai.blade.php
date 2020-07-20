@@ -551,7 +551,7 @@
         $('#kelurahan_id').val(data.kelurahan_id);
     }
 
-        //--- Edit Foto
+    //--- Edit Foto
     $('#form2').on('submit', function (e) {
         if ($(this)[0].checkValidity() === false) {
             event.preventDefault();

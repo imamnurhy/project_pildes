@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tmasets;
 use App\Models\Tmjenis_aset;
 use App\Models\Tmmerk;
+use App\Models\Tmno_urut;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +48,6 @@ class AsetMasukController extends Controller
     {
         $request->validate([
             'tgl'           => 'required',
-            'no_aset'       => 'required',
             'jenis_aset_id' => 'required',
             'serial'        => 'required',
             'merk_id'       => 'required',
@@ -57,21 +57,36 @@ class AsetMasukController extends Controller
             'status'        => 'required'
         ]);
 
-        Tmasets::create(
-            [
-                'tgl'           => $request->tgl,
-                'no_aset'       => $request->no_aset,
-                'jenis_aset_id' => $request->jenis_aset_id,
-                'serial'        => $request->serial,
-                'merk_id'       => $request->merk_id,
-                'tahun'         => $request->tahun,
-                'kondisi'       => $request->kondisi,
-                'jumlah'        => $request->jumlah,
-                'status'        => $request->status,
-                'created_by'    => Auth::user()->pegawai->n_pegawai,
-                'created_at'    => Carbon::now(),
-            ]
-        );
+        $tmno_urut = Tmno_urut::where('tmjenis_aset_id', $request->jenis_aset_id)->first();
+        $no_urut = 0;
+        if ($tmno_urut != null) {
+            $tmno_urut->update([
+                'no_urut' => $tmno_urut->no_urut + 1,
+            ]);
+            $no_urut = sprintf('%04s', $tmno_urut->no_urut);
+        } else {
+            $a = Tmno_urut::create([
+                'tmjenis_aset_id' => $request->jenis_aset_id,
+                'no_urut' => 1
+            ]);
+            $no_urut = sprintf('%04s', $a->no_urut);
+        }
+
+        $no_aset = $request->jenis_aset_id . $request->merk_id . Carbon::now()->format('my') . $no_urut;
+
+        Tmasets::create([
+            'tgl'           => $request->tgl,
+            'no_aset'       => $no_aset,
+            'jenis_aset_id' => $request->jenis_aset_id,
+            'serial'        => $request->serial,
+            'merk_id'       => $request->merk_id,
+            'tahun'         => $request->tahun,
+            'kondisi'       => $request->kondisi,
+            'jumlah'        => $request->jumlah,
+            'status'        => $request->status,
+            'created_by'    => Auth::user()->pegawai->n_pegawai,
+            'created_at'    => Carbon::now(),
+        ]);
 
         return response()->json([
             'success' => 1,

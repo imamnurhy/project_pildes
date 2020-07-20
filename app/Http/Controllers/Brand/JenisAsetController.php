@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Brand;
 use App\Http\Controllers\Controller;
 use App\Models\Tmjenis_aset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class JenisAsetController extends Controller
@@ -84,11 +85,24 @@ class JenisAsetController extends Controller
     public function api()
     {
         $tmjenis_asets = Tmjenis_aset::all();
+        $tmaset = DB::table('tmasets')
+            ->pluck('jenis_aset_id')
+            ->toArray();
         return DataTables::of($tmjenis_asets)
-            ->addColumn('action', function ($p) {
-                return "
-                   <a href='" . route('jenis.show', $p->id) . "' title='Edit Merek'><i class='icon-pencil mr-1'></i></a>
-                    <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Merek'><i class='icon-remove'></i></a>";
+            ->addColumn('action', function ($p) use ($tmaset) {
+                $buttonAction = '';
+                if (in_array($p->id, $tmaset)) {
+                    $buttonAction = "
+                    <a title='Edit Jenis'><i class='icon-pencil mr-1'></i></a>
+                    <a title='Hapus Jenis'><i class='icon-remove'></i></a>
+                    ";
+                } else {
+                    $buttonAction = "
+                   <a  href='" . route('brand.show', $p->id) . "' title='Edit Jenis'><i class='icon-pencil mr-1'></i></a>
+                    <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus jenis'><i class='icon-remove'></i></a>";
+                }
+
+                return $buttonAction;
             })
             ->rawColumns(['action'])
             ->toJson();

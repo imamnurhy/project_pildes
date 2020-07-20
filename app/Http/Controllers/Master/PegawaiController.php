@@ -298,6 +298,8 @@ class PegawaiController extends Controller
             'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
+        dd(config());
+
         $pegawai = Pegawai::findOrFail($id);
         $lastFoto = $pegawai->foto;
         $foto = $request->file('foto');
@@ -305,6 +307,8 @@ class PegawaiController extends Controller
         $foto->storeAs('foto', $nameFoto, 'sftp', 'public');
         $pegawai->foto = $nameFoto;
         $pegawai->save();
+
+
 
         if ($lastFoto != '') {
             Storage::disk('sftp')->delete('foto/' . $lastFoto);

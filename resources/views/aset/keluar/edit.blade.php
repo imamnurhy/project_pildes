@@ -37,7 +37,7 @@
 
             <div class="card no-b  no-r">
                 <div class="card-body">
-                    <h5 class="card-title" id="formTitle">Tambah Data</h5>
+                    <h5 class="card-title" id="formTitle">Edit Data</h5>
                     <div class="form-row form-inline">
 
                         <div class="col-md-8">

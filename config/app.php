@@ -28,6 +28,13 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+    //-- Config SFTP
+    'SFTP_HOST' => env('SFTP_HOST', null),
+    'SFTP_USERNAME' => env('SFTP_USERNAME', null),
+    'SFTP_PASSWORD' => env('SFTP_PASSWORD', null),
+    'SFTP_ROOT' => env('SFTP_ROOT', null),
+    'SFTP_SRC' => env('SFTP_SRC', null),
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -223,7 +230,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        
+
     ],
 
 ];

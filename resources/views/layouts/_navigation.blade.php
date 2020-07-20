@@ -63,12 +63,12 @@
     <li class="header light"><strong>ASSETS</strong></li>
     <li>
         <a href="{{ route('aset.masuk.index')}}">
-            <i class="icon icon-input blue-text s-18"></i> <span>Masuk</span>
+            <i class="icon icon-input blue-text s-18"></i> <span>Barang</span>
         </a>
     </li>
     <li>
         <a href="{{ route('aset.keluar.index')}}">
-            <i class="icon icon-arrow_back red-text s-18"></i> <span>Keluar</span>
+            <i class="icon icon-arrow_back red-text s-18"></i> <span>OPD</span>
         </a>
     </li>
     @endcan
