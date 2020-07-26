@@ -4,6 +4,7 @@
 
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 @endsection
 
 @section('content')
@@ -20,9 +21,9 @@
             <div class="row justify-content-between">
                 <ul class="nav nav-material nav-material-white responsive-tab" id="v-pegawai-tab" role="tablist">
                     <li>
-                        <a class="nav-link" href="{{ route('aset.keluar.index') }}"><i
-                                class="icon icon-arrow_back"></i>Semua
-                            Data</a>
+                        <a class="nav-link" href="{{ route('aset.keluar.index') }}">
+                            <i class="icon icon-arrow_back"></i>SemuaData
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -41,14 +42,13 @@
                     <h5 class="card-title" id="formTitle">Tambah Data</h5>
                     <div class="form-row form-inline">
 
-                        <div class="col-md-8">
-
+                        <div class="col-md-6">
                             <div class="form-group mb-1">
                                 <label for="opd_id" class="col-form-label s-12 col-md-4">OPD</label>
                                 <div class="col-md-8">
-                                    <select name="opd_id" id="opd_id" placeholder=""
-                                        class="form-control select2 light  r-0 s-12" autocomplete="off" required>
-                                        <option value="">Pilih</option>
+                                    <select name="opd_id" id="opd_id" class="form-control light select2  r-0 s-12"
+                                        autocomplete="off" required>
+                                        <option value="" disabled selected>Pilih OPD</option>
                                         @foreach($tmopds as $tmopd)
                                         <option value="{{ $tmopd->id }}">{{ $tmopd->n_lokasi }}</option>
                                         @endforeach
@@ -59,10 +59,9 @@
                             <div class="form-group mb-1">
                                 <label for="aset_id" class="col-form-label s-12 col-md-4">Aset</label>
                                 <div class="col-md-8">
-                                    <select name="aset_id[]" id="aset_id" placeholder=""
-                                        class="form-control select2 r-0 light s-12" multiple autocomplete="off"
-                                        required>
-                                        <option value="">Pilih</option>
+                                    <select name="aset_id[]" id="aset_id" class="form-control light select2 r-0 s-12"
+                                        multiple autocomplete="off" required>
+                                        <option value="" disabled>Pilih Asset</option>
                                         @foreach($tmasets as $tmaset)
                                         <option value="{{ $tmaset->id }}">
                                             {{ $tmaset->n_jenis_aset . '-' . $tmaset->n_merk .'-'. $tmaset->serial . '-' . $tmaset->tahun . '-' . $tmaset->jumlah }}
@@ -72,19 +71,51 @@
                                 </div>
                             </div>
 
+                            <div class="form-group m-0">
+                                <label for="foto" class="col-form-label s-12 col-md-4">Foto</label>
+                                <div class="col-md-6">
+                                    <input type="file" name="foto" id="foto" placeholder=""
+                                        class="form-control r-0 light s-12 " autocomplete="off" />
+                                </div>
+                            </div>
+
                             <div class="form-group mb-1">
                                 <label for="ket" class="col-form-label s-12 col-md-4">Keterangan</label>
-                                <textarea name="ket" id="ket" class="form-control light r-0 s-12 col-md-6 ml-3"
-                                    autocomplete="off" required rows="4" cols="50"></textarea>
+                                <div class="col-md-6">
+                                    <textarea name="ket" id="ket" class="form-control light r-0 s-12" autocomplete="off"
+                                        required rows="2" cols="38">
+                                    </textarea>
+                                </div>
                             </div>
                         </div>
+
+                        {{-- <div class="col-md-6">
+                            <div class="card" style="width: 50%">
+                                <div class="card-header">
+                                    Image Priview
+                                </div>
+                                <div class="card-body text-center">
+                                    <div id="priview_image_text" class="card-text">Gambar kamu akan muncul disini</div>
+                                    <img id="priview_image" width="50%" style="border-radius: 5%" />
+
+                                </div>
+                                <div class="card-footer text-right">
+                                    <a href="#modal_priview_image" rel="modal:open">
+                                        <button disabled id="button_modal_priview_image" class="btn btn-primary">
+                                            Priview
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div> --}}
 
                     </div>
                     <div class="form-row form-inline" style="align-items: baseline">
                         <div class="col-md-12">
                             <div class="card-body offset-md-3">
-                                <button type="submit" class="btn btn-primary btn-sm" id="action" title="Simpan data"><i
-                                        class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
+                                <button type="submit" class="btn btn-primary btn-sm" id="action" title="Simpan data">
+                                    <i class="icon-save mr-2"></i>Simpan<span id="txtAction"></span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -92,11 +123,18 @@
             </div>
         </form>
     </div>
+    <!-- Modal HTML embedded directly into document -->
+    {{-- <div id="modal_priview_image" class="modal" style="overflow: initial">
+        <img id="priview_image2" width="100%" style="border-radius: 5%" />
+    </div> --}}
 </div>
+
+
 @endsection
 
 @section('script')
 <script src="{{ asset('assets/js/jquery-confirm.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 
 <script type="text/javascript">
     $('#form').on('submit', function (e) {
@@ -135,6 +173,23 @@
             }
             $(this).addClass('was-validated');
     });
+
+    //  function readURL(input) {
+    //     if (input.files && input.files[0]) {
+    //         var reader = new FileReader();
+
+    //         reader.onload = function (e) {
+    //             $('#priview_image').attr('src', e.target.result);
+    //             $('#priview_image2').attr('src', e.target.result);
+    //             $('#priview_image_text').remove();
+    //             $('#button_modal_priview_image').removeAttr('disabled', true);
+    //         }
+    //         reader.readAsDataURL(input.files[0]);
+    //     }
+    // }
+    // $("#foto").change(function(){
+    //     readURL(this);
+    // });
 
 </script>
 @endsection

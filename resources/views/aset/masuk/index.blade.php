@@ -20,8 +20,8 @@
             <div class="row justify-content-between">
                 <ul class="nav nav-material nav-material-white responsive-tab" role="tablist">
                     <li>
-                        <a class="nav-link" href="{{ route('aset.masuk.create')}}"><i class="icon icon-plus"></i>Tambah
-                            Data</a>
+                        <a class="nav-link" href="{{ route('aset.masuk.create')}}"><i class="icon icon-plus">
+                            </i>Tambah Data</a>
                     </li>
                 </ul>
             </div>

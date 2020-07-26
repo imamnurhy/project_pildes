@@ -42,16 +42,23 @@
                     <div class="form-row form-inline">
 
                         <div class="col-md-6">
-                            <div class="form-group mb-1 ml-4">
+
+                            <div class="form-group mb-1 ">
                                 <label for="tgl" class="col-form-label s-12 col-md-4">Tanggal Entry</label>
-                                <input type="text" name="tgl" id="tgl" placeholder=""
-                                    class="form-control date-time-picker r-0 light s-12 col-md-6"
-                                    data-options='{"timepicker":false, "format":"Y-m-d"}' autocomplete="off" required />
+                                <input type="date" name="tgl" id="tgl" class="form-control light r-0 s-12 col-md-6 ml-3"
+                                    autocomplete="off" required />
+                            </div>
+
+                            <div class="form-group mb-1" id="view_no_aset">
+                                <label class="col-form-label s-12 col-md-4">No Aset</label>
+                                <input type="text" id="no_aset" class="form-control light r-0 s-12 col-md-6 ml-3"
+                                    disabled />
+                                <input type="hidden" name="no_aset" id="no_aset2">
                             </div>
 
                             <div class="form-group mb-1">
                                 <label for="jenis_aset_id" class="col-form-label s-12 col-md-4">Barang</label>
-                                <select name="jenis_aset_id" id="jenis_aset_id" placeholder=""
+                                <select name="jenis_aset_id" id="jenis_aset_id"
                                     class="form-control light  r-0 s-12 col-md-6 ml-3" autocomplete="off" required
                                     onchange="getMerk()">
                                     <option value="">Pilih</option>
@@ -63,8 +70,8 @@
 
                             <div class="form-group mb-1">
                                 <label for="merk_id" class="col-form-label s-12 col-md-4">Merek</label>
-                                <select name="merk_id" id="merk_id" placeholder=""
-                                    class="form-control light  r-0 s-12 col-md-6 ml-3" autocomplete="off" required>
+                                <select name="merk_id" id="merk_id" class="form-control light  r-0 s-12 col-md-6 ml-3"
+                                    autocomplete="off" required onchange="generateNoAset()">
                                     <option value="">Pilih</option>
                                 </select>
                             </div>
@@ -77,8 +84,9 @@
 
                             <div class="form-group mb-1">
                                 <label for="tahun" class="col-form-label s-12 col-md-4">Tahun</label>
-                                <input type="text" name="tahun" id="tahun" placeholder=""
-                                    class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required />
+                                <input maxlength="4" type="text" name="tahun" id="tahun" placeholder=""
+                                    class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
                             </div>
 
                             <div class="form-group mb-1">
@@ -90,7 +98,8 @@
                             <div class="form-group mb-1">
                                 <label for="jumlah" class="col-form-label s-12 col-md-4">Jumlah</label>
                                 <input type="text" name="jumlah" id="jumlah" placeholder=""
-                                    class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required />
+                                    class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
                             </div>
 
                             <div class="form-group mb-1">
@@ -189,10 +198,18 @@
                 $('#form').show();
                 $('#id').val(data.id);
                 $('#tgl').val(data.tgl);
-                $('#no_aset').val(data.no_aset);
+
                 $('#jenis_aset_id').val(data.jenis_aset_id);
+                //-- Get and select merk
+                getMerk(data.merk_id);
+                $('#view_no_aset').removeAttr('style');
+                $('#no_aset').val(data.no_aset);
+
+                //-- View no aset
+
+                console.log(data.no_aset);
+
                 $('#serial').val(data.serial);
-                $('#merk_id').val(data.merk_id);
                 $('#tahun').val(data.tahun);
                 $('#kondisi').val(data.kondisi);
                 $('#jumlah').val(data.jumlah);
@@ -229,6 +246,9 @@
     function getMerk(id) {
         $('#merk_id').html("<option value=''>Loading...</option>");
         url = "{{ route('aset.masuk.getMerk', ':id') }}".replace(':id', $('#jenis_aset_id').val());
+
+        // Disable button action when prosess getMerek
+        $('#action').attr('disabled', true);
         $.get(url, function (data) {
             option = "<option value=''>Pilih</option>";
             $.each(data, function (index, value) {
@@ -236,8 +256,25 @@
             });
             $('#merk_id').html(option);
         }, 'JSON').done(function () {
-            $('#merk_id').val(id);
+            $('#merk_id').val(id).trigger('change');
+
+            // Enable button action when success getMerek
+            $('#action').removeAttr('disabled', true);
         });
+    }
+
+
+    function generateNoAset(){
+        url = "{{ route('aset.masuk.generateNoAset') }}";
+        $.get(url, {
+            jenis_aset_id: $('#jenis_aset_id').val(),
+            merk_id: $('#merk_id').val(),
+        }, function(data) {
+            $('#no_aset').val(data);
+            $('#no_aset2').val(data);
+        }, 'JSON').done(function() {
+            console.log('done');
+        })
     }
 
 </script>

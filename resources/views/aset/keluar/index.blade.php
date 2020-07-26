@@ -4,7 +4,6 @@
 
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/jquery-fancybox.min.css') }}">
 @endsection
 
 @section('content')
@@ -21,8 +20,10 @@
             <div class="row justify-content-between">
                 <ul class="nav nav-material nav-material-white responsive-tab" role="tablist">
                     <li>
-                        <a class="nav-link" href="{{ route('aset.keluar.create')}}"><i class="icon icon-plus"></i>Tambah
-                            Data</a>
+                        <a class="nav-link" href="{{ route('aset.keluar.create')}}">
+                            <i class="icon icon-plus"></i>
+                            Tambah Data
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -38,7 +39,7 @@
                             <th width="30">No</th>
                             <th>OPD</th>
                             <th>Kategori</th>
-                            <th width="450">Alamat</th>
+                            <th width="350">Alamat</th>
                             <th width=130px>foto</th>
                             <th>Detail</th>
                             <th width="40"></th>
@@ -49,39 +50,62 @@
             </div>
         </div>
     </div>
-</div>
-<div id="formUpload" style="display:none">
-    <div id="alert2"></div>
-    <form class="needs-validation" id="form2" method="POST" enctype="multipart/form-data" novalidate>
-        <button type="button" data-fancybox-close="" class="fancybox-button fancybox-close-small" title="Close"><svg
-                xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24">
-                <path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"></path>
-            </svg></button>
-        @csrf
-        @method('PATCH')
-        <input type="hidden" id="id_foto" name="id_foto" />
-        <h4>Unggah Foto</h4>
-        <hr>
-        <div class="form-row form-inline" style="align-items: baseline">
-            <div class="col-md-12">
-                <div class="form-group m-0">
-                    <label for="foto" class="col-form-label s-12 col-md-4">Foto</label>
-                    <input type="file" name="foto" id="foto" placeholder="" class="form-control r-0 light s-12 col-md-8"
-                        autocomplete="off" value="Pemerintah Kota Tangerang Selatan" required />
+
+    <div id="priview_aset_detail" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="card-body offset-md-3">
-                    <button type="submit" class="btn btn-primary btn-sm" id="action2" title="Simpan data"><i
-                            class="icon-save mr-2"></i>Unggah<span id="txtAction"></span></button>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="table-detail-aset-keluar" class="table table-striped no-b" style="width:100%">
+                            <thead>
+                                <th width="30">No</th>
+                                <th>Barang</th>
+                                <th>No Aset</th>
+                                <th>Serial</th>
+                                <th>Merek</th>
+                                <th>Ket</th>
+                                <th>Tanggal</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+
+    <div id="priview_image_network" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Image priview</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img alt="image network" id="image_network">
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
 @endsection
 
 @section('script')
 <script src="{{ asset('assets/js/jquery-confirm.min.js') }}"></script>
-<script src="{{ asset('assets/js/jquery-fancybox.min.js') }}"></script>
 
 <script type="text/javascript">
     var table = $('#aset-keluar-table').dataTable({
@@ -179,52 +203,63 @@
         });
     }
 
-    //--- Edit Foto
-    $('#form2').on('submit', function (e) {
-        if ($(this)[0].checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        else{
-            $('#alert2').html('');
-            $('#action2').attr('disabled', true);
-            url = "{{ route('aset.keluar.updateFoto', ':id') }}".replace(':id', $('#id_foto').val());
-            $.ajax({
-                url : url,
-                type : 'POST',
-                data: new FormData($(this)[0]),
-                dataType:'JSON',
-                contentType: false,
-                processData: false,
-                success : function(data) {
-                    $('#action2').removeAttr('disabled');
-                    if(data.success == 1){
-                        $('#alert2').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success!</strong> " + data.message + "</div>");
-                        table.api().ajax.reload();
-                        if(save_method == 'add'){
-                            add();
-                        }
-                    }
+    function showDetailAset(tmopd_id){
+        $('#priview_aset_detail').modal('show');
+
+        var table2 = $('#table-detail-aset-keluar').dataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            order: [1, 'desc'],
+            ajax: "{{ route('aset.keluar.apiDetailAsetKeluar', ':id')}}".replace(':id', tmopd_id ),
+            columns: [
+                {
+                    data:'id',
+                    name:'id',
+                    orderable: false,
+                    searchable: false,
+                    className: 'text-center'
                 },
-                error : function(data){
-                    $('#action').removeAttr('disabled');
-                    err = '';
-                    respon = data.responseJSON;
-                    $.each(respon.errors, function( index, value ) {
-                        err = err + "<li>" + value +"</li>";
-                    });
+                {
+                    data:'n_jenis_aset',
+                    name:'n_jenis_aset'
+                },
+                {
+                    data:'no_aset',
+                    name:'no_aset'
+                },
+                {
+                    data:'serial',
+                    name:'serial'
+                },
+                {
+                    data:'n_merk',
+                    name:'n_merk'
+                },
+                {
+                    data:'ket',
+                    name:'ket'
+                },
+                {
+                    data:'created_at',
+                    name:'created_at'
+                },
+            ]
+        });
 
-                    $('#alert2').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
-                }
+        table2.on('draw.dt', function () {
+            var PageInfo2 = $('#table-detail-aset-keluar').DataTable().page.info();
+            table2.api().column(0, {
+                page: 'current'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1 + PageInfo2.start;
             });
-            return false;
-        }
-        $(this).addClass('was-validated');
-    });
-
-    function editFoto(id) {
-        $('#id_foto').val(id);
+        });
     }
 
+    function showImageNetwork(image){
+        $('#priview_image_network').modal('show');
+        $('#image_network').attr('src',image);
+    }
 </script>
 @endsection

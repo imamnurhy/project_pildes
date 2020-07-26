@@ -49,16 +49,25 @@ class AsetKeluarController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'opd_id'  => 'required',
+            'opd_id'    => 'required',
             'aset_id.*' => 'required',
-            'ket'     => 'required'
+            'ket'       => 'required'
         ]);
+        $tmopd = Tmopd::findOrFail($request->opd_id);
+        if ($request->hasFile('foto')) {
+            $request->validate(['foto' => 'required|image|mimes:jpeg,png,jpg|max:2048']);
+            $foto = $request->file('foto');
+            $nameFoto = rand() . '.' . $foto->getClientOriginalExtension();
+            $foto->storeAs('aset/opd', $nameFoto, 'sftp', 'public');
+            $tmopd->image_network = $nameFoto;
+            $tmopd->save();
+        }
 
         foreach ($request->aset_id as $aset_id) {
             Tmopd_aset::create([
-                'opd_id'  => $request->opd_id,
-                'aset_id' => $aset_id,
-                'ket'     => $request->ket,
+                'opd_id'        => $request->opd_id,
+                'aset_id'       => $aset_id,
+                'ket'           => $request->ket,
                 'created_by'    => Auth::user()->pegawai->n_pegawai,
                 'created_at'    => Carbon::now(),
             ]);
@@ -76,15 +85,15 @@ class AsetKeluarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($tmopd_id)
     {
-        $tmopds = Tmopd::all();
+        $tmopd = Tmopd::find($tmopd_id);
         $tmasets = DB::table('tmasets')
             ->select('tmasets.id', 'tmasets.serial', 'tmasets.tahun', 'tmasets.jumlah', 'tmjenis_asets.n_jenis_aset', 'tmmerks.n_merk')
             ->join('tmjenis_asets', 'tmasets.jenis_aset_id', '=', 'tmjenis_asets.id')
             ->join('tmmerks', 'tmasets.merk_id', '=', 'tmmerks.id')
             ->get();
-        return view('aset.keluar.edit', compact(['id', 'tmopds', 'tmasets']));
+        return view('aset.keluar.edit', compact(['tmopd_id', 'tmopd', 'tmasets']));
     }
 
     /**
@@ -152,7 +161,24 @@ class AsetKeluarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroyOpd($id)
+    {
+        Tmopd_aset::destroy($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data berhasil dihapus.'
+        ]);
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyOpdAset($id)
     {
         Tmopd_aset::destroy($id);
 
@@ -182,34 +208,42 @@ class AsetKeluarController extends Controller
     public function api()
     {
         $tmaset = DB::table('tmopds')
-            ->select('tmopds.id', 'tmopds.n_lokasi', 'tmopds.alamat', 'tmkategoris.n_kategori', 'tmopds.foto')
+            ->select('tmopds.id', 'tmopds.n_lokasi', 'tmopds.alamat', 'tmkategoris.n_kategori', 'tmopds.image_network')
             ->join('tmkategoris', 'tmopds.tmkategori_id', 'tmkategoris.id')
+            ->join('tmopd_asets', 'tmopds.id', 'tmopd_asets.opd_id')
             ->orderBy('tmopds.id', 'asc')
+            ->groupBy('tmopds.id')
             ->get();
 
         return DataTables::of($tmaset)
-            ->addColumn('action', function ($p) {
-                return "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Aset'><i class='icon-remove'></i></a>";
-            })
             ->addColumn('detail', function ($p) {
-                return "<a href='" . route('aset.keluar.showDetail', $p->id) . "' title='Show Detail'><i class='icon-eye mr-1'></i></a>";
+                return "<a href='#' onclick='showDetailAset(" . $p->id . ")' data-id='" . $p->id . "' title='Show Detail'><br/><i class='icon-eye mr-1'>Detail</i></a>";
+            })
+            ->addColumn('action', function ($p) {
+                $tmopd_aset = Tmopd_aset::where('opd_id', $p->id)->count();
+                $btnEdit = "<a href='" . route('aset.keluar.show', $p->id) . "' title='Edit Merek'><i class='icon-pencil mr-1'></i></a>";
+                $btnRemove = "<a title='Hapus Aset'><i class='icon-remove'></i></a>";
+
+                if ($tmopd_aset > 0) {
+                    return $btnEdit . $btnRemove;
+                } else {
+                    // $btnRemove = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Aset'><i class='icon-remove'></i></a>";
+                    return $btnEdit . $btnRemove;
+                }
             })
             ->editColumn('foto', function ($p) {
-                if ($p->foto == "") {
-                    $img = "Tidak";
-                } else {
-                    $img = "<img src='" . config('app.SFTP_SRC') . 'opd/' . $p->foto . "' width='50px' alt='img' align='center'/>";
+                if ($p->image_network != "") {
+                    return "<img onclick='showImageNetwork(this.src)'  src='" . config('app.SFTP_SRC') . 'aset/opd/' . $p->image_network . "' width='50px' alt='img' align='center'/>";
                 }
-                return $img . "<br/><a onclick='editFoto(" . $p->id . ")' href='javascript:;' data-fancybox data-src='#formUpload' data-modal='true' title='Upload foto' class='btn btn-xs'>Unggah Foto <i class='icon-upload'></i></a>";
             })
-            ->rawColumns(['foto', 'detail', 'action'])
+            ->rawColumns(['detail', 'action', 'foto'])
             ->toJson();
     }
 
     public function apiDetailAsetKeluar($tmopd_id)
     {
         $tmaset = DB::table('tmopd_asets')
-            ->select('tmopd_asets.id', 'tmjenis_asets.n_jenis_aset', 'tmasets.serial', 'tmmerks.n_merk', 'tmopd_asets.ket', 'tmopd_asets.created_at')
+            ->select('tmopd_asets.id', 'tmjenis_asets.n_jenis_aset', 'tmasets.no_aset', 'tmasets.serial', 'tmmerks.n_merk', 'tmopd_asets.ket', 'tmopd_asets.created_at')
             ->join('tmopds', 'tmopd_asets.opd_id', '=', 'tmopds.id')
             ->join('tmasets', 'tmopd_asets.aset_id', '=', 'tmasets.id')
             ->join('tmjenis_asets', 'tmasets.jenis_aset_id', '=', 'tmjenis_asets.id')
@@ -219,14 +253,14 @@ class AsetKeluarController extends Controller
 
         return DataTables::of($tmaset)
             ->addColumn('action', function ($p) {
-                return "
-                <a href='#' onclick='edit(" . $p->id . ")' title='Edit Aset'><i class='icon-pencil mr-1'></i></a>
-                <a class='text-danger' title='Hapus Aset'><i class='icon-remove'></i></a>";
+                $btnEdit = "< href='#' onclick='edit(" . $p->id . ")' title='Edit Aset'><i class='icon-pencil mr-1'></i></>";
+                $btnRemove = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Aset'><i class='icon-remove'></i></a>";
+                return $btnEdit . $btnRemove;
             })
             ->editColumn('created_at', function ($p) {
                 return Carbon::parse($p->created_at)->format('d-m-Y');
             })
-            ->rawColumns(['action', 'created_at'])
+            ->rawColumns(['action'])
             ->toJson();
     }
 
@@ -250,7 +284,7 @@ class AsetKeluarController extends Controller
         }
 
         return response()->json([
-            'success'   => true,
+            'success'   => 1,
             'message' => $nameFoto
         ]);
     }

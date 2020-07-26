@@ -43,12 +43,15 @@ Route::group(['middleware' => ['permission:master-aset']], function () {
     Route::prefix('aset')->namespace('Aset')->name('aset.')->group(function () {
         Route::get('masuk/api', 'AsetMasukController@api')->name('masuk.api');
         Route::get('getMerk/{id_nama_aset}', 'AsetMasukController@getMerk')->name('masuk.getMerk');
+        route::get('masuk/generateNoAset', 'AsetMasukController@generateNoAset')->name('masuk.generateNoAset');
         Route::resource('masuk', 'AsetMasukController');
 
         Route::get('keluar/api', 'AsetKeluarController@api')->name('keluar.api');
         Route::get('keluar/apiDetail/{tmopd_id}', 'AsetKeluarController@apiDetailAsetKeluar')->name('keluar.apiDetailAsetKeluar');
         Route::get('keluar/showDetail/{id}', 'AsetKeluarController@showDetail')->name('keluar.showDetail');
         Route::patch('keluar/{id}/updateFoto', 'AsetKeluarController@updateFoto')->name('keluar.updateFoto');
+        Route::delete('keluar/deletOpd/{id}', 'AsetKeluarController@destroyOpd')->name('keluar.destroyOpd');
+        Route::delete('keluar/deletOpdAset/{id}', 'AsetKeluarController@destroyOpdAset')->name('keluar.destroyOpdAset');
         Route::resource('keluar', 'AsetKeluarController');
     });
 });
@@ -74,6 +77,16 @@ Route::prefix('account')->group(function () {
 
     Route::get('password', 'AccountController@password')->name('account.password');
     Route::patch('password', 'AccountController@updatePassword')->name('account.password');
+});
+
+// MASTER PERMOHONAN
+Route::prefix('permohonan')->name('permohonan.')->middleware('permission:master-permohonan')->group(function () {
+    Route::get('index', 'PermohonanController@index')->name('index');
+    Route::get('edit/{id}', 'PermohonanController@edit')->name('edit');
+    Route::patch('update/{id}', 'PermohonanController@update')->name('update');
+    Route::get('detail/{id}', 'PermohonanController@detail')->name('detail');
+    Route::delete('destroy/{id}', 'PermohonanController@destroy')->name('destroy');
+    Route::get('api', 'PermohonanController@api')->name('api');
 });
 
 /* MASTER PEGAWAI */

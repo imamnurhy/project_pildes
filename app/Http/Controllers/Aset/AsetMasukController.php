@@ -46,6 +46,7 @@ class AsetMasukController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'tgl'           => 'required',
             'jenis_aset_id' => 'required',
@@ -57,26 +58,9 @@ class AsetMasukController extends Controller
             'status'        => 'required'
         ]);
 
-        $tmno_urut = Tmno_urut::where('tmjenis_aset_id', $request->jenis_aset_id)->first();
-        $no_urut = 0;
-        if ($tmno_urut != null) {
-            $tmno_urut->update([
-                'no_urut' => $tmno_urut->no_urut + 1,
-            ]);
-            $no_urut = sprintf('%04s', $tmno_urut->no_urut);
-        } else {
-            $a = Tmno_urut::create([
-                'tmjenis_aset_id' => $request->jenis_aset_id,
-                'no_urut' => 1
-            ]);
-            $no_urut = sprintf('%04s', $a->no_urut);
-        }
-
-        $no_aset = $request->jenis_aset_id . $request->merk_id . Carbon::now()->format('my') . $no_urut;
-
         Tmasets::create([
             'tgl'           => $request->tgl,
-            'no_aset'       => $no_aset,
+            'no_aset'       => $request->no_aset,
             'jenis_aset_id' => $request->jenis_aset_id,
             'serial'        => $request->serial,
             'merk_id'       => $request->merk_id,
@@ -117,20 +101,18 @@ class AsetMasukController extends Controller
     {
         $tmaset = Tmasets::find($id);
 
-        return response()->json(
-            [
-                'id'            => $tmaset->id,
-                'tgl'           => $tmaset->tgl,
-                'no_aset'       => $tmaset->no_aset,
-                'jenis_aset_id' => $tmaset->jenis_aset_id,
-                'serial'        => $tmaset->serial,
-                'merk_id'       => $tmaset->merk_id,
-                'tahun'         => $tmaset->tahun,
-                'kondisi'       => $tmaset->kondisi,
-                'jumlah'        => $tmaset->jumlah,
-                'status'        => $tmaset->status,
-            ]
-        );
+        return response()->json([
+            'id'            => $tmaset->id,
+            'tgl'           => $tmaset->tgl,
+            'no_aset'       => $tmaset->no_aset,
+            'jenis_aset_id' => $tmaset->jenis_aset_id,
+            'serial'        => $tmaset->serial,
+            'merk_id'       => $tmaset->merk_id,
+            'tahun'         => $tmaset->tahun,
+            'kondisi'       => $tmaset->kondisi,
+            'jumlah'        => $tmaset->jumlah,
+            'status'        => $tmaset->status,
+        ]);
     }
 
     /**
@@ -144,7 +126,6 @@ class AsetMasukController extends Controller
     {
         $request->validate([
             'tgl'           => 'required',
-            'no_aset'       => 'required',
             'jenis_aset_id' => 'required',
             'serial'        => 'required',
             'merk_id'       => 'required',
@@ -155,21 +136,19 @@ class AsetMasukController extends Controller
         ]);
 
         $tmaset = Tmasets::find($id);
-        $tmaset->update(
-            [
-                'tgl'           => $request->tgl,
-                'no_aset'       => $request->no_aset,
-                'jenis_aset_id' => $request->jenis_aset_id,
-                'serial'        => $request->serial,
-                'merk_id'       => $request->merk_id,
-                'tahun'         => $request->tahun,
-                'kondisi'       => $request->kondisi,
-                'jumlah'        => $request->jumlah,
-                'status'        => $request->status,
-                'updated_by'    => Auth::user()->pegawai->n_pegawai,
-                'updated_at'    => Carbon::now(),
-            ]
-        );
+        $tmaset->update([
+            'tgl'           => $request->tgl,
+            'no_aset'       => $request->no_aset,
+            'jenis_aset_id' => $request->jenis_aset_id,
+            'serial'        => $request->serial,
+            'merk_id'       => $request->merk_id,
+            'tahun'         => $request->tahun,
+            'kondisi'       => $request->kondisi,
+            'jumlah'        => $request->jumlah,
+            'status'        => $request->status,
+            'updated_by'    => Auth::user()->pegawai->n_pegawai,
+            'updated_at'    => Carbon::now(),
+        ]);
 
         return response()->json([
             'success' => 1,
@@ -205,14 +184,75 @@ class AsetMasukController extends Controller
             ->select('tmasets.id', 'tmasets.tgl', 'tmasets.no_aset', 'tmjenis_asets.n_jenis_aset', 'tmasets.serial', 'tmmerks.n_merk', 'tmasets.tahun', 'tmasets.kondisi', 'tmasets.jumlah', 'tmasets.status')
             ->join('tmjenis_asets', 'tmasets.jenis_aset_id', '=', 'tmjenis_asets.id')
             ->join('tmmerks', 'tmasets.merk_id', '=', 'tmmerks.id')
+            // ->orderBy('tmasets.no_aset', 'asc')
+            // ->where('tmasets.jenis_aset_id', 3)
             ->get();
         return DataTables::of($tmaset)
             ->addColumn('action', function ($p) {
-                return "
-                   <a href='" . route('aset.masuk.show', $p->id) . "' title='Edit Merek'><i class='icon-pencil mr-1'></i></a>
-                    <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Merek'><i class='icon-remove'></i></a>";
+                $btnEdit = "<a href='" . route('aset.masuk.show', $p->id) . "' title='Edit Merek'><i class='icon-pencil mr-1'></i></a>";
+                $btnRemove = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Merek'><i class='icon-remove'></i></a>";
+                return $btnEdit . $btnRemove;
             })
             ->rawColumns(['action'])
             ->toJson();
+    }
+
+
+    /**
+     * GenerateNoAset
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function generateNoAset(Request $request)
+    {
+        /**
+         * Generage nomor aset
+         * * id jenis aset
+         * * id merek
+         * * Bulan dan tahun waktu pembuatan
+         * * nomor urut sesuai dengan id jenis aset di tambah 4 angka nol di depan nomor urut
+         * Example
+         * 11072000001
+         */
+
+        $tmno_urut = Tmno_urut::where('tmjenis_aset_id', $request->jenis_aset_id)->first();
+        $jenis_aset_id = $request->jenis_aset_id;
+        $merk_id = $request->merk_id;
+        $monthYear = Carbon::now()->format('my');
+        $no_urut = 1;
+        $no_aset = $jenis_aset_id . $merk_id . $monthYear;
+
+        if ($tmno_urut == null) {
+            $tmno_urut =  Tmno_urut::create([
+                'tmjenis_aset_id' => $jenis_aset_id,
+                'no_urut'         => $no_urut,
+                'tahun'           => Carbon::now()->format('Y'),
+            ]);
+        }
+
+        $tmasets = Tmasets::where('jenis_aset_id', $jenis_aset_id)->get();
+        foreach ($tmasets as $tmaset) {
+
+            if (sprintf('%04s', $tmno_urut->no_urut) == sprintf('%04s', substr($tmaset->no_aset, -4))) {
+                $no_urut = $tmno_urut->no_urut + 1;
+            } else {
+                $no_urut = $tmno_urut->no_urut;
+            }
+
+            if (Carbon::now()->format('Y') != $tmno_urut->tahun) {
+                $no_urut = 1;
+            }
+
+            $tmno_urut->no_urut =  $no_urut;
+            $tmno_urut->save();
+        }
+
+
+
+
+
+
+        return $no_aset . sprintf('%04s', $no_urut);
     }
 }

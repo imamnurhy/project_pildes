@@ -48,13 +48,13 @@
     @can('master-brand')
     <li class="header light"><strong>MASTER</strong></li>
     <li>
-        <a href="{{ route('brand.index')}}">
-            <i class="icon icon-branding_watermark amber-text s-18"></i> <span>Merek</span>
+        <a href="{{ route('jenis.index')}}">
+            <i class="icon icon-document-text3 text-success s-18"></i> <span>Jenis</span>
         </a>
     </li>
     <li>
-        <a href="{{ route('jenis.index')}}">
-            <i class="icon icon-document-text3 text-success s-18"></i> <span>Jenis</span>
+        <a href="{{ route('brand.index')}}">
+            <i class="icon icon-branding_watermark amber-text s-18"></i> <span>Merek</span>
         </a>
     </li>
     @endcan
@@ -63,12 +63,21 @@
     <li class="header light"><strong>ASSETS</strong></li>
     <li>
         <a href="{{ route('aset.masuk.index')}}">
-            <i class="icon icon-input blue-text s-18"></i> <span>Fisik</span>
+            <i class="icon icon-input blue-text s-18"></i> <span>Fisik / Nonfisik</span>
         </a>
     </li>
     <li>
         <a href="{{ route('aset.keluar.index')}}">
-            <i class="icon icon-arrow_back red-text s-18"></i> <span>Non Fisik</span>
+            <i class="icon icon-arrow_back red-text s-18"></i> <span>OPD</span>
+        </a>
+    </li>
+    @endcan
+
+    @can('master-permohonan')
+    <li class="header light"><strong>MASTER-PERMOHONAN</strong></li>
+    <li>
+        <a href="{{ route('permohonan.index') }}">
+            <i class="icon icon-paper-plane red-text s-18"></i> <span>Permohonan</span>
         </a>
     </li>
     @endcan
@@ -95,4 +104,6 @@
         </a>
     </li>
     @endcan
+
+
 </ul>
