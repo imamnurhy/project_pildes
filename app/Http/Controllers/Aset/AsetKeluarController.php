@@ -253,7 +253,7 @@ class AsetKeluarController extends Controller
 
         return DataTables::of($tmaset)
             ->addColumn('action', function ($p) {
-                $btnEdit = "< href='#' onclick='edit(" . $p->id . ")' title='Edit Aset'><i class='icon-pencil mr-1'></i></>";
+                $btnEdit = "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Aset'><i class='icon-pencil mr-1'></i></a>";
                 $btnRemove = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Aset'><i class='icon-remove'></i></a>";
                 return $btnEdit . $btnRemove;
             })
