@@ -26,7 +26,10 @@ class AsetMasukController extends Controller
      */
     public function index()
     {
-        return view('aset.masuk.index');
+        $tmjenis_asets = Tmjenis_aset::all();
+        $tmdokumens = DB::table('tmdokumen')->get();
+
+        return view('aset.masuk.index', compact(['tmjenis_asets', 'tmdokumens']));
     }
 
     /**
@@ -94,59 +97,81 @@ class AsetMasukController extends Controller
 
     public function storeDetailTanah(Request $request)
     {
-        $request->validate([
-            'nm_lahan'      => 'required',
-            'luas'          => 'required',
-            'alamat'        => 'required',
-            'batas_barat'   => 'required',
-            'batas_timur'   => 'required',
-            'batas_selatan' => 'required',
-            'batas_utara'   => 'required',
-            'latitude'      => 'required',
-            'longitude'     => 'required',
-            'longitude'     => 'required',
-            'provinsi_id'   => 'required',
-            'kota_id'       => 'required',
-            'kecamatan_id'  => 'required',
-            'kelurahan_id'  => 'required',
-            'luas_tanah'    => 'required',
-            'tanda_bukti'   => 'required',
-            'file_bukti_beli'    => 'required'
-        ]);
+        if ($request->form_edit == 1) {
+            $request->validate([
+                'nm_lahan'      => 'required',
+                'luas'          => 'required',
+                'alamat'        => 'required',
+                'batas_barat'   => 'required',
+                'batas_timur'   => 'required',
+                'batas_selatan' => 'required',
+                'batas_utara'   => 'required',
+                'latitude'      => 'required',
+                'longitude'     => 'required',
+                'longitude'     => 'required',
+                'provinsi_id'   => 'required',
+                'kota_id'       => 'required',
+                'kecamatan_id'  => 'required',
+                'kelurahan_id'  => 'required',
+                'luas_tanah'    => 'required',
+                'tanda_bukti'   => 'required',
+                'file_bukti_beli'    => 'required'
+            ]);
 
-        if ($request->hasFile('tanda_bukti')) {
-            $file = $request->file('tanda_bukti');
-            $tanda_bukti = rand() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('aset/tanah', $tanda_bukti, 'sftp', 'public');
-        }
-        if ($request->hasFile('file_bukti_beli')) {
-            $file = $request->file('file_bukti_beli');
-            $file_bukti_beli = rand() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('aset/tanah', $file_bukti_beli, 'sftp', 'public');
+            if ($request->hasFile('tanda_bukti')) {
+                $file = $request->file('tanda_bukti');
+                $tanda_bukti = rand() . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('aset/tanah', $tanda_bukti, 'sftp', 'public');
+            }
+            if ($request->hasFile('file_bukti_beli')) {
+                $file = $request->file('file_bukti_beli');
+                $file_bukti_beli = rand() . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('aset/tanah', $file_bukti_beli, 'sftp', 'public');
+            }
+
+            DB::table('tmaset_tanah')->insert([
+                'id_master_aset'  => $request->id_master_aset,
+                'nm_lahan'        => $request->nm_lahan,
+                'luas'            => $request->luas,
+                'alamat'          => $request->alamat,
+                'batas_barat'     => $request->batas_barat,
+                'batas_timur'     => $request->batas_timur,
+                'batas_selatan'   => $request->batas_selatan,
+                'batas_utara'     => $request->batas_utara,
+                'id_jenis_tanah'  => $request->id_jenis_tanah,
+                'latitude'        => $request->latitude,
+                'longitude'       => $request->longitude,
+                'longitude'       => $request->longitude,
+                'provinsi_id'     => $request->provinsi_id,
+                'kota_id'         => $request->kota_id,
+                'kecamatan_id'    => $request->kecamatan_id,
+                'kelurahan_id'    => $request->kelurahan_id,
+                'luas_tanah'      => $request->luas_tanah,
+                'nm_pemilik_sebelum' => $request->nm_pemilik_sebelum,
+                'tanda_bukti'     => $tanda_bukti,
+                'file_bukti_beli' => $file_bukti_beli
+            ]);
+        } else {
+            $request->validate([
+                'nomor'           => 'required',
+                'merk'            => 'required',
+                'jenis'            => 'required',
+                'tahun_pembuatan' => 'required',
+                'no_rangka'       => 'required',
+                'no_mesin'        => 'required',
+            ]);
+
+            DB::table('tmaset_barang')->insert([
+                'nomor'           => $request->nomor,
+                'merk'            => $request->merk,
+                'jenis'           => $request->jenis,
+                'tahun_pembuatan' => $request->tahun_pembuatan,
+                'no_rangka'       => $request->no_rangka,
+                'no_mesin'        => $request->no_mesin,
+                'id_master_aset'  => $request->id_master_aset
+            ]);
         }
 
-        DB::table('tmaset_tanah')->insert([
-            'id_master_aset'  => $request->id_master_aset,
-            'nm_lahan'        => $request->nm_lahan,
-            'luas'            => $request->luas,
-            'alamat'          => $request->alamat,
-            'batas_barat'     => $request->batas_barat,
-            'batas_timur'     => $request->batas_timur,
-            'batas_selatan'   => $request->batas_selatan,
-            'batas_utara'     => $request->batas_utara,
-            'id_jenis_tanah'  => $request->id_jenis_tanah,
-            'latitude'        => $request->latitude,
-            'longitude'       => $request->longitude,
-            'longitude'       => $request->longitude,
-            'provinsi_id'     => $request->provinsi_id,
-            'kota_id'         => $request->kota_id,
-            'kecamatan_id'    => $request->kecamatan_id,
-            'kelurahan_id'    => $request->kelurahan_id,
-            'luas_tanah'      => $request->luas_tanah,
-            'nm_pemilik_sebelum' => $request->nm_pemilik_sebelum,
-            'tanda_bukti'     => $tanda_bukti,
-            'file_bukti_beli' => $file_bukti_beli
-        ]);
 
 
         return response()->json([
@@ -297,7 +322,7 @@ class AsetMasukController extends Controller
     }
 
 
-    public function api()
+    public function api(Request $request)
     {
         $tmaset = DB::table('tmmaster_asset')
             ->select(
@@ -309,11 +334,31 @@ class AsetMasukController extends Controller
                 'tmmaster_asset.tahun',
                 'tmmaster_asset.status',
                 'tmmaster_asset.kondisi',
-                'tmjenis_asets.n_jenis_aset'
+                'tmjenis_asets.n_jenis_aset',
+                'tmmerks.n_merk'
             )
             ->join('tmjenis_asets', 'tmmaster_asset.id_jenis_asset', '=', 'tmjenis_asets.id')
             ->join('tmperolehan', 'tmmaster_asset.id_tmperolehan', '=', 'tmperolehan.id')
-            ->get();
+            ->join('trmaster_dokumen', 'tmmaster_asset.id', 'trmaster_dokumen.id_master')
+            ->join('tmmerks', 'tmmaster_asset.id_rincian_jenis_asset', 'tmmerks.id')
+            ->groupBy('tmmaster_asset.id');
+
+        if ($request->id_jenis_aset != 99) {
+            $tmaset->where('tmmaster_asset.id_jenis_asset', $request->id_jenis_aset);
+        }
+
+        if ($request->id_rincian_jenis_aset != '') {
+            $tmaset->where('tmmaster_asset.id_rincian_jenis_asset', $request->id_rincian_jenis_aset);
+        }
+
+        if ($request->status != 99) {
+            $tmaset->where('tmmaster_asset.status', $request->status);
+        }
+
+        if ($request->id_dokumen != 99) {
+            $tmaset->where('trmaster_dokumen.id_dokumen', $request->id_dokumen);
+        }
+
 
         return DataTables::of($tmaset)
             ->addColumn('action', function ($p) {
@@ -336,6 +381,7 @@ class AsetMasukController extends Controller
             ->addColumn('detail', function ($p) {
                 return "<a href='" . route('aset.masuk.showDetail', $p->id) . "' title='Show Detail Aset'><i class='icon-eye mr-1'></i></a>";
             })
+
             ->rawColumns(['action', 'detail'])
             ->toJson();
     }

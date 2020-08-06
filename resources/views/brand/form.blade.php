@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Merek')
+@section('title', 'Tambah Rincian Jenis')
 
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col">
                     <h4 id="header">
-                        <i class="icon icon-notebook-list"></i> Tambah Data Merk
+                        <i class="icon icon-notebook-list"></i> Tambah Rincian Jenis
                     </h4>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                                 </select>
                             </div>
                             <div class="form-group mb-1">
-                                <label for="n_merk" class="col-form-label s-12 col-md-4">Merk</label>
+                                <label for="n_merk" class="col-form-label s-12 col-md-4">Rician Jenis</label>
                                 <input type="text" name="n_merk" id="n_merk" placeholder=""
                                     class="form-control  r-0 s-12 col-md-6 ml-3" autocomplete="off" required />
                             </div>

@@ -5,6 +5,8 @@
         <input type="hidden" name="id_master_aset" value="{{ $tmmaster_asset->tmmaster_asset_id }}" />
         <input type="hidden" name="id_jenis_tanah" value="{{ $tmmaster_asset->tmjenis_asets_id }}" />
         <input type="hidden" name="nm_pemilik_sebelum" value="{{ $tmmaster_asset->pemilik_sebelumnya }}" />
+        <input type="hidden" name="form_edit" value="{{ $formEdit }}" />
+
         <div class="form-inline row">
             <div class="col-md-6">
                 <div class="form-group m-0 col-md-12">
