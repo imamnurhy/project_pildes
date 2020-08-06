@@ -95,22 +95,58 @@ class AsetMasukController extends Controller
     public function storeDetailTanah(Request $request)
     {
         $request->validate([
-            'nm_lahan' => 'required',
-            'luas' => 'required',
-            'alamat' => 'required',
-            'batas_barat' => 'required',
-            'batas_timur' => 'required',
+            'nm_lahan'      => 'required',
+            'luas'          => 'required',
+            'alamat'        => 'required',
+            'batas_barat'   => 'required',
+            'batas_timur'   => 'required',
             'batas_selatan' => 'required',
-            'batas_utara' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
-            'longitude' => 'required',
-            'provinsi_id' => 'required',
-            'kota_id' => 'required',
-            'kecamatan_id' => 'required',
-            'kelurahan_id' => 'required',
+            'batas_utara'   => 'required',
+            'latitude'      => 'required',
+            'longitude'     => 'required',
+            'longitude'     => 'required',
+            'provinsi_id'   => 'required',
+            'kota_id'       => 'required',
+            'kecamatan_id'  => 'required',
+            'kelurahan_id'  => 'required',
+            'luas_tanah'    => 'required',
+            'tanda_bukti'   => 'required',
+            'file_bukti_beli'    => 'required'
         ]);
 
+        if ($request->hasFile('tanda_bukti')) {
+            $file = $request->file('tanda_bukti');
+            $tanda_bukti = rand() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('aset/tanah', $tanda_bukti, 'sftp', 'public');
+        }
+        if ($request->hasFile('file_bukti_beli')) {
+            $file = $request->file('file_bukti_beli');
+            $file_bukti_beli = rand() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('aset/tanah', $file_bukti_beli, 'sftp', 'public');
+        }
+
+        DB::table('tmaset_tanah')->insert([
+            'id_master_aset'  => $request->id_master_aset,
+            'nm_lahan'        => $request->nm_lahan,
+            'luas'            => $request->luas,
+            'alamat'          => $request->alamat,
+            'batas_barat'     => $request->batas_barat,
+            'batas_timur'     => $request->batas_timur,
+            'batas_selatan'   => $request->batas_selatan,
+            'batas_utara'     => $request->batas_utara,
+            'id_jenis_tanah'  => $request->id_jenis_tanah,
+            'latitude'        => $request->latitude,
+            'longitude'       => $request->longitude,
+            'longitude'       => $request->longitude,
+            'provinsi_id'     => $request->provinsi_id,
+            'kota_id'         => $request->kota_id,
+            'kecamatan_id'    => $request->kecamatan_id,
+            'kelurahan_id'    => $request->kelurahan_id,
+            'luas_tanah'      => $request->luas_tanah,
+            'nm_pemilik_sebelum' => $request->nm_pemilik_sebelum,
+            'tanda_bukti'     => $tanda_bukti,
+            'file_bukti_beli' => $file_bukti_beli
+        ]);
 
 
         return response()->json([
@@ -139,6 +175,7 @@ class AsetMasukController extends Controller
         $tmmaster_asset = DB::table('tmmaster_asset')
             ->select(
                 'tmmaster_asset.id as tmmaster_asset_id',
+                'tmmaster_asset.pemilik_sebelumnya',
                 'tmjenis_asets.id as tmjenis_asets_id',
                 'tmjenis_asets.n_jenis_aset',
                 'tmjenis_asets.kode',
@@ -272,6 +309,7 @@ class AsetMasukController extends Controller
                 'tmmaster_asset.tahun',
                 'tmmaster_asset.status',
                 'tmmaster_asset.kondisi',
+                'tmjenis_asets.n_jenis_aset'
             )
             ->join('tmjenis_asets', 'tmmaster_asset.id_jenis_asset', '=', 'tmjenis_asets.id')
             ->join('tmperolehan', 'tmmaster_asset.id_tmperolehan', '=', 'tmperolehan.id')

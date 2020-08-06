@@ -78,7 +78,7 @@
             $('#alert').html('');
             $('#action').attr('disabled', true);
             $.ajax({
-                    url: url,
+                    url: "{{ route('aset.masuk.storeDetailTanah') }}",
                     type: 'POST',
                     data: new FormData($(this)[0]),
                     contentType: false,

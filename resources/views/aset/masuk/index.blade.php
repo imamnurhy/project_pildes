@@ -36,6 +36,7 @@
                         <thead>
                             <th width="30">No</th>
                             <th>Tanggal</th>
+                            <th>Aset</th>
                             <th>Pembelian</th>
                             <th>Pemilik Sebelumnya</th>
                             <th>Harga</th>
@@ -74,6 +75,10 @@
         {
             data: 'date',
             name: 'date',
+        },
+        {
+            data: 'n_jenis_aset',
+            name: 'n_jenis_aset',
         },
         {
             data: 'nm_pembelian',
