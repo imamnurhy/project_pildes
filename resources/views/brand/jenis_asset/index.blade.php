@@ -35,7 +35,7 @@
                     <table id="jenis-table" class="table table-striped no-b" style="width:100%">
                         <thead>
                             <th width="30">No</th>
-                            <th>Jenis Aset</th>
+                            <th>Nama</th>
                             <th width="40"></th>
                         </thead>
                         <tbody></tbody>

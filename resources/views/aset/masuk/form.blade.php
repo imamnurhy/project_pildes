@@ -44,21 +44,14 @@
                         <div class="col-md-6">
 
                             <div class="form-group mb-1 ">
-                                <label for="tgl" class="col-form-label s-12 col-md-4">Tanggal Entry</label>
-                                <input type="date" name="tgl" id="tgl" class="form-control light r-0 s-12 col-md-6 ml-3"
-                                    autocomplete="off" required />
-                            </div>
-
-                            <div class="form-group mb-1" id="view_no_aset">
-                                <label class="col-form-label s-12 col-md-4">No Aset</label>
-                                <input type="text" id="no_aset" class="form-control light r-0 s-12 col-md-6 ml-3"
-                                    disabled />
-                                <input type="hidden" name="no_aset" id="no_aset2">
+                                <label for="date" class="col-form-label s-12 col-md-4">Tanggal Entry</label>
+                                <input type="date" name="date" id="date"
+                                    class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required />
                             </div>
 
                             <div class="form-group mb-1">
-                                <label for="jenis_aset_id" class="col-form-label s-12 col-md-4">Barang</label>
-                                <select name="jenis_aset_id" id="jenis_aset_id"
+                                <label for="id_jenis_asset" class="col-form-label s-12 col-md-4">Jenis</label>
+                                <select name="id_jenis_asset" id="id_jenis_asset"
                                     class="form-control light  r-0 s-12 col-md-6 ml-3" autocomplete="off" required
                                     onchange="getMerk()">
                                     <option value="">Pilih</option>
@@ -69,17 +62,37 @@
                             </div>
 
                             <div class="form-group mb-1">
-                                <label for="merk_id" class="col-form-label s-12 col-md-4">Merek</label>
-                                <select name="merk_id" id="merk_id" class="form-control light  r-0 s-12 col-md-6 ml-3"
-                                    autocomplete="off" required onchange="generateNoAset()">
+                                <label for="id_rincian_jenis_asset" class="col-form-label s-12 col-md-4">Rincian
+                                    Jenis</label>
+                                <select name="id_rincian_jenis_asset" id="id_rincian_jenis_asset"
+                                    class="form-control light  r-0 s-12 col-md-6 ml-3" autocomplete="off" required>
                                     <option value="">Pilih</option>
                                 </select>
                             </div>
 
                             <div class="form-group mb-1">
-                                <label for="serial" class="col-form-label s-12 col-md-4">Serial</label>
-                                <input type="text" name="serial" id="serial" placeholder=""
+                                <label for="id_tmperolehan" class="col-form-label s-12 col-md-4">Pembelian</label>
+                                <select name="id_tmperolehan" id="id_tmperolehan"
+                                    class="form-control light  r-0 s-12 col-md-6 ml-3" autocomplete="off" required>
+                                    <option value="">Pilih</option>
+                                    @foreach($tmperolehans as $tmperolehan)
+                                    <option value="{{ $tmperolehan->id }}">{{ $tmperolehan->nm_pembelian }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-1">
+                                <label for="pemilik_sebelumnya" class="col-form-label s-12 col-md-4">Pemilik
+                                    Sebelumnya</label>
+                                <input type="text" name="pemilik_sebelumnya" id="pemilik_sebelumnya" placeholder=""
                                     class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required />
+                            </div>
+
+                            <div class="form-group mb-1">
+                                <label for="harga_beli" class="col-form-label s-12 col-md-4">Harga Beli</label>
+                                <input type="text" name="harga_beli" id="harga_beli" placeholder=""
+                                    class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
                             </div>
 
                             <div class="form-group mb-1">
@@ -90,32 +103,45 @@
                             </div>
 
                             <div class="form-group mb-1">
+                                <label for="status" class="col-form-label s-12 col-md-4">Status</label>
+                                <select name="status" id="status" class="form-control light  r-0 s-12 col-md-6 ml-3"
+                                    autocomplete="off" required>
+                                    <option value="">Pilih</option>
+                                    <option value="1">Ada</option>
+                                    <option value="0">Tidak Ada</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-1">
                                 <label for="kondisi" class="col-form-label s-12 col-md-4">Kondisi</label>
                                 <input type="text" name="kondisi" id="kondisi" placeholder=""
                                     class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required />
                             </div>
 
                             <div class="form-group mb-1">
-                                <label for="jumlah" class="col-form-label s-12 col-md-4">Jumlah</label>
-                                <input type="text" name="jumlah" id="jumlah" placeholder=""
-                                    class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required
-                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                                <label for="id_dokumen" class="col-form-label s-12 col-md-4">Doc Kelengkapan</label>
+                                <div class="col-md-6">
+                                    <select name="id_dokumen[]" id="id_dokumen"
+                                        class="form-control select2 light  r-0 s-12  ml-3" autocomplete="off" required
+                                        multiple="multiple">
+                                        <option value="">Pilih</option>
+                                        @foreach($tmdokumens as $tmdokumen)
+                                        <option value="{{ $tmdokumen->id }}">{{ $tmdokumen->nama_dokumen }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-
-                            <div class="form-group mb-1">
-                                <label for="status" class="col-form-label s-12 col-md-4">Status</label>
-                                <input type="text" name="status" id="status" placeholder=""
-                                    class="form-control light r-0 s-12 col-md-6 ml-3" autocomplete="off" required />
-                            </div>
-
                         </div>
 
                     </div>
                     <div class="form-row form-inline" style="align-items: baseline">
                         <div class="col-md-12">
                             <div class="card-body offset-md-3">
-                                <button type="submit" class="btn btn-primary btn-sm" id="action" title="Simpan data"><i
-                                        class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
+                                <button type="submit" class="btn btn-primary btn-sm" id="action" title="Simpan data">
+                                    <i class="icon-save mr-2"></i>
+                                    Simpan
+                                    <span id="txtAction"></span>
+                                </button>
                                 <a class="btn btn-sm" onclick="add()" id="reset" title="Reset inputan">Reset</a>
                             </div>
                         </div>
@@ -150,6 +176,9 @@
             }else{
                 url = "{{ route('aset.masuk.update', ':id') }}".replace(':id', $('#id').val());
             }
+
+            console.log(save_method);
+
             $.ajax({
                     url: url,
                     type: 'POST',
@@ -197,23 +226,19 @@
                 $('#formTitle').html("Edit Data");
                 $('#form').show();
                 $('#id').val(data.id);
-                $('#tgl').val(data.tgl);
+                $('#date').val(data.date);
 
-                $('#jenis_aset_id').val(data.jenis_aset_id);
+                $('#id_jenis_asset').val(data.id_jenis_asset);
                 //-- Get and select merk
-                getMerk(data.merk_id);
-                $('#view_no_aset').removeAttr('style');
-                $('#no_aset').val(data.no_aset);
+                getMerk(data.id_rincian_jenis_asset);
 
-                //-- View no aset
-
-                console.log(data.no_aset);
-
-                $('#serial').val(data.serial);
+                $('#id_tmperolehan').val(data.id_tmperolehan);
+                $('#pemilik_sebelumnya').val(data.pemilik_sebelumnya);
+                $('#harga_beli').val(data.harga_beli);
                 $('#tahun').val(data.tahun);
-                $('#kondisi').val(data.kondisi);
-                $('#jumlah').val(data.jumlah);
                 $('#status').val(data.status);
+                $('#kondisi').val(data.kondisi);
+                $('#id_dokumen').val(data.id_dokumen).trigger('change');
 
             },
             error: function () {
@@ -244,8 +269,8 @@
     }
 
     function getMerk(id) {
-        $('#merk_id').html("<option value=''>Loading...</option>");
-        url = "{{ route('aset.masuk.getMerk', ':id') }}".replace(':id', $('#jenis_aset_id').val());
+        $('#id_rincian_jenis_asset').html("<option value=''>Loading...</option>");
+        url = "{{ route('aset.masuk.getMerk', ':id') }}".replace(':id', $('#id_jenis_asset').val());
 
         // Disable button action when prosess getMerek
         $('#action').attr('disabled', true);
@@ -254,9 +279,9 @@
             $.each(data, function (index, value) {
                 option += "<option value='" + value.id + "'>" + value.n_merk + "</li>";
             });
-            $('#merk_id').html(option);
+            $('#id_rincian_jenis_asset').html(option);
         }, 'JSON').done(function () {
-            $('#merk_id').val(id).trigger('change');
+            $('#id_rincian_jenis_asset').val(id).trigger('change');
 
             // Enable button action when success getMerek
             $('#action').removeAttr('disabled', true);

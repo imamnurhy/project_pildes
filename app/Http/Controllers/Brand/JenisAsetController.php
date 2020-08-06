@@ -18,7 +18,7 @@ class JenisAsetController extends Controller
     public function create()
     {
         $id = 0;
-        return view('brand.jenis_asset.form', compact(['id']));
+        return view('brand.jenis_asset.form', compact('id'));
     }
 
     public function store(Request $request)
@@ -39,19 +39,16 @@ class JenisAsetController extends Controller
 
     public function show($id)
     {
-        return view('brand.jenis_asset.form', compact(['id']));
+        return view('brand.jenis_asset.form', compact('id'));
     }
 
     public function edit($id)
     {
         $tmmerek = Tmjenis_aset::find($id);
-
-        return response()->json(
-            [
-                'id'            => $tmmerek->id,
-                'n_jenis_aset' => $tmmerek->n_jenis_aset,
-            ]
-        );
+        return response()->json([
+            'id'           => $tmmerek->id,
+            'n_jenis_aset' => $tmmerek->n_jenis_aset,
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -85,20 +82,22 @@ class JenisAsetController extends Controller
     public function api()
     {
         $tmjenis_asets = Tmjenis_aset::all();
-        $tmaset = DB::table('tmasets')
-            ->pluck('jenis_aset_id')
+        $tmmerk = DB::table('tmmerks')
+            ->pluck('id_nama_aset')
             ->toArray();
+
         return DataTables::of($tmjenis_asets)
-            ->addColumn('action', function ($p) use ($tmaset) {
+            ->addColumn('action', function ($p) use ($tmmerk) {
                 $buttonAction = '';
-                if (in_array($p->id, $tmaset)) {
+
+                if (in_array($p->id, $tmmerk)) {
                     $buttonAction = "
-                    <a title='Edit Jenis'><i class='icon-pencil mr-1'></i></a>
+                   <a  href='" . route('jenis.show', $p->id) . "' title='Edit Jenis'><i class='icon-pencil mr-1'></i></a>
                     <a title='Hapus Jenis'><i class='icon-remove'></i></a>
                     ";
                 } else {
                     $buttonAction = "
-                   <a  href='" . route('brand.show', $p->id) . "' title='Edit Jenis'><i class='icon-pencil mr-1'></i></a>
+                   <a  href='" . route('jenis.show', $p->id) . "' title='Edit Jenis'><i class='icon-pencil mr-1'></i></a>
                     <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus jenis'><i class='icon-remove'></i></a>";
                 }
 

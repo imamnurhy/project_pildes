@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Master Merek')
+@section('title', 'Master Rincian Jenis')
 
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
@@ -13,15 +13,16 @@
             <div class="row">
                 <div class="col">
                     <h3 class="my-2">
-                        <i class="icon icon-notebook-list "></i> Data Merek
+                        <i class="icon icon-notebook-list "></i> Data Rincian Jenis
                     </h3>
                 </div>
             </div>
             <div class="row justify-content-between">
                 <ul class="nav nav-material nav-material-white responsive-tab" role="tablist">
                     <li>
-                        <a class="nav-link" href="{{ route('brand.create')}}"><i class="icon icon-plus"></i>Tambah
-                            Data</a>
+                        <a class="nav-link" href="{{ route('brand.create')}}">
+                            <i class="icon icon-plus"></i>Tambah Data
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -35,7 +36,7 @@
                     <table id="brand-table" class="table table-striped no-b" style="width:100%">
                         <thead>
                             <th width="30">No</th>
-                            <th>Merk</th>
+                            <th>Nama</th>
                             <th>Jenis Aset</th>
                             <th width="40"></th>
                         </thead>

@@ -44,6 +44,10 @@ Route::group(['middleware' => ['permission:master-aset']], function () {
         Route::get('masuk/api', 'AsetMasukController@api')->name('masuk.api');
         Route::get('getMerk/{id_nama_aset}', 'AsetMasukController@getMerk')->name('masuk.getMerk');
         route::get('masuk/generateNoAset', 'AsetMasukController@generateNoAset')->name('masuk.generateNoAset');
+        route::get('masuk/showDetail/{id}', 'AsetMasukController@showDetail')->name('masuk.showDetail');
+        Route::get('masuk/{provinsi_id}/getKabupaten', 'AsetMasukController@getKabupaten')->name('masuk.getKabupaten');
+        Route::get('masuk/{kabupaten_id}/getKecamatan', 'AsetMasukController@getKecamatan')->name('masuk.getKecamatan');
+        Route::get('masuk/{kecamatan_id}/getKelurahan', 'AsetMasukController@getKelurahan')->name('masuk.getKelurahan');
         Route::resource('masuk', 'AsetMasukController');
 
         Route::get('keluar/api', 'AsetKeluarController@api')->name('keluar.api');

@@ -117,7 +117,6 @@
 
     function edit(id) {
         save_method = 'edit';
-        var id = id;
         $('#alert').html('');
         $('#header').html('Edit Data Jenis Aset');
         $('#formTitle').html("Mohon tunggu beberapa saat...");
@@ -130,6 +129,7 @@
             type: "GET",
             dataType: "JSON",
             success: function (data) {
+                console.log(data);
                 $('#formTitle').html("Edit Data");
                 $('#form').show();
                 $('#id').val(data.id);

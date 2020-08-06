@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Master Barang')
+@section('title', 'Master Asset')
 
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col">
                     <h3 class="my-2">
-                        <i class="icon-notebook-list"></i> Data Barang
+                        <i class="icon-notebook-list"></i> Data Asset
                     </h3>
                 </div>
             </div>
@@ -36,14 +36,13 @@
                         <thead>
                             <th width="30">No</th>
                             <th>Tanggal</th>
-                            <th>No Aset</th>
-                            <th>Barang</th>
-                            <th>Serial</th>
-                            <th>Merek</th>
+                            <th>Pembelian</th>
+                            <th>Pemilik Sebelumnya</th>
+                            <th>Harga</th>
                             <th>Tahun</th>
-                            <th>Kondisi</th>
-                            <th>Jumlah</th>
                             <th>Status</th>
+                            <th>Kondisi</th>
+                            <th width="40">Detail</th>
                             <th width="40"></th>
                         </thead>
                         <tbody></tbody>
@@ -73,40 +72,39 @@
             className: 'text-center'
         },
         {
-            data: 'tgl',
-            name: 'tgl',
+            data: 'date',
+            name: 'date',
         },
         {
-            data: 'no_aset',
-            name: 'no_aset',
+            data: 'nm_pembelian',
+            name: 'nm_pembelian',
         },
         {
-            data: 'n_jenis_aset',
-            name: 'n_jenis_aset',
+            data: 'pemilik_sebelumnya',
+            name: 'pemilik_sebelumnya',
         },
         {
-            data: 'serial',
-            name: 'serial',
-        },
-        {
-            data: 'n_merk',
-            name: 'n_merk',
+            data: 'harga_beli',
+            name: 'harga_beli',
         },
         {
             data: 'tahun',
             name: 'tahun',
         },
         {
+            data: 'status',
+            name: 'status',
+        },
+        {
             data: 'kondisi',
             name: 'kondisi',
         },
         {
-            data: 'jumlah',
-            name: 'jumlah',
-        },
-        {
-            data: 'status',
-            name: 'status',
+            data: 'detail',
+            name: 'detail',
+            orderable: false,
+            searchable: false,
+            className: 'text-center'
         },
         {
             data: 'action',

@@ -43,8 +43,6 @@
     </li>
     @endcan
 
-
-
     @can('master-brand')
     <li class="header light"><strong>MASTER</strong></li>
     <li>
@@ -54,7 +52,7 @@
     </li>
     <li>
         <a href="{{ route('brand.index')}}">
-            <i class="icon icon-branding_watermark amber-text s-18"></i> <span>Merek</span>
+            <i class="icon icon-branding_watermark amber-text s-18"></i> <span>Rincian Jenis</span>
         </a>
     </li>
     @endcan
@@ -63,12 +61,12 @@
     <li class="header light"><strong>ASSETS</strong></li>
     <li>
         <a href="{{ route('aset.masuk.index')}}">
-            <i class="icon icon-input blue-text s-18"></i> <span>Fisik / Nonfisik</span>
+            <i class="icon icon-input blue-text s-18"></i> <span>Aset</span>
         </a>
     </li>
     <li>
         <a href="{{ route('aset.keluar.index')}}">
-            <i class="icon icon-arrow_back red-text s-18"></i> <span>OPD</span>
+            <i class="icon icon-arrow_back red-text s-18"></i><span>Rincian Aset</span>
         </a>
     </li>
     @endcan
