@@ -45,7 +45,7 @@
                                             <th width="30">No</th>
                                             <th width="80px">NIP</th>
                                             <th>Nama</th>
-                                            <th width="100px">OPD</th>
+                                            <th width="100px">Pengguna</th>
                                             <th width="130px">Foto</th>
                                             <th width="120">Pengguna APP</th>
                                             <th width="40"></th>
@@ -161,7 +161,7 @@
                         autocomplete="off" required />
                 </div>
                 <div class="form-group m-0">
-                    <label for="tmopd_id" class="col-form-label s-12 col-md-4">OPD</label>
+                    <label for="tmopd_id" class="col-form-label s-12 col-md-4">Pengguna</label>
                     <select name="tmopd_id" id="tmopd_id" placeholder="" class="form-control r-0 light s-12 col-md-8"
                         required>
                         <option value="">Pilih</option>

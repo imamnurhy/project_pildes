@@ -32,12 +32,14 @@ class AsetKeluarController extends Controller
     public function create()
     {
         $tmopds = Tmopd::all();
-        $tmasets = DB::table('tmasets')
-            ->select('tmasets.id', 'tmasets.serial', 'tmasets.tahun', 'tmasets.jumlah', 'tmjenis_asets.n_jenis_aset', 'tmmerks.n_merk')
-            ->join('tmjenis_asets', 'tmasets.jenis_aset_id', '=', 'tmjenis_asets.id')
-            ->join('tmmerks', 'tmasets.merk_id', '=', 'tmmerks.id')
+        $tmmaster_assets = DB::table('tmmaster_asset')
+            ->select('tmmaster_asset.id', 'tmmaster_asset.tahun', 'tmjenis_asets.n_jenis_aset', 'tmmerks.n_merk')
+            ->join('tmjenis_asets', 'tmmaster_asset.id_jenis_asset', '=', 'tmjenis_asets.id')
+            ->join('tmmerks', 'tmmaster_asset.id_rincian_jenis_asset', '=', 'tmmerks.id')
             ->get();
-        return view('aset.keluar.add', compact(['tmopds', 'tmasets']));
+
+
+        return view('aset.keluar.add', compact(['tmopds', 'tmmaster_assets']));
     }
 
     /**
@@ -68,7 +70,7 @@ class AsetKeluarController extends Controller
                 'opd_id'        => $request->opd_id,
                 'aset_id'       => $aset_id,
                 'ket'           => $request->ket,
-                'created_by'    => Auth::user()->pegawai->n_pegawai,
+                'created_by'    => Auth::user()->pegawai == null ? 'admin' : Auth::user()->pegawai->n_pegawai,
                 'created_at'    => Carbon::now(),
             ]);
         }
@@ -88,12 +90,12 @@ class AsetKeluarController extends Controller
     public function show($tmopd_id)
     {
         $tmopd = Tmopd::find($tmopd_id);
-        $tmasets = DB::table('tmasets')
-            ->select('tmasets.id', 'tmasets.serial', 'tmasets.tahun', 'tmasets.jumlah', 'tmjenis_asets.n_jenis_aset', 'tmmerks.n_merk')
-            ->join('tmjenis_asets', 'tmasets.jenis_aset_id', '=', 'tmjenis_asets.id')
-            ->join('tmmerks', 'tmasets.merk_id', '=', 'tmmerks.id')
+        $tmmaster_assets = DB::table('tmmaster_asset')
+            ->select('tmmaster_asset.id', 'tmmaster_asset.tahun', 'tmjenis_asets.n_jenis_aset', 'tmmerks.n_merk')
+            ->join('tmjenis_asets', 'tmmaster_asset.id_jenis_asset', '=', 'tmjenis_asets.id')
+            ->join('tmmerks', 'tmmaster_asset.id_rincian_jenis_asset', '=', 'tmmerks.id')
             ->get();
-        return view('aset.keluar.edit', compact(['tmopd_id', 'tmopd', 'tmasets']));
+        return view('aset.keluar.edit', compact(['tmopd_id', 'tmopd', 'tmmaster_assets']));
     }
 
     /**
@@ -117,27 +119,6 @@ class AsetKeluarController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $request->validate([
-        //     'opd_id'  => 'required',
-        //     'aset_id' => 'required',
-        //     'ket'     => 'required'
-        // ]);
-
-        // $tmopd_aset = Tmopd_aset::find($id);
-
-        // $tmopd_aset->update([
-        //     'opd_id'     => $request->opd_id,
-        //     'aset_id'    => $request->aset_id,
-        //     'ket'        => $request->ket,
-        //     'updated_by' => Auth::user()->pegawai->n_pegawai,
-        //     'updated_at' => Carbon::now(),
-        // ]);
-
-        // return response()->json([
-        //     'success' => 1,
-        //     'message' => 'Data berhasil diperbaharui.'
-        // ]);
-
         #region update asset in menu detail
         $tmopd_aset = Tmopd_aset::find($id);
 
@@ -145,7 +126,7 @@ class AsetKeluarController extends Controller
             'opd_id'     => $request->opd_id,
             'aset_id'    => $request->aset_id,
             'ket'        => $request->ket,
-            'updated_by' => Auth::user()->pegawai->n_pegawai,
+            'updated_by' => Auth::user()->pegawai == null ? 'admin' : Auth::user()->pegawai->n_pegawai,
             'updated_at' => Carbon::now(),
         ]);
 
@@ -242,12 +223,13 @@ class AsetKeluarController extends Controller
 
     public function apiDetailAsetKeluar($tmopd_id)
     {
+
         $tmaset = DB::table('tmopd_asets')
-            ->select('tmopd_asets.id', 'tmjenis_asets.n_jenis_aset', 'tmasets.no_aset', 'tmasets.serial', 'tmmerks.n_merk', 'tmopd_asets.ket', 'tmopd_asets.created_at')
+            ->select('tmopd_asets.id', 'tmjenis_asets.n_jenis_aset', 'tmmerks.n_merk', 'tmopd_asets.ket', 'tmopd_asets.created_at')
             ->join('tmopds', 'tmopd_asets.opd_id', '=', 'tmopds.id')
-            ->join('tmasets', 'tmopd_asets.aset_id', '=', 'tmasets.id')
-            ->join('tmjenis_asets', 'tmasets.jenis_aset_id', '=', 'tmjenis_asets.id')
-            ->join('tmmerks', 'tmasets.merk_id', '=', 'tmmerks.id')
+            ->join('tmmaster_asset', 'tmopd_asets.aset_id', '=', 'tmmaster_asset.id')
+            ->join('tmjenis_asets', 'tmmaster_asset.id_jenis_asset', '=', 'tmjenis_asets.id')
+            ->join('tmmerks', 'tmmaster_asset.id_rincian_jenis_asset', '=', 'tmmerks.id')
             ->where('tmopd_asets.opd_id', '=', $tmopd_id)
             ->get();
 

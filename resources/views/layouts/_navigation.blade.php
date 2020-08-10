@@ -22,7 +22,7 @@
         <ul class="treeview-menu">
             <li>
                 <a href="{{ route('opd.index') }}">
-                    <i class="icon icon-building-o"></i> <span>OPD</span>
+                    <i class="icon icon-building-o"></i> <span>Pengguna</span>
                 </a>
             </li>
         </ul>
@@ -61,12 +61,12 @@
     <li class="header light"><strong>ASSETS</strong></li>
     <li>
         <a href="{{ route('aset.masuk.index')}}">
-            <i class="icon icon-input blue-text s-18"></i> <span>Aset</span>
+            <i class="icon icon-input blue-text s-18"></i> <span>Pendanaan</span>
         </a>
     </li>
     <li>
         <a href="{{ route('aset.keluar.index')}}">
-            <i class="icon icon-arrow_back red-text s-18"></i><span>Rincian Aset</span>
+            <i class="icon icon-arrow_back red-text s-18"></i><span>Pendistribusian</span>
         </a>
     </li>
     @endcan

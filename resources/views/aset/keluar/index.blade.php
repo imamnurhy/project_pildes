@@ -37,7 +37,7 @@
                     <table id="aset-keluar-table" class="table table-striped no-b" style="width:100%">
                         <thead>
                             <th width="30">No</th>
-                            <th>OPD</th>
+                            <th>Pengguna</th>
                             <th>Kategori</th>
                             <th width="350">Alamat</th>
                             <th width=130px>foto</th>
@@ -66,10 +66,8 @@
                         <table id="table-detail-aset-keluar" class="table table-striped no-b" style="width:100%">
                             <thead>
                                 <th width="30">No</th>
-                                <th>Barang</th>
-                                <th>No Aset</th>
-                                <th>Serial</th>
-                                <th>Merek</th>
+                                <th>Jenis</th>
+                                <th>Rician Jenis</th>
                                 <th>Ket</th>
                                 <th>Tanggal</th>
                             </thead>
@@ -223,14 +221,6 @@
                 {
                     data:'n_jenis_aset',
                     name:'n_jenis_aset'
-                },
-                {
-                    data:'no_aset',
-                    name:'no_aset'
-                },
-                {
-                    data:'serial',
-                    name:'serial'
                 },
                 {
                     data:'n_merk',

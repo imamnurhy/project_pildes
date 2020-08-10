@@ -44,11 +44,11 @@
 
                         <div class="col-md-6">
                             <div class="form-group mb-1">
-                                <label for="opd_id" class="col-form-label s-12 col-md-4">OPD</label>
+                                <label for="opd_id" class="col-form-label s-12 col-md-4">Pengguna</label>
                                 <div class="col-md-8">
                                     <select name="opd_id" id="opd_id" class="form-control light select2  r-0 s-12"
                                         autocomplete="off" required>
-                                        <option value="" disabled selected>Pilih OPD</option>
+                                        <option value="" disabled selected>Pilih</option>
                                         @foreach($tmopds as $tmopd)
                                         <option value="{{ $tmopd->id }}">{{ $tmopd->n_lokasi }}</option>
                                         @endforeach
@@ -62,9 +62,9 @@
                                     <select name="aset_id[]" id="aset_id" class="form-control light select2 r-0 s-12"
                                         multiple autocomplete="off" required>
                                         <option value="" disabled>Pilih Asset</option>
-                                        @foreach($tmasets as $tmaset)
-                                        <option value="{{ $tmaset->id }}">
-                                            {{ $tmaset->n_jenis_aset . '-' . $tmaset->n_merk .'-'. $tmaset->serial . '-' . $tmaset->tahun . '-' . $tmaset->jumlah }}
+                                        @foreach($tmmaster_assets as $tmmaster_asset)
+                                        <option value="{{ $tmmaster_asset->id }}">
+                                            {{ $tmmaster_asset->n_jenis_aset . '-' . $tmmaster_asset->n_merk . '-' . $tmmaster_asset->tahun  }}
                                         </option>
                                         @endforeach
                                     </select>

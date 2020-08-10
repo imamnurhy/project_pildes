@@ -145,7 +145,7 @@ class PegawaiController extends Controller
                 if ($p->foto == "") {
                     $img = "Tidak";
                 } else {
-                    $img = "<img src='" . env("SFTP_SRC") . 'foto/' . $p->foto . "' alt='img' align='center'/>";
+                    $img = "<img src='" . 'http://103.219.112.114/asetgrup_storage/public/foto/' . $p->foto . "' alt='img' align='center' width='50%'/>";
                 }
                 return $img . "<br/><a onclick='editFoto(" . $p->id . ")' href='javascript:;' data-fancybox data-src='#formUpload' data-modal='true' title='Upload foto pegawai' class='btn btn-xs'>Unggah Foto <i class='icon-upload'></i></a>";
             })
@@ -298,7 +298,7 @@ class PegawaiController extends Controller
             'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        dd(config());
+        // dd(config());
 
         $pegawai = Pegawai::findOrFail($id);
         $lastFoto = $pegawai->foto;
@@ -307,8 +307,6 @@ class PegawaiController extends Controller
         $foto->storeAs('foto', $nameFoto, 'sftp', 'public');
         $pegawai->foto = $nameFoto;
         $pegawai->save();
-
-
 
         if ($lastFoto != '') {
             Storage::disk('sftp')->delete('foto/' . $lastFoto);

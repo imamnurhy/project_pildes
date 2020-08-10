@@ -35,10 +35,8 @@
                         <table id="table-detail-aset-keluar" class="table table-striped no-b" style="width:100%">
                             <thead>
                                 <th width="30">No</th>
-                                <th>Barang</th>
-                                <th>No Aset</th>
-                                <th>Serial</th>
-                                <th width="100px">Merek</th>
+                                <th>Jenis</th>
+                                <th width="100px">Rincian Jenis</th>
                                 <th>Ket</th>
                                 <th>Tanggal</th>
                                 <th width="40"></th>
@@ -104,14 +102,14 @@
                 <div class="form-row form-inline">
                     <div class="col-md-12">
                         <div class="form-group mb-1">
-                            <label for="aset_id" class="col-form-label s-12 col-md-2">Barang</label>
+                            <label for="aset_id" class="col-form-label s-12 col-md-2">Jenis</label>
                             <div class="col-md-10">
                                 <select name="aset_id" id="aset_id" disabled class="form-control select2 r-0 light s-12"
                                     autocomplete="off" required>
                                     <option value="">Pilih</option>
-                                    @foreach($tmasets as $tmaset)
-                                    <option value="{{ $tmaset->id }}">
-                                        {{ $tmaset->n_jenis_aset . '-' . $tmaset->n_merk .'-'. $tmaset->serial . '-' . $tmaset->tahun . '-' . $tmaset->jumlah }}
+                                    @foreach($tmmaster_assets as $tmmaster_asset)
+                                    <option value="{{ $tmmaster_asset->id }}">
+                                        {{ $tmmaster_asset->n_jenis_aset . '-' . $tmmaster_asset->n_merk . '-' . $tmmaster_asset->tahun  }}
                                     </option>
                                     @endforeach
                                 </select>
@@ -166,14 +164,6 @@
             {
                 data:'n_jenis_aset',
                 name:'n_jenis_aset'
-            },
-            {
-                data:'no_aset',
-                name:'no_aset'
-            },
-            {
-                data:'serial',
-                name:'serial'
             },
             {
                 data:'n_merk',
