@@ -8,13 +8,18 @@ use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\Provinsi;
+use App\Models\Tmaset_barang;
+use App\Models\Tmaset_tanah;
 use App\Models\Tmasets;
+use App\Models\Tmberkas;
+use App\Models\Tmberkas_aset_tanah;
 use App\Models\Tmjenis_aset;
 use App\Models\Tmmerk;
 use App\Models\Tmno_urut;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
 class AsetMasukController extends Controller
@@ -114,22 +119,31 @@ class AsetMasukController extends Controller
                 'kecamatan_id'  => 'required',
                 'kelurahan_id'  => 'required',
                 'luas_tanah'    => 'required',
-                'tanda_bukti'   => 'required',
-                'file_bukti_beli'    => 'required'
+                'berkas.*' => 'mimes:doc,pdf,docx,jpg,jpeg,png'
             ]);
 
             if ($request->hasFile('tanda_bukti')) {
                 $file = $request->file('tanda_bukti');
                 $tanda_bukti = rand() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('aset/tanah', $tanda_bukti, 'sftp', 'public');
+            } else {
+                $tanda_bukti = $request->tanda_bukti_db;
             }
+           
+
             if ($request->hasFile('file_bukti_beli')) {
                 $file = $request->file('file_bukti_beli');
                 $file_bukti_beli = rand() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('aset/tanah', $file_bukti_beli, 'sftp', 'public');
+            } else {
+                $file_bukti_beli = $request->file_bukti_beli_db;
             }
 
-            DB::table('tmaset_tanah')->insert([
+            $tmaset_tanah = Tmaset_tanah::firstOrCreate([
+                'id_master_aset'  => $request->id_master_aset,
+            ]);
+
+            $tmaset_tanah->update([
                 'id_master_aset'  => $request->id_master_aset,
                 'nm_lahan'        => $request->nm_lahan,
                 'luas'            => $request->luas,
@@ -151,6 +165,30 @@ class AsetMasukController extends Controller
                 'tanda_bukti'     => $tanda_bukti,
                 'file_bukti_beli' => $file_bukti_beli
             ]);
+        
+            // dd($request->no_sertifikat);
+            // exit;
+            foreach ($request->tmberkas_id as $key => $berkas) {
+                if ($berkas) {
+                    if ($request->hasfile('berkas')) {
+                        foreach ($request->file('berkas') as $key2 => $file) {
+                            $name_file = rand() . '.' . $file->getClientOriginalExtension();
+                            $file->storeAs('aset/tanah/berkas/'.$request->id_master_aset, $name_file, 'sftp', 'public');
+
+                            $berkas_aset[$key2] = $name_file;
+                        }
+                    }
+                    Tmberkas_aset_tanah::create([
+                        "id_master_aset" => $request->id_master_aset,
+                        "tmberkas_id" => $berkas,
+                        "no_sertifikat" => $request->no_sertifikat[$key],
+                        "nm_pemegang_hak" =>$request->nm_pemegang_hak[$key],
+                        "tgl_berakhir_hak" => $request->tgl_berakhir_hak[$key],
+                        "nib" =>$request->nib[$key],
+                        "berkas" =>$berkas_aset[$key],
+                    ]);
+                }
+            }
         } else {
             $request->validate([
                 'nomor'           => 'required',
@@ -160,15 +198,18 @@ class AsetMasukController extends Controller
                 'no_rangka'       => 'required',
                 'no_mesin'        => 'required',
             ]);
-
-            DB::table('tmaset_barang')->insert([
+            
+            $tmaset_barang = Tmaset_barang::firstOrCreate([
+                'id_master_aset'  => $request->id_master_aset
+            ]);
+            $tmaset_barang->update([
                 'nomor'           => $request->nomor,
                 'merk'            => $request->merk,
                 'jenis'           => $request->jenis,
                 'tahun_pembuatan' => $request->tahun_pembuatan,
                 'no_rangka'       => $request->no_rangka,
                 'no_mesin'        => $request->no_mesin,
-                'id_master_aset'  => $request->id_master_aset
+                
             ]);
         }
 
@@ -214,13 +255,30 @@ class AsetMasukController extends Controller
         // dd($tmmaster_asset);
 
         $formEdit = 0;
+        $data = Tmaset_barang::where('id_master_aset', '=', $tmmaster_asset->tmmaster_asset_id)->first();
+        $tbl_berkas = [];
         if ($tmmaster_asset->kode == 'tanah') {
             $formEdit = 1;
+            $data = Tmaset_tanah::where('id_master_aset', '=', $tmmaster_asset->tmmaster_asset_id)->first();
+            $tbl_berkas = Tmberkas_aset_tanah::where('id_master_aset', '=', $tmmaster_asset->tmmaster_asset_id)->with(['tmberkas'])->get();
         }
+        // dd($tbl_berkas);
         $provinsis = Provinsi::select('id', 'kode', 'n_provinsi')->get();
+        $tmberkas = Tmberkas::where('tmjenis_aset_id', '=', $tmmaster_asset->tmjenis_asets_id)->get();
 
+  
+        // dd($tbl_berkas);
+        return view('aset.masuk.show', compact(['tmmaster_asset', 'formEdit', 'provinsis','tmberkas','data','tbl_berkas']));
+    }
 
-        return view('aset.masuk.show', compact(['tmmaster_asset', 'formEdit', 'provinsis']));
+    public function hapusBerkas($id)
+    {
+        Tmberkas_aset_tanah::where('id', $id)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data berhasil dihapus.'
+        ]);
     }
 
     /**
@@ -343,9 +401,9 @@ class AsetMasukController extends Controller
             ->join('tmmerks', 'tmmaster_asset.id_rincian_jenis_asset', 'tmmerks.id')
             ->groupBy('tmmaster_asset.id');
 
-        if ($request->id_jenis_aset != 99) {
-            $tmaset->where('tmmaster_asset.id_jenis_asset', $request->id_jenis_aset);
-        }
+        // if ($request->id_jenis_aset != 99) {
+        //     $tmaset->where('tmmaster_asset.id_jenis_asset', $request->id_jenis_aset);
+        // }
 
         if ($request->id_rincian_jenis_aset != '') {
             $tmaset->where('tmmaster_asset.id_rincian_jenis_asset', $request->id_rincian_jenis_aset);
@@ -437,7 +495,6 @@ class AsetMasukController extends Controller
 
         $tmasets = Tmasets::where('jenis_aset_id', $jenis_aset_id)->get();
         foreach ($tmasets as $tmaset) {
-
             if (sprintf('%04s', $tmno_urut->no_urut) == sprintf('%04s', substr($tmaset->no_aset, -4))) {
                 $no_urut = $tmno_urut->no_urut + 1;
             } else {
@@ -458,5 +515,27 @@ class AsetMasukController extends Controller
 
 
         return $no_aset . sprintf('%04s', $no_urut);
+    }
+
+    public function download_berkas($file)
+    {
+        $tmberkas_aset_tanah  = Tmberkas_aset_tanah::where('berkas', '=', $file)->first();
+        $tmaset_tanah = Tmaset_tanah::where('tanda_bukti', '=', $file)->orWhere('file_bukti_beli', '=', $file)->first();
+        if ($tmberkas_aset_tanah) {
+            $path = 'aset/tanah/berkas/'.$tmberkas_aset_tanah->id_master_aset.'/';
+        }
+
+        if ($tmaset_tanah) {
+            $path = 'aset/tanah/';
+        }
+
+        $exists = Storage::disk('sftp')->exists($path.$file);
+
+        // dd($exists);
+        if ($exists) {
+            return Storage::disk('sftp')->download($path.$file, );
+        }
+
+        return redirect()->to('/');
     }
 }
