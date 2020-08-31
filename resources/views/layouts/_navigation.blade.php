@@ -61,7 +61,7 @@
     <li class="header light"><strong>ASSETS</strong></li>
     <li>
         <a href="{{ route('aset.masuk.index')}}">
-            <i class="icon icon-input blue-text s-18"></i> <span>Pendanaan</span>
+            <i class="icon icon-input blue-text s-18"></i> <span>Pendataan</span>
         </a>
     </li>
     <li>

@@ -533,7 +533,7 @@ class AsetMasukController extends Controller
 
         // dd($exists);
         if ($exists) {
-            return Storage::disk('sftp')->download($path.$file, );
+            return Storage::disk('sftp')->download($path.$file);
         }
 
         return redirect()->to('/');
