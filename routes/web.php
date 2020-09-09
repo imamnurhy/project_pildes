@@ -112,6 +112,8 @@ Route::group(['middleware' => ['permission:master-pegawai']], function () {
 
     Route::resource('opd', 'Master\OpdController');
     Route::get('api/opd', 'Master\OpdController@api')->name('api.opd');
+    Route::resource('kategori', 'Master\KategoriController');
+    Route::get('api/kategori', 'Master\KategoriController@api')->name('api.kategori');
 
     Route::resource('unitkerja', 'Master\UnitkerjaController');
     Route::get('api/unitkerja', 'Master\UnitkerjaController@api')->name('api.unitkerja');

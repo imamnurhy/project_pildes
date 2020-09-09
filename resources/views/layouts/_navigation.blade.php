@@ -22,7 +22,14 @@
         <ul class="treeview-menu">
             <li>
                 <a href="{{ route('opd.index') }}">
-                    <i class="icon icon-building-o"></i> <span>Pengguna</span>
+                    <i class="icon icon-building-o s-8"></i> <span>Pengguna</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="treeview-menu">
+            <li>
+                <a href="{{ route('kategori.index') }}">
+                    <i class="icon icon-document-list blue-text s-8"></i> <span>Kategori</span>
                 </a>
             </li>
         </ul>
