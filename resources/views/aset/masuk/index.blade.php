@@ -174,14 +174,17 @@ var table = $('#asetmasuk-table').dataTable({
         {
             data: 'n_jenis_aset',
             name: 'n_jenis_aset',
+            searchable: false,
         },
         {
             data: 'n_merk',
-            name: 'n_merk'
+            name: 'n_merk',
+            searchable: false,
         },
         {
             data: 'nm_pembelian',
             name: 'nm_pembelian',
+            searchable: false,
         },
         {
             data: 'pemilik_sebelumnya',

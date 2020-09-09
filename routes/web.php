@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return redirect('login');
 });
@@ -41,7 +43,6 @@ Route::group(['middleware' => ['permission:master-brand']], function () {
 /* MASTER ASET */
 Route::group(['middleware' => ['permission:master-aset']], function () {
     Route::prefix('aset')->namespace('Aset')->name('aset.')->group(function () {
-
         Route::post('masuk/api', 'AsetMasukController@api')->name('masuk.api');
 
         Route::get('getMerk/{id_nama_aset}', 'AsetMasukController@getMerk')->name('masuk.getMerk');
@@ -51,6 +52,8 @@ Route::group(['middleware' => ['permission:master-aset']], function () {
         Route::get('masuk/{kabupaten_id}/getKecamatan', 'AsetMasukController@getKecamatan')->name('masuk.getKecamatan');
         Route::get('masuk/{kecamatan_id}/getKelurahan', 'AsetMasukController@getKelurahan')->name('masuk.getKelurahan');
         Route::post('masuk/storeDetailTanah', 'AsetMasukController@storeDetailTanah')->name('masuk.storeDetailTanah');
+        Route::delete('masuk/{id}/hapusBerkas', 'AsetMasukController@hapusBerkas')->name('masuk.hapusBerkas');
+        Route::get('masuk/{id}/download_berkas', 'AsetMasukController@download_berkas')->name('masuk.download_berkas');
         Route::resource('masuk', 'AsetMasukController');
 
         Route::get('keluar/api', 'AsetKeluarController@api')->name('keluar.api');

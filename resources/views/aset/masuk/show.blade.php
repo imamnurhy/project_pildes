@@ -19,7 +19,7 @@
             <div class="row justify-content-between">
                 <ul class="nav nav-material nav-material-white responsive-tab" role="tablist">
                     <li>
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('aset.masuk.index') }}">
                             <i class="icon icon-arrow_back"></i>Semua data</a>
                     </li>
                 </ul>
@@ -87,7 +87,7 @@
                         $('#action').removeAttr('disabled');
                         if (data.success == 1) {
                             $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label = 'Close' > <span aria-hidden='true'>×</span></button> <strong> Success! </strong> " + data.message + "</div>");
-                            document.location.href = "{{ route('aset.masuk.index') }}";
+                            location.reload();
                         }
                     },
                     error: function (data) {
@@ -106,55 +106,8 @@
             $(this).addClass('was-validated');
     });
 
-    function getKabupaten(id) {
-        val = $('#provinsi_id').val();
-        option = " <option value=''> Pilih </option>";
-        if (val == "") {
-            $('#kabupaten_id').html(option);
-        } else {
-            $('#kabupaten_id').html("<option value=''>Loading...</option>");
-            url = "{{ route('aset.masuk.getKabupaten', ':id') }}".replace(':id', val);
-            $.get(url, function (data) {
-                $.each(data, function (index, value) {
-                    option += "<option value='" + value.id + "'>" + value.n_kabupaten + "</li>";
-                });
-                $('#kabupaten_id').html(option);
-            }, 'JSON');
-        }
-    }
-
-    function getKecamatan(id) {
-        val = $('#kabupaten_id').val();
-        option = " <option value=''> Pilih </option>";
-        if (val == "") {
-            $('#kecamatan_id').html(option);
-        } else {
-            $('#kecamatan_id').html("<option value=''>Loading...</option>");
-            url = "{{ route('aset.masuk.getKecamatan', ':id') }}".replace(':id', val);
-            $.get(url, function (data) {
-                $.each(data, function (index, value) {
-                    option += "<option value='" + value.id + "'>" + value.n_kecamatan + "</li>";
-                });
-                $('#kecamatan_id').html(option);
-            }, 'JSON');
-        }
-    }
-
-    function getKelurahan() {
-        val = $('#kecamatan_id').val();
-        option = "<option value=''>Pilih </option>";
-        if (val == "") {
-            $('#kelurahan_id').html(option);
-        } else {
-            $('#kelurahan_id').html("<option value=''>Loading...</option>");
-            url = "{{ route('aset.masuk.getKelurahan', ':id') }}".replace(':id', val);
-            $.get(url, function (data) {
-                $.each(data, function (index, value) {
-                    option += "<option value='" + value.id + "'>" + value.n_kelurahan + "</li>";
-                });
-                $('#kelurahan_id').html(option);
-            }, 'JSON');
-        }
-    }
+   
 </script>
+
+@yield('script_incl')
 @endsection
