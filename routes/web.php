@@ -39,6 +39,9 @@ Route::group(['middleware' => ['permission:master-brand']], function () {
     Route::delete('jenis/delete/{id}', 'Brand\JenisAsetController@destroy')->name('jenis.destroy');
 });
 
+Route::namespace('JenisAset')->middleware('permission:master-jenisAset')->group(function () {
+});
+
 
 /* MASTER ASET */
 Route::group(['middleware' => ['permission:master-aset']], function () {
