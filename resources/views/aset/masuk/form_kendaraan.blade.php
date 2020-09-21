@@ -1,10 +1,10 @@
 <div class="card">
     <div class="card-header white">
         <i class="icon-clipboard-edit blue-text"></i>
-        <strong id="formTitle"> Tambah Detail Barang </strong>
+        <strong id="formTitle"> Tambah Detail Kendaraan </strong>
     </div>
     <div class="card-body no-b">
-        <form class="needs-validation" id="form_barang" method="POST">
+        <form class="needs-validation" id="form_kendaraan" method="POST">
             <div class="card-body">
                 @csrf
                 {{ method_field('POST') }}
@@ -13,44 +13,47 @@
                 <input type="hidden" name="id" id="id">
 
                 <div class="form-inline row">
+
                     <div class="form-group m-0 col-md-12">
-                        <label for="nomor" class="col-form-label s-12 col-md-4">Nomor</label>
-                        <input type="text" name="nomor" id="nomor" class="form-control light r-0 s-12 col-md-6"
+                        <label for="no_polisi" class="col-form-label s-12 col-md-4">Nomor polisi</label>
+                        <input type="text" name="no_polisi" id="no_polisi" class="form-control light r-0 s-12 col-md-6"
                             autocomplete="off" required />
                     </div>
 
                     <div class="form-group m-0 col-md-12">
-                        <label for="merk" class="col-form-label s-12 col-md-4">Merk</label>
-                        <input type="text" name="merk" id="merk" class="form-control light r-0 s-12 col-md-6"
+                        <label for="merek" class="col-form-label s-12 col-md-4">Merk</label>
+                        <input type="text" name="merek" id="merek" class="form-control light r-0 s-12 col-md-6"
                             autocomplete="off" required />
                     </div>
 
                     <div class="form-group m-0 col-md-12">
-                        <label for="jenis" class="col-form-label s-12 col-md-4">Jenis</label>
-                        <input type="text" name="jenis" id="jenis" class="form-control light r-0 s-12 col-md-6"
-                            autocomplete="off" required />
-                    </div>
-
-                    <div class="form-group m-0 col-md-12">
-                        <label for="tahun_pembuatan" class="col-form-label s-12 col-md-4">Tahun</label>
-                        <input type="text" name="tahun_pembuatan" id="tahun_pembuatan"
-                            class="form-control light r-0 s-12 col-md-6" autocomplete="off" required maxlength="4"
-                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
-                    </div>
-                    <div class="form-group m-0 col-md-12">
-                        <label for="no_rangka" class="col-form-label s-12 col-md-4">No Rangka</label>
-                        <input type="text" name="no_rangka" id="no_rangka" class="form-control light r-0 s-12 col-md-6"
+                        <label for="no_stnk" class="col-form-label s-12 col-md-4">No STNK</label>
+                        <input type="text" name="no_stnk" id="no_stnk" class="form-control light r-0 s-12 col-md-6"
                             autocomplete="off" required
                             oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
                     </div>
 
                     <div class="form-group m-0 col-md-12">
-                        <label for="no_mesin" class="col-form-label s-12 col-md-4">No Mesin</label>
-                        <input type="text" name="no_mesin" id="no_mesin" class="form-control light r-0 s-12 col-md-6"
+                        <label for="nm_pemilik" class="col-form-label s-12 col-md-4">Pemilik</label>
+                        <input type="text" name="nm_pemilik" id="nm_pemilik"
+                            class="form-control light r-0 s-12 col-md-6" autocomplete="off" required />
+                    </div>
+
+                    <div class="form-group m-0 col-md-12">
+                        <label for="sumber_barang" class="col-form-label s-12 col-md-4">Sumber barang</label>
+                        <select name="sumber_barang" id="sumber_barang" class="form-control light  r-0 s-12 col-md-6"
+                            autocomplete="off" required>
+                            <option value="">Pilih</option>
+                            <option value="Leasing">Leasing</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group m-0 col-md-12">
+                        <label for="nilai" class="col-form-label s-12 col-md-4">Nilai</label>
+                        <input type="text" name="nilai" id="nilai" class="form-control light r-0 s-12 col-md-6"
                             autocomplete="off" required
                             oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
                     </div>
-
 
                     <div class="card-body">
                         <button type="submit" class="btn btn-primary btn-sm float-right" id="action"
@@ -71,39 +74,36 @@
         <strong> Tabel </strong>
     </div>
     <div class="card-body">
-        <table class="table table-bordered" id="barang-table">
+        <table class="table table-bordered" id="kendaraan-table">
             <thead>
                 <tr>
                     <th width="5%">No</th>
-                    <th>Nomor</th>
+                    <th>No polisi</th>
+                    <th>No STNK</th>
+                    <th>Pemilik</th>
                     <th>Merek</th>
-                    <th>Jenis</th>
-                    <th>Tahun</th>
-                    <th>Nomor rangka</th>
-                    <th>Nomor mesin</th>
-
+                    <th>Sumber barang</th>
+                    <th>Nilai</th>
                     <th class="text-center">Aksi</th>
                 </tr>
 
             </thead>
 
             <tbody>
-                @foreach ($tmaset_barangs as $key => $tmaset_barang)
+                @foreach ($tmAssetKendaraans as $key => $tmAssetKendaraan)
                 <tr>
                     <td class="text-center">{{ ++$key }}</td>
-                    <td>{{ $tmaset_barang->nomor }}</td>
-                    <td>{{ $tmaset_barang->merk }}</td>
-                    <td>{{ $tmaset_barang->jenis }}</td>
-                    <td>{{ $tmaset_barang->tahun_pembuatan }}</td>
-                    <td>{{ $tmaset_barang->no_rangka }}</td>
-                    <td>{{ $tmaset_barang->no_mesin }}</td>
-
-
+                    <td>{{ $tmAssetKendaraan->no_polisi }}</td>
+                    <td>{{ $tmAssetKendaraan->no_stnk }}</td>
+                    <td>{{ $tmAssetKendaraan->nm_pemilik }}</td>
+                    <td>{{ $tmAssetKendaraan->merek }}</td>
+                    <td>{{ $tmAssetKendaraan->sumber_barang }}</td>
+                    <td>{{ $tmAssetKendaraan->nilai }}</td>
                     <td class="text-center">
-                        <a href="#" onclick="editBarang({{ $tmaset_barang->id }})" title="Edit barang"><i
+                        <a href="#" onclick="editKendaraan({{ $tmAssetKendaraan->id }})" title="Edit Merek"><i
                                 class="icon-pencil mr-1"></i></a>
-                        <a href="#" onclick="removeBarang({{ $tmaset_barang->id }})" class="text-danger"
-                            title="Hapus barang">
+                        <a href="#" onclick="removeKendaraan({{ $tmAssetKendaraan->id }})" class="text-danger"
+                            title="Hapus Berkas">
                             <i class="icon-remove"></i>
                         </a>
 
@@ -118,10 +118,10 @@
 
 @section('script_incl')
 <script>
-    var table = $('#barang-table').dataTable({})
+    var table = $('#kendaraan-table').dataTable({})
     save_method = 'add';
 
-     $('#form_barang').on('submit', function (e) {
+     $('#form_kendaraan').on('submit', function (e) {
         if ($(this)[0].checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
@@ -164,7 +164,7 @@
             $(this).addClass('was-validated');
     });
 
-    function editBarang(id) {
+    function editKendaraan(id) {
         save_method = 'edit';
         var id = id;
         $('#alert').html('');
@@ -172,7 +172,7 @@
         $('#formTitle').html("Mohon tunggu beberapa saat...");
         $('#txtAction').html(" Perubahan");
         $('#reset').hide();
-        $('#form_barang input[name=_method]').val('PATCH');
+        $('#form_kendaraan input[name=_method]').val('PATCH');
         $('#span').removeAttr('hidden');
         $.ajax({
             url: "{{ route('aset.masuk.detail.edit', ':id') }}".replace(':id', id),
@@ -185,12 +185,12 @@
                 $('#formTitle').html("Edit Data");
                 $('#form').show();
                 $('#id').val(data.id);
-                $('#nomor').val(data.nomor);
-                $('#merk').val(data.merk);
-                $('#jenis').val(data.jenis);
-                $('#tahun_pembuatan').val(data.tahun_pembuatan);
-                $('#no_rangka').val(data.no_rangka);
-                $('#no_mesin').val(data.no_mesin);
+                $('#no_polisi').val(data.no_polisi);
+                $('#merek').val(data.merek);
+                $('#no_stnk').val(data.no_stnk);
+                $('#nm_pemilik').val(data.nm_pemilik);
+                $('#sumber_barang').val(data.sumber_barang);
+                $('#nilai').val(data.nilai);
             },
             error: function () {
                 console.log("Nothing Data");
@@ -219,7 +219,7 @@
         })
     }
 
-function removeBarang(id) {
+    function removeKendaraan(id) {
     $.confirm({
         title: '',
         content: 'Apakah Anda yakin akan menghapus data ini?',
@@ -238,11 +238,9 @@ function removeBarang(id) {
                     $.ajax({
                         url: "{{ route('aset.masuk.detail.destroy', ':id') }}".replace(':id', id),
                         type: "POST",
-
                         data: {
                             '_method': 'DELETE',
-                            '_token': csrf_token,
-                            'form_edit': $('#form_edit').val()
+                            '_token': csrf_token
                         },
                         success: function (data) {
                           $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success! </strong>" + data.message + "</div>");

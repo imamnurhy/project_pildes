@@ -64,7 +64,7 @@
                                         <option value="" disabled>Pilih Asset</option>
                                         @foreach($tmmaster_assets as $tmmaster_asset)
                                         <option value="{{ $tmmaster_asset->id }}">
-                                            {{ $tmmaster_asset->n_jenis_aset . '-' . $tmmaster_asset->n_merk . '-' . $tmmaster_asset->tahun  }}
+                                            {{ $tmmaster_asset->n_jenis_aset . '-' . $tmmaster_asset->n_rincian . '-' . $tmmaster_asset->tahun  }}
                                         </option>
                                         @endforeach
                                     </select>

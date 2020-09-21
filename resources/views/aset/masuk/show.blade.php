@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Master Pendapatan')
+
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
 @endsection
@@ -12,7 +14,7 @@
                 <div class="col">
                     <h4>
                         <i class="icon-box"></i>
-                        Permohonan
+                        Detail Pendapatan
                     </h4>
                 </div>
             </div>
@@ -39,7 +41,7 @@
                             </li>
                             <li class="list-group-item">
                                 <strong class="s-12">Jenis Aset</strong>
-                                <span class="s-12 float-right">{{ $tmmaster_asset->n_merk }}</span>
+                                <span class="s-12 float-right">{{ $tmmaster_asset->n_rincian }}</span>
                             </li>
 
                         </ul>
@@ -49,17 +51,13 @@
         </div>
 
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-body no-b">
-
-                    @if ($formEdit == 1)
-                    @include('aset.masuk.form_tanah')
-                    @else
-                    @include('aset.masuk.form_barang')
-                    @endif
-
-                </div>
-            </div>
+            @if ($formEdit == 1)
+            @include('aset.masuk.form_tanah')
+            @elseif($formEdit == 2)
+            @include('aset.masuk.form_kendaraan')
+            @elseif($formEdit == 3)
+            @include('aset.masuk.form_barang')
+            @endif
         </div>
     </div>
 </div>
@@ -70,6 +68,7 @@
 <script src="{{ asset('assets/js/jquery-confirm.min.js') }}"></script>
 
 <script type="text/javascript">
+    var save_method = 'add';
     $('#form').on('submit', function (e) {
         if ($(this)[0].checkValidity() === false) {
             event.preventDefault();
@@ -77,8 +76,15 @@
         } else {
             $('#alert').html('');
             $('#action').attr('disabled', true);
+
+            if(save_method == 'add'){
+                url = "{{ route('aset.masuk.storeDetailAsset') }}";
+            } else {
+                url = "{{ route('aset.masuk.updateDetailAsset') }}";
+            }
+
             $.ajax({
-                    url: "{{ route('aset.masuk.storeDetailTanah') }}",
+                    url: url,
                     type: 'POST',
                     data: new FormData($(this)[0]),
                     contentType: false,
@@ -106,7 +112,6 @@
             $(this).addClass('was-validated');
     });
 
-   
 </script>
 
 @yield('script_incl')

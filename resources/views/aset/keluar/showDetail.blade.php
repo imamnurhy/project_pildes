@@ -114,8 +114,8 @@
                 name:'serial'
             },
             {
-                data:'n_merk',
-                name:'n_merk'
+                data:'n_rincian',
+                name:'n_rincian'
             },
             {
                 data:'ket',

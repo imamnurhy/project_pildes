@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Master Asset')
+@section('title', 'Master Pendapatan')
 
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col">
                     <h3 class="my-2">
-                        <i class="icon-notebook-list"></i> Data Asset
+                        <i class="icon-notebook-list"></i> Pendapatan
                     </h3>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                             <div class="bg-light" width="100%">
                                 <select name="id_jenis_aset" id="id_jenis_aset" placeholder="Semua"
                                     class="form-control r-0 light s-12 col-md-12 custom-select select2"
-                                    autocomplete="off" onchange="getMerk()">
+                                    autocomplete="off" onchange="getRincian()">
                                     <option value="99">Aset : Semua</option>
                                     @foreach ($tmjenis_asets as $tmjenis_aset)
                                     <option value="{{ $tmjenis_aset->id }}">{{ $tmjenis_aset->n_jenis_aset }}</option>
@@ -61,30 +61,6 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3 pr-0">
-                            <div class="bg-light p-0" width="100%">
-                                <select name="status" id="status" placeholder=""
-                                    class="form-control r-0 light s-12 col-md-12 custom-select select2"
-                                    autocomplete="off">
-                                    <option value="99">Status : Semua</option>
-                                    <option value="1"><strong class="text-success">Masih Ada</strong></option>
-                                    <option value="0">Tidak Ada</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 pr-0">
-                            <div class="bg-light" width="100%">
-                                <select name="id_dokumen" id="id_dokumen" placeholder="Semua"
-                                    class="form-control r-0 light s-12 col-md-12 custom-select select2"
-                                    autocomplete="off">
-                                    <option value="99">Dokumen : Semua</option>
-                                    @foreach ($tmdokumens as $tmdokumen)
-                                    <option value="{{ $tmdokumen->id }}">{{ $tmdokumen->nama_dokumen }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
                         <div class="col-md-1">
                             <a class="btn btn-sm" id="btnFilter" title="Reset Filter" style="display:none"
                                 onclick="filterReset()">Reset</a>
@@ -100,12 +76,8 @@
                             <th>Tanggal</th>
                             <th>Aset</th>
                             <th>Jenis Aset</th>
-                            <th>Pembelian</th>
-                            <th>Pemilik Sebelumnya</th>
-                            <th>Harga</th>
+                            <th>Nilai</th>
                             <th>Tahun</th>
-                            <th>Status</th>
-                            <th>Kondisi</th>
                             <th width="40">Detail</th>
                             <th width="40"></th>
                         </thead>
@@ -177,34 +149,17 @@ var table = $('#asetmasuk-table').dataTable({
             searchable: false,
         },
         {
-            data: 'n_merk',
-            name: 'n_merk',
+            data: 'n_rincian',
+            name: 'n_rincian',
             searchable: false,
         },
         {
-            data: 'nm_pembelian',
-            name: 'nm_pembelian',
-            searchable: false,
-        },
-        {
-            data: 'pemilik_sebelumnya',
-            name: 'pemilik_sebelumnya',
-        },
-        {
-            data: 'harga_beli',
-            name: 'harga_beli',
+            data: 'nilai',
+            name: 'nilai',
         },
         {
             data: 'tahun',
             name: 'tahun',
-        },
-        {
-            data: 'status',
-            name: 'status',
-        },
-        {
-            data: 'kondisi',
-            name: 'kondisi',
         },
         {
             data: 'detail',
@@ -273,10 +228,10 @@ function remove(id) {
     });
 }
 
-$('#id_jenis_aset, #id_rincian_jenis_asset, #status, #id_dokumen').on("select2:select", function(){ filter(); });
+$('#id_jenis_aset, #id_rincian_jenis_asset').on("select2:select", function(){ filter(); });
 
    function filter(){
-        if($('#id_jenis_aset').val() == '99' && $('#status').val() == '99' && $('#id_dokumen').val() == '99'){
+        if($('#id_jenis_aset').val() == '99'){
             $('.formFilter').removeClass('active');
             $('#btnFilter').hide();
         }else{
@@ -287,21 +242,21 @@ $('#id_jenis_aset, #id_rincian_jenis_asset, #status, #id_dokumen').on("select2:s
     }
 
     function filterReset(){
-        $('#id_jenis_aset, #status, #id_dokumen').val('99');
-        $('#id_jenis_aset, #status, #id_dokumen').trigger('change.select2');
+        $('#id_jenis_aset').val('99');
+        $('#id_jenis_aset').trigger('change.select2');
         filter();
         }
 
-    function getMerk(id) {
+    function getRincian(id) {
         $('#id_rincian_jenis_asset').html("<option value=''>Loading...</option>");
-        url = "{{ route('aset.masuk.getMerk', ':id') }}".replace(':id', $('#id_jenis_aset').val());
+        url = "{{ route('aset.masuk.getRincian', ':id') }}".replace(':id', $('#id_jenis_aset').val());
 
         // Disable button action when prosess getMerek
         $('#action').attr('disabled', true);
         $.get(url, function (data) {
             option = "<option value=''>Pilih</option>";
             $.each(data, function (index, value) {
-                option += "<option value='" + value.id + "'>" + value.n_merk + "</li>";
+                option += "<option value='" + value.id + "'>" + value.n_rincian + "</li>";
             });
             $('#id_rincian_jenis_asset').html(option);
         }, 'JSON').done(function () {

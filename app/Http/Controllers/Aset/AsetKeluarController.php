@@ -33,9 +33,9 @@ class AsetKeluarController extends Controller
     {
         $tmopds = Tmopd::all();
         $tmmaster_assets = DB::table('tmmaster_asset')
-            ->select('tmmaster_asset.id', 'tmmaster_asset.tahun', 'tmjenis_asets.n_jenis_aset', 'tmmerks.n_merk')
+            ->select('tmmaster_asset.id', 'tmmaster_asset.tahun', 'tmjenis_asets.n_jenis_aset', 'tmjenis_aset_rincians.n_rincian')
             ->join('tmjenis_asets', 'tmmaster_asset.id_jenis_asset', '=', 'tmjenis_asets.id')
-            ->join('tmmerks', 'tmmaster_asset.id_rincian_jenis_asset', '=', 'tmmerks.id')
+            ->join('tmjenis_aset_rincians', 'tmmaster_asset.id_rincian_jenis_asset', '=', 'tmjenis_aset_rincians.id')
             ->get();
 
 
@@ -91,9 +91,9 @@ class AsetKeluarController extends Controller
     {
         $tmopd = Tmopd::find($tmopd_id);
         $tmmaster_assets = DB::table('tmmaster_asset')
-            ->select('tmmaster_asset.id', 'tmmaster_asset.tahun', 'tmjenis_asets.n_jenis_aset', 'tmmerks.n_merk')
+            ->select('tmmaster_asset.id', 'tmmaster_asset.tahun', 'tmjenis_asets.n_jenis_aset', 'tmjenis_aset_rincians.n_rincian')
             ->join('tmjenis_asets', 'tmmaster_asset.id_jenis_asset', '=', 'tmjenis_asets.id')
-            ->join('tmmerks', 'tmmaster_asset.id_rincian_jenis_asset', '=', 'tmmerks.id')
+            ->join('tmjenis_aset_rincians', 'tmmaster_asset.id_rincian_jenis_asset', '=', 'tmjenis_aset_rincians.id')
             ->get();
         return view('aset.keluar.edit', compact(['tmopd_id', 'tmopd', 'tmmaster_assets']));
     }
@@ -179,9 +179,9 @@ class AsetKeluarController extends Controller
     {
         $tmopd = Tmopd::with('tmkategoris')->find($tmopd_id);
         $tmasets = DB::table('tmasets')
-            ->select('tmasets.id', 'tmasets.serial', 'tmasets.tahun', 'tmasets.jumlah', 'tmjenis_asets.n_jenis_aset', 'tmmerks.n_merk')
+            ->select('tmasets.id', 'tmasets.serial', 'tmasets.tahun', 'tmasets.jumlah', 'tmjenis_asets.n_jenis_aset', 'tmjenis_aset_rincians.n_rincian')
             ->join('tmjenis_asets', 'tmasets.jenis_aset_id', '=', 'tmjenis_asets.id')
-            ->join('tmmerks', 'tmasets.merk_id', '=', 'tmmerks.id')
+            ->join('tmjenis_aset_rincians', 'tmasets.merk_id', '=', 'tmjenis_aset_rincians.id')
             ->get();
         return view('aset.keluar.showDetail', compact('tmopd_id', 'tmopd', 'tmasets'));
     }
@@ -225,11 +225,11 @@ class AsetKeluarController extends Controller
     {
 
         $tmaset = DB::table('tmopd_asets')
-            ->select('tmopd_asets.id', 'tmjenis_asets.n_jenis_aset', 'tmmerks.n_merk', 'tmopd_asets.ket', 'tmopd_asets.created_at')
+            ->select('tmopd_asets.id', 'tmjenis_asets.n_jenis_aset', 'tmjenis_aset_rincian.n_rincian', 'tmopd_asets.ket', 'tmopd_asets.created_at')
             ->join('tmopds', 'tmopd_asets.opd_id', '=', 'tmopds.id')
             ->join('tmmaster_asset', 'tmopd_asets.aset_id', '=', 'tmmaster_asset.id')
             ->join('tmjenis_asets', 'tmmaster_asset.id_jenis_asset', '=', 'tmjenis_asets.id')
-            ->join('tmmerks', 'tmmaster_asset.id_rincian_jenis_asset', '=', 'tmmerks.id')
+            ->join('tmjenis_aset_rincian', 'tmmaster_asset.id_rincian_jenis_asset', '=', 'tmjenis_aset_rincian.id')
             ->where('tmopd_asets.opd_id', '=', $tmopd_id)
             ->get();
 

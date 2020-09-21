@@ -93,7 +93,6 @@ class PegawaiController extends Controller
             'nip' => 'required|string|min:18|max:18|unique:pegawais,nip,' . $id,
             'n_pegawai' => 'required',
             'telp' => 'required|string|min:10|max:14|unique:pegawais,telp,' . $id,
-            'opd_id' => 'required',
             'nik' => 'required|string|min:16|max:16|unique:pegawais,nik,' . $id,
             't_lahir' => 'required',
             'd_lahir' => 'required',
@@ -101,7 +100,6 @@ class PegawaiController extends Controller
             'pekerjaan' => 'required',
             'kelurahan_id' => 'required',
             'alamat' => 'required',
-            'instansi' => 'required'
         ]);
 
         $input = $request->all();

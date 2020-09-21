@@ -17,29 +17,35 @@ Route::prefix('home')->group(function () {
 });
 
 
-/* MASTER BRAND */
-Route::group(['middleware' => ['permission:master-brand']], function () {
-    Route::get('brand', 'Brand\BrandController@index')->name('brand.index');
-    Route::get('brand/api', 'Brand\BrandController@api')->name('brand.api');
-    Route::get('brand/create', 'Brand\BrandController@create')->name('brand.create');
-    Route::post('brand/store', 'Brand\BrandController@store')->name('brand.store');
-    Route::get('brand/show/{id}', 'Brand\BrandController@show')->name('brand.show');
-    Route::get('brand/edit/{id}', 'Brand\BrandController@edit')->name('brand.edit');
-    Route::patch('brand/update/{id}', 'Brand\BrandController@update')->name('brand.update');
-    Route::delete('brand/delete/{id}', 'Brand\BrandController@destroy')->name('brand.destroy');
+/* MASTER INCOME */
+Route::namespace('Income')->group(function () {
+    Route::get('pendapatanAset/api', 'PendapatanAsetController@api')->name('pendapatanAset.api');
+    Route::get('pendapatanAset/getJenisAset/{id}', 'PendapatanAsetController@getJenisAset')->name('pendapatanAset.getJenisAset');
+    Route::resource('pendapatanAset', 'PendapatanAsetController');
 
-
-    Route::get('jenis', 'Brand\JenisAsetController@index')->name('jenis.index');
-    Route::get('jenis/api', 'Brand\JenisAsetController@api')->name('jenis.api');
-    Route::get('jenis/create', 'Brand\JenisAsetController@create')->name('jenis.create');
-    Route::post('jenis/store', 'Brand\JenisAsetController@store')->name('jenis.store');
-    Route::get('jenis/show/{id}', 'Brand\JenisAsetController@show')->name('jenis.show');
-    Route::get('jenis/edit/{id}', 'Brand\JenisAsetController@edit')->name('jenis.edit');
-    Route::patch('jenis/update/{id}', 'Brand\JenisAsetController@update')->name('jenis.update');
-    Route::delete('jenis/delete/{id}', 'Brand\JenisAsetController@destroy')->name('jenis.destroy');
+    Route::get('pendapatanNonAset/api', 'PendapatanNonAsetController@api')->name('pendapatanNonAset.api');
+    Route::get('pendapatanNonAset/getJenisAset/{id}', 'PendapatanNonAsetController@getJenisAset')->name('pendapatanNonAset.getJenisAset');
+    Route::resource('pendapatanNonAset', 'PendapatanNonAsetController');
 });
 
+
+/* MASTER JENIS ASET */
 Route::namespace('JenisAset')->middleware('permission:master-jenisAset')->group(function () {
+    Route::get('jenisAset', 'JenisAsetController@index')->name('jenisAset.index');
+    Route::get('jenisAset/api', 'JenisAsetController@api')->name('jenisAset.api');
+    Route::post('jenisAset/store', 'JenisAsetController@store')->name('jenisAset.store');
+    Route::get('jenisAset/show/{id}', 'JenisAsetController@show')->name('jenisAset.show');
+    Route::get('jenisAset/edit/{id}', 'JenisAsetController@edit')->name('jenisAset.edit');
+    Route::patch('jenisAset/update/{id}', 'JenisAsetController@update')->name('jenisAset.update');
+    Route::delete('jenisAset/delete/{id}', 'JenisAsetController@destroy')->name('jenisAset.destroy');
+
+    Route::get('rincianJenisAset', 'RincianJenisAsetController@index')->name('rincianJenisAset.index');
+    Route::get('rincianJenisAset/api', 'RincianJenisAsetController@api')->name('rincianJenisAset.api');
+    Route::post('rincianJenisAset/store', 'RincianJenisAsetController@store')->name('rincianJenisAset.store');
+    Route::get('rincianJenisAset/show/{id}', 'RincianJenisAsetController@show')->name('rincianJenisAset.show');
+    Route::get('rincianJenisAset/edit/{id}', 'RincianJenisAsetController@edit')->name('rincianJenisAset.edit');
+    Route::patch('rincianJenisAset/update/{id}', 'RincianJenisAsetController@update')->name('rincianJenisAset.update');
+    Route::delete('rincianJenisAset/delete/{id}', 'RincianJenisAsetController@destroy')->name('rincianJenisAset.destroy');
 });
 
 
@@ -48,15 +54,29 @@ Route::group(['middleware' => ['permission:master-aset']], function () {
     Route::prefix('aset')->namespace('Aset')->name('aset.')->group(function () {
         Route::post('masuk/api', 'AsetMasukController@api')->name('masuk.api');
 
-        Route::get('getMerk/{id_nama_aset}', 'AsetMasukController@getMerk')->name('masuk.getMerk');
+        Route::get('getRincian/{id}', 'AsetMasukController@getRincian')->name('masuk.getRincian');
         route::get('masuk/generateNoAset', 'AsetMasukController@generateNoAset')->name('masuk.generateNoAset');
-        route::get('masuk/showDetail/{id}', 'AsetMasukController@showDetail')->name('masuk.showDetail');
         Route::get('masuk/{provinsi_id}/getKabupaten', 'AsetMasukController@getKabupaten')->name('masuk.getKabupaten');
         Route::get('masuk/{kabupaten_id}/getKecamatan', 'AsetMasukController@getKecamatan')->name('masuk.getKecamatan');
         Route::get('masuk/{kecamatan_id}/getKelurahan', 'AsetMasukController@getKelurahan')->name('masuk.getKelurahan');
-        Route::post('masuk/storeDetailTanah', 'AsetMasukController@storeDetailTanah')->name('masuk.storeDetailTanah');
         Route::delete('masuk/{id}/hapusBerkas', 'AsetMasukController@hapusBerkas')->name('masuk.hapusBerkas');
         Route::get('masuk/{id}/download_berkas', 'AsetMasukController@download_berkas')->name('masuk.download_berkas');
+
+        route::get('masuk/showDetail/{id}', 'AsetMasukController@showDetail')->name('masuk.showDetail');
+        Route::post('masuk/storeDetailAsset', 'AsetMasukController@storeDetailAsset')->name('masuk.storeDetailAsset');
+        Route::get('masuk/editDetailAsset', 'AsetMasukController@editDetailAsset')->name('masuk.editDetailAsset');
+        Route::patch('masuk/updateDetailAsset', 'AsetMasukController@updateDetailAsset')->name('masuk.updateDetailAsset');
+        Route::delete('masuk/{id}/hapusAssetKendaraan', 'AsetMasukController@destroyAssetKendaraan')->name('masuk.destroyAssetKendaraan');
+
+        // Detail asset
+        Route::prefix('detail')->name('masuk.detail.')->group(function () {
+            Route::get('show/{id}', 'AsetMasukController@showDetail')->name('show');
+            Route::post('store', 'AsetMasukController@storeDetail')->name('store');
+            Route::get('edit/{id}', 'AsetMasukController@editDetail')->name('edit');
+            Route::patch('update/{id}', 'AsetMasukController@updateDetail')->name('update');
+            Route::delete('destroy/{id}', 'AsetMasukController@destroyDetail')->name('destroy');
+        });
+
         Route::resource('masuk', 'AsetMasukController');
 
         Route::get('keluar/api', 'AsetKeluarController@api')->name('keluar.api');
@@ -69,20 +89,6 @@ Route::group(['middleware' => ['permission:master-aset']], function () {
     });
 });
 
-/* MASTER PERTANYAAN */
-Route::group(['middleware' => ['permission:master-pertanyaan']], function () {
-    Route::get('pertanyaan/api', 'PertanyaanController@api')->name('pertanyaan.api');
-    Route::resource('pertanyaan', 'PertanyaanController');
-
-    Route::get('jenis_pertanyaan/api', 'JenisPertanyaanController@api')->name('jenis_pertanyaan.api');
-    Route::resource('jenis_pertanyaan', 'JenisPertanyaanController');
-});
-
-/* MASTER USER PERTANYAAN */
-Route::group(['middleware' => ['permission:master-user-pertanyaan']], function () {
-    Route::get('pertanyaanMasuk/api', 'UserPertanyaanController@api')->name('pertanyaanMasuk.api');
-    Route::resource('pertanyaanMasuk', 'UserPertanyaanController');
-});
 
 Route::prefix('account')->group(function () {
     Route::get('profile', 'AccountController@profile')->name('account.profile');
@@ -92,15 +98,6 @@ Route::prefix('account')->group(function () {
     Route::patch('password', 'AccountController@updatePassword')->name('account.password');
 });
 
-// MASTER PERMOHONAN
-Route::prefix('permohonan')->name('permohonan.')->middleware('permission:master-permohonan')->group(function () {
-    Route::get('index', 'PermohonanController@index')->name('index');
-    Route::get('edit/{id}', 'PermohonanController@edit')->name('edit');
-    Route::patch('update/{id}', 'PermohonanController@update')->name('update');
-    Route::get('detail/{id}', 'PermohonanController@detail')->name('detail');
-    Route::delete('destroy/{id}', 'PermohonanController@destroy')->name('destroy');
-    Route::get('api', 'PermohonanController@api')->name('api');
-});
 
 /* MASTER PEGAWAI */
 Route::group(['middleware' => ['permission:master-pegawai']], function () {

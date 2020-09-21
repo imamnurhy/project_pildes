@@ -50,15 +50,15 @@
     </li>
     @endcan
 
-    @can('master-brand')
-    <li class="header light"><strong>MASTER</strong></li>
+    @can('master-jenisAset')
+    <li class="header light"><strong>JENIS ASET</strong></li>
     <li>
-        <a href="{{ route('jenis.index')}}">
+        <a href="{{ route('jenisAset.index')}}">
             <i class="icon icon-document-text3 text-success s-18"></i> <span>Jenis</span>
         </a>
     </li>
     <li>
-        <a href="{{ route('brand.index')}}">
+        <a href="{{ route('rincianJenisAset.index')}}">
             <i class="icon icon-branding_watermark amber-text s-18"></i> <span>Rincian Jenis</span>
         </a>
     </li>
@@ -78,36 +78,25 @@
     </li>
     @endcan
 
-    @can('master-permohonan')
-    <li class="header light"><strong>MASTER-PERMOHONAN</strong></li>
+    @can('master-income')
+    <li class="header light"><strong>PENDAPATAN</strong></li>
     <li>
-        <a href="{{ route('permohonan.index') }}">
-            <i class="icon icon-paper-plane red-text s-18"></i> <span>Permohonan</span>
+        <a href="{{ route('pendapatanAset.index')}}">
+            <i class="icon icon-money-2 blue-text s-18"></i> <span>Aset<span>
         </a>
     </li>
-    @endcan
+    <li>
+        <a href="{{ route('pendapatanNonAset.index') }}">
+            <i class="icon icon-money-1 blue-text s-18"></i> <span>Non Aset</span>
+        </a>
+    </li>
 
-    @can('master-pertanyaan')
-    <li class="header light"><strong>MASTER-PERTANYAAN</strong></li>
     <li>
-        <a href="{{ route('pertanyaan.index')}}">
-            <i class="icon icon-comments-o blue-text s-18"></i> <span>Pertanyaan</span>
+        <a href="#">
+            <i class="icon icon-money-1 blue-text s-18"></i> <span>Rincian Aset</span>
         </a>
     </li>
-    <li>
-        <a href="{{ route('jenis_pertanyaan.index')}}">
-            <i class="icon icon-merge_type green-text s-18"></i> <span>Jenis Pertanyaan</span>
-        </a>
-    </li>
-    @endcan
 
-    @can('master-user-pertanyaan')
-    <li class="header light"><strong>MASTER-USER-PERTANYAAN</strong></li>
-    <li>
-        <a href="{{ route('pertanyaanMasuk.index') }}">
-            <i class="icon icon-input red-text s-18"></i> <span>Pertanyaan Masuk</span>
-        </a>
-    </li>
     @endcan
 
 
