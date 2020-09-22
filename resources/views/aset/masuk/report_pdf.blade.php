@@ -22,11 +22,24 @@
         <thead>
             <tr>
                 <th>No</th>
-
+                <th>Tanggal</th>
+                <th>Aset</th>
+                <th>Jenis Aset</th>
+                <th>Nilai</th>
+                <th>Tahun</th>
             </tr>
         </thead>
         <tbody>
-
+            @foreach ($tmasets as $key => $tmaset)
+            <tr>
+                <td>{{ ++$key }}</td>
+                <td>{{ Carbon\Carbon::parse($tmaset->date)->format('Y-m-d') }}</td>
+                <td>{{ $tmaset->n_jenis_aset }}</td>
+                <td>{{ $tmaset->n_rincian }}</td>
+                <td>{{ $tmaset->nilai }}</td>
+                <td>{{ $tmaset->tahun }}</td>
+            </tr>
+            @endforeach
         </tbody>
     </table>
 

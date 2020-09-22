@@ -225,6 +225,10 @@ class AsetMasukController extends Controller
             ->join('tmjenis_aset_rincians', 'tmmaster_asset.id_rincian_jenis_asset', 'tmjenis_aset_rincians.id')
             ->groupBy('tmmaster_asset.id');
 
+        if ($request->id_jenis_aset != 99) {
+            $tmaset->where('tmmaster_asset.id_jenis_asset', $request->id_jenis_aset);
+        }
+
         if ($request->id_rincian_jenis_aset != '') {
             $tmaset->where('tmmaster_asset.id_rincian_jenis_asset', $request->id_rincian_jenis_aset);
         }
@@ -376,7 +380,6 @@ class AsetMasukController extends Controller
 
         $provinsis = Provinsi::select('id', 'kode', 'n_provinsi')->get();
         $tmberkas = Tmberkas::where('tmjenis_aset_id', '=', $tmmaster_asset->tmjenis_asets_id)->get();
-
 
         return view('aset.masuk.show', compact(
             'tmmaster_asset',
@@ -632,7 +635,15 @@ class AsetMasukController extends Controller
             ->join('tmjenis_asets', 'tmmaster_asset.id_jenis_asset', '=', 'tmjenis_asets.id')
 
             ->join('tmjenis_aset_rincians', 'tmmaster_asset.id_rincian_jenis_asset', 'tmjenis_aset_rincians.id')
-            ->groupBy('tmmaster_asset.id')->get();
+            ->groupBy('tmmaster_asset.id');
+
+        if ($request->id_jenis_aset != 99) {
+            $tmaset->where('tmmaster_asset.id_jenis_asset', $request->id_jenis_aset)->get();
+        } else         if ($request->id_rincian_jenis_aset != '') {
+            $tmaset->where('tmmaster_asset.id_rincian_jenis_asset', $request->id_rincian_jenis_aset)->get();
+        } else {
+            $tmaset->get();
+        }
 
         $pdf = PDF::loadview('aset.masuk.report_pdf', ['tmasets' => $tmaset]);
         // return $pdf->download('laporan_pendapatan');

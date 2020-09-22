@@ -262,23 +262,22 @@ $('#id_jenis_aset, #id_rincian_jenis_asset').on("select2:select", function(){ fi
 
 
 
-    $(document).ready(function () {
+$(document).ready(function () {
     $('#laporan').on('click', function (e) {
-        var $this = $(this);
+        url = "{{ route('aset.masuk.laporan') }}";
         $.ajax({
-            url: "{{ route('aset.masuk.laporan') }}",
-            async: false,
-            success: function (url) {
-                $this.attr("href", url);
-                $this.attr("target", "_blank");
+            url: url,
+            cache:false,
+            success: function (data) {
+                window.open(url,'_blank');
             },
             error: function () {
                 e.preventDefault();
             }
         });
     })
+});
 
-})
 
 
 </script>

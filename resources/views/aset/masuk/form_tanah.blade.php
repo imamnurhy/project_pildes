@@ -84,7 +84,7 @@
                         <div class="form-group m-0 col-md-12">
                             <label for="provinsi_id" class="col-form-label s-12 col-md-4">Provinsi</label>
                             <select name="provinsi_id" id="provinsi_id" placeholder=""
-                                class="form-control r-0 light s-12 col-md-6" onchange="getKabupaten()" required>
+                                class="form-control r-0 light s-12 col-md-6" onchange="getKabupaten()">
                                 <option value="">Pilih</option>
                                 @foreach($provinsis as $key=>$provinsi)
                                 <option value="{{ $provinsi->id }}">{{ $provinsi->n_provinsi }}</option>
@@ -95,7 +95,7 @@
                         <div class="form-group m-0 col-md-12">
                             <label for="kabupaten_id" class="col-form-label s-12 col-md-4">Kota</label>
                             <select name="kota_id" id="kabupaten_id" placeholder=""
-                                class="form-control r-0 light s-12 col-md-6" onchange="getKecamatan()" required>
+                                class="form-control r-0 light s-12 col-md-6" onchange="getKecamatan()">
                                 <option value="">Pilih</option>
                             </select>
                         </div>
@@ -103,7 +103,7 @@
                         <div class="form-group m-0 col-md-12">
                             <label for="kecamatan_id" class="col-form-label s-12 col-md-4">Kecamatan</label>
                             <select name="kecamatan_id" id="kecamatan_id" placeholder=""
-                                class="form-control r-0 light s-12 col-md-6" onchange="getKelurahan()" required>
+                                class="form-control r-0 light s-12 col-md-6" onchange="getKelurahan()">
                                 <option value="">Pilih</option>
                             </select>
                         </div>
@@ -111,7 +111,7 @@
                         <div class="form-group m-0 col-md-12">
                             <label for="kelurahan_id" class="col-form-label s-12 col-md-4">Kelurahan</label>
                             <select name="kelurahan_id" id="kelurahan_id" placeholder=""
-                                class="form-control r-0 light s-12 col-md-6" required>
+                                class="form-control r-0 light s-12 col-md-6">
                                 <option value="">Pilih</option>
                             </select>
                         </div>
