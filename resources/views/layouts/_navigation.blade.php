@@ -92,7 +92,7 @@
     </li>
 
     <li>
-        <a href="#">
+        <a href="{{ route('pendapatanRincianAset.index')}}">
             <i class="icon icon-money-1 blue-text s-18"></i> <span>Rincian Aset</span>
         </a>
     </li>

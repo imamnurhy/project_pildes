@@ -71,7 +71,7 @@ class PendapatanNonAsetController extends Controller
      */
     public function edit($id)
     {
-        //
+        return Tm_penghasilan_aset::whereid($id)->with('tmMasterAset')->first();
     }
 
     /**
@@ -83,7 +83,28 @@ class PendapatanNonAsetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'tmmaster_aset_id' => 'required',
+            'n_aset'           => 'required',
+            'tahun_e'          => 'required',
+            'tgl_pendapatan_e' => 'required',
+            'nilai_e'          => 'required',
+        ]);
+
+        $tm_penghasillan_aset = Tm_penghasilan_aset::find($id);
+
+        $tm_penghasillan_aset->update([
+            'tmmaster_aset_id' => $request->tmmaster_aset_id,
+            'n_aset'           => $request->n_aset,
+            'tahun'            => $request->tahun_e,
+            'tgl_pendapatan'   => $request->tgl_pendapatan_e,
+            'nilai'            => $request->nilai_e,
+        ]);
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Data berhasil diperbaharui.'
+        ]);
     }
 
     /**
@@ -94,7 +115,12 @@ class PendapatanNonAsetController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Tm_penghasilan_aset::destroy($id);
+
+        return response()->json([
+            'success' => 1,
+            'message' => 'Data berhasil dihapus.'
+        ]);
     }
 
     /**

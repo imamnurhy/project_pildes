@@ -16,6 +16,6 @@ class Tm_pendapatan extends Model
 
     public function tmmasterAset()
     {
-        return $this->belongsTo(DB::table('tmmaster_aset'));
+        return $this->belongsTo(Tm_master_aset::class);
     }
 }

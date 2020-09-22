@@ -32,9 +32,9 @@
                                     <th width="30">No</th>
                                     <th>Aset</th>
                                     <th>jenis Aset</th>
-                                    {{-- <th>Pendapatan</th>
+                                    <th>Pendapatan</th>
                                     <th>Tahun</th>
-                                    <th>Nilai</th> --}}
+                                    <th>Nilai</th>
                                     <th width="40"></th>
                                 </thead>
                                 <tbody></tbody>
@@ -80,11 +80,11 @@
                                     </div>
                                     <hr>
 
-                                    <div id="input_form">
+                                    <div id="input_form" style="display: block">
                                         <div class="form-group mb-1">
                                             <label for="tahun" class="col-form-label s-12 col-md-4">Tahun</label>
                                             <input type="text" name="tahun[]" id="tahun" placeholder=""
-                                                class="form-control  r-0 s-12 col-md-8" autocomplete="off" required />
+                                                class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
                                         </div>
 
                                         <div class="form-group mb-1">
@@ -93,13 +93,13 @@
                                             </label>
                                             <input type="date" name="tgl_pendapatan[]" id="tgl_pendapatan"
                                                 placeholder="" class="form-control  r-0 s-12 col-md-8"
-                                                autocomplete="off" required />
+                                                autocomplete="off" />
                                         </div>
 
                                         <div class="form-group mb-1">
                                             <label for="nilai" class="col-form-label s-12 col-md-4"> Nilai </label>
                                             <input type="text" name="nilai[]" id="nilai" placeholder=""
-                                                class="form-control  r-0 s-12 col-md-8" autocomplete="off" required />
+                                                class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
                                         </div>
 
                                         <div class="form-group mb-1">
@@ -108,6 +108,29 @@
                                                 onclick="addForm();">
                                                 <i class="icon-plus"></i>
                                             </a>
+                                        </div>
+                                    </div>
+
+                                    <div id="input_form_edit" style="display: none">
+                                        <div class="form-group mb-1">
+                                            <label for="tahun_e" class="col-form-label s-12 col-md-4">Tahun</label>
+                                            <input type="text" name="tahun_e" id="tahun_e" placeholder=""
+                                                class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
+                                        </div>
+
+                                        <div class="form-group mb-1">
+                                            <label for="tgl_pendapatan_e" class="col-form-label s-12 col-md-4">
+                                                Tgl Pendapatan
+                                            </label>
+                                            <input type="date" name="tgl_pendapatan_e" id="tgl_pendapatan_e"
+                                                placeholder="" class="form-control  r-0 s-12 col-md-8"
+                                                autocomplete="off" />
+                                        </div>
+
+                                        <div class="form-group mb-1">
+                                            <label for="nilai_e" class="col-form-label s-12 col-md-4"> Nilai </label>
+                                            <input type="text" name="nilai_e" id="nilai_e" placeholder=""
+                                                class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
                                         </div>
                                     </div>
 
@@ -135,60 +158,62 @@
 <script type="text/javascript">
     {{ isset($id) ? 'add()' : 'edit('.$id.')'}}
 
-var table = $('#table').dataTable({
-    processing: true,
-    serverSide: true,
-    order: [1, 'desc'],
-    ajax: "{{ route('pendapatanNonAset.api')}}",
-    columns: [{
-            data: 'id',
-            name: 'id',
-            orderable: false,
-            searchable: false,
-            className: 'text-center'
-        },
-        {
-            data: 'tm_master_aset.tm_jenis_aset.n_jenis_aset',
-            name: 'tm_master_aset.tm_jenis_aset.n_jenis_aset'
-        },
-        {
-            data: 'n_aset',
-            name: 'n_aset'
-        },
-        // {
-        //     data: 'tgl_pendapatan',
-        //     name: 'tgl_pendapatan'
-        // },
-        // {
-        //     data: 'tahun',
-        //     name: 'tahun'
-        // },
-        // {
-        //     data: 'nilai',
-        //     name: 'nilai'
-        // },
-        {
-            data: 'action',
-            name: 'action',
-            orderable: false,
-            searchable: false,
-            className: 'text-center'
-        }
-    ]
-});
-
-table.on('draw.dt', function () {
-    var PageInfo = $('#table').DataTable().page.info();
-    table.api().column(0, {
-        page: 'current'
-    }).nodes().each(function (cell, i) {
-        cell.innerHTML = i + 1 + PageInfo.start;
+    var table = $('#table').dataTable({
+        processing: true,
+        serverSide: true,
+        order: [1, 'desc'],
+        ajax: "{{ route('pendapatanNonAset.api')}}",
+        columns: [{
+                data: 'id',
+                name: 'id',
+                orderable: false,
+                searchable: false,
+                className: 'text-center'
+            },
+            {
+                data: 'tm_master_aset.tm_jenis_aset.n_jenis_aset',
+                name: 'tm_master_aset.tm_jenis_aset.n_jenis_aset'
+            },
+            {
+                data: 'n_aset',
+                name: 'n_aset'
+            },
+            {
+                data: 'tgl_pendapatan',
+                name: 'tgl_pendapatan'
+            },
+            {
+                data: 'tahun',
+                name: 'tahun'
+            },
+            {
+                data: 'nilai',
+                name: 'nilai'
+            },
+            {
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false,
+                className: 'text-center'
+            }
+        ]
     });
-});
+
+    table.on('draw.dt', function () {
+        var PageInfo = $('#table').DataTable().page.info();
+        table.api().column(0, {
+            page: 'current'
+        }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1 + PageInfo.start;
+        });
+    });
 
     function add() {
         $('#form').trigger('reset');
         save_method = 'add';
+        $('#input_form').show();
+        $('#input_form_edit').hide();
     }
 
     $('#form').on('submit', function (e) {
@@ -233,7 +258,7 @@ table.on('draw.dt', function () {
             $(this).addClass('was-validated');
     });
 
-function edit(id) {s
+    function edit(id) {
         save_method = 'edit';
         $('#alert').html('');
         $('#formTitle').html("Mohon tunggu beberapa saat...");
@@ -241,17 +266,22 @@ function edit(id) {s
         $('#reset').hide();
         $('#form input[name=_method]').val('PATCH');
         $('#span').removeAttr('hidden');
+        $('#input_form').hide();
+        $('#input_form_edit').show();
         $.ajax({
-            url: "{{ route('pendapatanAset.edit', ':id') }}".replace(':id', id),
+            url: "{{ route('pendapatanNonAset.edit', ':id') }}".replace(':id', id),
             type: "GET",
             dataType: "JSON",
             success: function (data) {
-                console.log(data);
+                console.log(data.n_aset);
                 $('#formTitle').html("Edit Data  <a href='#' onclick='add()' class='btn btn-outline-primary btn-xs pull-right'>Batal</a>");
                 $('#form').show();
                 $('#id').val(data.id);
-                $('#tmmaster_aset_id').val(data.tmmaster_aset_id);
-                $('#nilai').val(data.nilai);
+                $('#tmmaster_aset_id').val(data.tmmaster_aset_id).trigger('change');
+                getJenisAset(data.n_aset);
+                $('#tahun_e').val(data.tahun);
+                $('#tgl_pendapatan_e').val(data.tgl_pendapatan);
+                $('#nilai_e').val(data.nilai);
             },
             error: function () {
                 console.log("Nothing Data");
@@ -271,57 +301,57 @@ function edit(id) {s
                             btnClass: 'btn-primary',
                             keys: ['enter'],
                             action: function () {
-                                document.location.href = "{{ route('pendapatanAset.index') }}";
+                                document.location.href = "{{ route('pendapatanNonAset.index') }}";
                             }
                         }
                     }
                 });
             }
         })
-}
+    }
 
-function remove(id) {
-    $.confirm({
-        title: '',
-        content: 'Apakah Anda yakin akan menghapus data ini?',
-        icon: 'icon icon-question amber-text',
-        theme: 'modern',
-        closeIcon: true,
-        animation: 'scale',
-        type: 'red',
-        buttons: {
-            ok: {
-                text: "ok!",
-                btnClass: 'btn-primary',
-                keys: ['enter'],
-                action: function () {
-                    var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                    $.ajax({
-                        url: "{{ route('pendapatanAset.destroy', ':id') }}".replace(':id', id),
-                        type: "POST",
-                        data: {
-                            '_method': 'DELETE',
-                            '_token': csrf_token
-                        },
-                        success: function (data) {
-                        table.api().ajax.reload();
-                          $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success! </strong>" + data.message + "</div>");
-                        },
-                        error: function () {
-                            console.log('Opssss...');
-                            reload();
-                        }
-                    });
+    function remove(id) {
+        $.confirm({
+            title: '',
+            content: 'Apakah Anda yakin akan menghapus data ini?',
+            icon: 'icon icon-question amber-text',
+            theme: 'modern',
+            closeIcon: true,
+            animation: 'scale',
+            type: 'red',
+            buttons: {
+                ok: {
+                    text: "ok!",
+                    btnClass: 'btn-primary',
+                    keys: ['enter'],
+                    action: function () {
+                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                        $.ajax({
+                            url: "{{ route('pendapatanNonAset.destroy', ':id') }}".replace(':id', id),
+                            type: "POST",
+                            data: {
+                                '_method': 'DELETE',
+                                '_token': csrf_token
+                            },
+                            success: function (data) {
+                            table.api().ajax.reload();
+                            $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success! </strong>" + data.message + "</div>");
+                            },
+                            error: function () {
+                                console.log('Opssss...');
+                                reload();
+                            }
+                        });
+                    }
+                },
+                cancel: function () {
+                    console.log('the user clicked cancel');
                 }
-            },
-            cancel: function () {
-                console.log('the user clicked cancel');
             }
-        }
-    });
-}
+        });
+    }
 
-var input_form = 1;
+    var input_form = 1;
     function addForm(){
         $('.addBtnFrm').hide();
         input_form++;
@@ -331,7 +361,7 @@ var input_form = 1;
         <div class="form-group mb-1">
             <label for="tahun" class="col-form-label s-12 col-md-4">Tahun</label>
             <input type="text" name="tahun[]" id="tahun" placeholder="" class="form-control  r-0 s-12 col-md-8"
-                autocomplete="off" required />
+                autocomplete="off" />
         </div>
 
         <div class="form-group mb-1">
@@ -339,13 +369,13 @@ var input_form = 1;
                 Tgl Pendapatan
             </label>
             <input type="date" name="tgl_pendapatan[]" id="tgl_pendapatan" placeholder=""
-                class="form-control  r-0 s-12 col-md-8" autocomplete="off" required />
+                class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
         </div>
 
         <div class="form-group mb-1">
             <label for="nilai" class="col-form-label s-12 col-md-4"> Nilai </label>
             <input type="text" name="nilai[]" id="nilai" placeholder="" class="form-control  r-0 s-12 col-md-8"
-                autocomplete="off" required />
+                autocomplete="off" />
         </div>
         <div class="form-group">
             <label for=""></label>
@@ -358,9 +388,9 @@ var input_form = 1;
         </div>
         </div>
         `;
-    $('#input_form').append(htmlAdd);
+        $('#input_form').append(htmlAdd);
 
-    $('.addBtnFrm').last().show();
+        $('.addBtnFrm').last().show();
     }
 
     function deleteForm(id){
@@ -369,18 +399,19 @@ var input_form = 1;
         $('.addBtnFrm').last().show();
     }
 
-    function getJenisAset(){
-    var id = $('#tmmaster_aset_id').val();
-    option = " <option value=''> Pilih </option>";
-    $('#n_aset').html("<option value=''>Loading...</option>");
-    url = "{{ route('pendapatanAset.getJenisAset', ':id') }}".replace(':id', id);
-    $.get(url, function (data) {
-    $.each(data, function (index, value) {
-    option += "<option value='" + value.n_aset + "'>" + value.n_aset + "</li>";
+    function getJenisAset(n_aset) {
+        option = " <option value=''> Pilih </option>";
+        $('#n_aset').html("<option value=''>Loading...</option>");
+        url = "{{ route('pendapatanAset.getJenisAset', ':id') }}".replace(':id', $('#tmmaster_aset_id').val());
+        $.get(url, function (data) {
+            $.each(data, function (index, value) {
+                option += "<option value='" + value.n_aset + "'>" + value.n_aset + "</li>";
+            });
+            $('#n_aset').html(option);
+        }, 'JSON').done(function (){
+            $('#n_aset').val(n_aset);
         });
-        $('#n_aset').html(option);
-        }, 'JSON');
-        }
+    }
 
 </script>
 @endsection

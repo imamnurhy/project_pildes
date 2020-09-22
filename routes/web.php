@@ -26,6 +26,9 @@ Route::namespace('Income')->group(function () {
     Route::get('pendapatanNonAset/api', 'PendapatanNonAsetController@api')->name('pendapatanNonAset.api');
     Route::get('pendapatanNonAset/getJenisAset/{id}', 'PendapatanNonAsetController@getJenisAset')->name('pendapatanNonAset.getJenisAset');
     Route::resource('pendapatanNonAset', 'PendapatanNonAsetController');
+
+    Route::get('pendapatanRincianAset/api', 'PendapatanRincianAsetController@api')->name('pendapatanRincianAset.api');
+    Route::resource('pendapatanRincianAset', 'PendapatanRincianAsetController');
 });
 
 

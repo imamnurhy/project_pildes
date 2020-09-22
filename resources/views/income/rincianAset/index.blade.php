@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Penghasilan aset')
+@section('title', 'Rincian aset')
 
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col">
                     <h3 class="my-2">
-                        <i class="icon icon-notebook-list"></i> pendapatanAset
+                        <i class="icon icon-notebook-list"></i> Rincian Aset
                     </h3>
                 </div>
             </div>
@@ -30,10 +30,8 @@
                             <table id="table" class="table table-striped no-b" style="width:100%">
                                 <thead>
                                     <th width="30">No</th>
-                                    <th>Pemilik</th>
-                                    <th>Asset</th>
-                                    <th>Jenis Aset</th>
-                                    <th>Nilai</th>
+                                    <th>Aset</th>
+                                    <th>No index</th>
                                     <th width="40"></th>
                                 </thead>
                                 <tbody></tbody>
@@ -57,43 +55,20 @@
                                 <div class="col-md-12">
 
                                     <div class="form-group mb-1">
-                                        <label for="pegawai_id" class="col-form-label s-12 col-md-4">Pemilik</label>
-                                        <select name="pegawai_id" id="pegawai_id" placeholder=""
+                                        <label for="tm_penghasilan_aset_id" class="col-form-label s-12 col-md-4">Jenis
+                                            aset</label>
+                                        <select name="tm_penghasilan_aset_id" id="tm_penghasilan_aset_id" placeholder=""
                                             class="form-control  r-0 s-12 col-md-8" autocomplete="off" required>
                                             <option value="">Pilih</option>
-                                            @foreach ($pegawais as $pegawai)
-                                            <option value="{{ $pegawai->id }}">
-                                                {{ $pegawai->n_pegawai}}
-                                            </option>
+                                            @foreach ($tm_penghasilan_asets as $item)
+                                            <option value="{{ $item->id }}">{{ $item->n_aset }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <div class="form-group mb-1">
-                                        <label for="tmmaster_aset_id" class="col-form-label s-12 col-md-4">Asset</label>
-                                        <select name="tmmaster_aset_id" id="tmmaster_aset_id" placeholder=""
-                                            class="form-control  r-0 s-12 col-md-8" autocomplete="off" required
-                                            onchange="getJenisAset()">
-                                            <option value="">Pilih</option>
-                                            @foreach ($tmmaster_asets as $tmmaster_aset)
-                                            <option value="{{ $tmmaster_aset->id }}">
-                                                {{ $tmmaster_aset->n_jenis_aset }}
-                                            </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group mb-1">
-                                        <label for="n_aset" class="col-form-label s-12 col-md-4">Jenis aset</label>
-                                        <select name="n_aset" id="n_aset" placeholder=""
-                                            class="form-control  r-0 s-12 col-md-8" autocomplete="off" required>
-                                            <option value="">Pilih</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group mb-1">
-                                        <label for="nilai" class="col-form-label s-12 col-md-4">Nilai</label>
-                                        <input type="text" name="nilai" id="nilai" placeholder=""
+                                        <label for="no_index" class="col-form-label s-12 col-md-4">No Index</label>
+                                        <input type="text" name="no_index" id="no_index" placeholder=""
                                             class="form-control  r-0 s-12 col-md-8" autocomplete="off" required />
                                     </div>
 
@@ -114,18 +89,17 @@
     </div>
 </div>
 @endsection
-
 @section('script')
 <script src="{{ asset('assets/js/jquery-confirm.min.js') }}"></script>
 
 <script type="text/javascript">
     {{ isset($id) ? 'add()' : 'edit('.$id.')'}}
 
-    var table = $('#table').dataTable({
+var table = $('#table').dataTable({
     processing: true,
     serverSide: true,
     order: [1, 'desc'],
-    ajax: "{{ route('pendapatanAset.api')}}",
+    ajax: "{{ route('pendapatanRincianAset.api')}}",
     columns: [{
             data: 'id',
             name: 'id',
@@ -134,20 +108,12 @@
             className: 'text-center'
         },
         {
-            data: 'n_pegawai',
-            name: 'n_pegawai'
+            data: 'tm_penghasilan_aset.n_aset',
+            name: 'tm_penghasilan_aset.n_aset'
         },
         {
-            data: 'tmmaster_aset.tm_jenis_aset.n_jenis_aset',
-            name: 'tmmaster_aset.tm_jenis_aset.n_jenis_aset'
-        },
-        {
-            data: 'n_aset',
-            name: 'n_aset'
-        },
-        {
-            data: 'nilai',
-            name: 'nilai'
+            data:'no_index',
+            name:'no_index'
         },
         {
             data: 'action',
@@ -181,9 +147,9 @@ $('#form').on('submit', function (e) {
             $('#alert').html('');
             $('#action').attr('disabled', true);
             if (save_method == 'add'){
-                url = "{{ route('pendapatanAset.store') }}";
+                url = "{{ route('pendapatanRincianAset.store') }}";
             }else{
-                url = "{{ route('pendapatanAset.update', ':id') }}".replace(':id', $('#id').val());
+                url = "{{ route('pendapatanRincianAset.update', ':id') }}".replace(':id', $('#id').val());
             }
             $.ajax({
                     url: url,
@@ -224,7 +190,7 @@ function edit(id) {
         $('#form input[name=_method]').val('PATCH');
         $('#span').removeAttr('hidden');
         $.ajax({
-            url: "{{ route('pendapatanAset.edit', ':id') }}".replace(':id', id),
+            url: "{{ route('pendapatanRincianAset.edit', ':id') }}".replace(':id', id),
             type: "GET",
             dataType: "JSON",
             success: function (data) {
@@ -232,10 +198,8 @@ function edit(id) {
                 $('#formTitle').html("Edit Data  <a href='#' onclick='add()' class='btn btn-outline-primary btn-xs pull-right'>Batal</a>");
                 $('#form').show();
                 $('#id').val(data.id);
-                $('#pegawai_id').val(data.pegawai_id);
-                $('#tmmaster_aset_id').val(data.tmmaster_aset_id);
-                getJenisAset(data.n_aset);
-                $('#nilai').val(data.nilai);
+                $('#tm_penghasilan_aset_id').val(data.tm_penghasilan_aset_id);
+                $('#no_index').val(data.no_index);
             },
             error: function () {
                 console.log("Nothing Data");
@@ -255,7 +219,7 @@ function edit(id) {
                             btnClass: 'btn-primary',
                             keys: ['enter'],
                             action: function () {
-                                document.location.href = "{{ route('pendapatanAset.index') }}";
+                                document.location.href = "{{ route('pendapatanRincianAset.index') }}";
                             }
                         }
                     }
@@ -281,7 +245,7 @@ function remove(id) {
                 action: function () {
                     var csrf_token = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: "{{ route('pendapatanAset.destroy', ':id') }}".replace(':id', id),
+                        url: "{{ route('pendapatanRincianAset.destroy', ':id') }}".replace(':id', id),
                         type: "POST",
                         data: {
                             '_method': 'DELETE',
@@ -302,21 +266,6 @@ function remove(id) {
                 console.log('the user clicked cancel');
             }
         }
-    });
-}
-
-function getJenisAset(n_aset){
-    var id = $('#tmmaster_aset_id').val();
-    option = " <option value=''> Pilih </option>";
-    $('#n_aset').html("<option value=''>Loading...</option>");
-    url = "{{ route('pendapatanAset.getJenisAset', ':id') }}".replace(':id', id);
-    $.get(url, function (data) {
-        $.each(data, function (index, value) {
-            option += "<option value='" + value.n_aset + "'>" + value.n_aset + "</li>";
-        });
-        $('#n_aset').html(option);
-    }, 'JSON').done(function (){
-        $('#n_aset').val(n_aset);
     });
 }
 

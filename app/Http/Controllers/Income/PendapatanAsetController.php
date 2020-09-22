@@ -134,7 +134,7 @@ class PendapatanAsetController extends Controller
      */
     public function api()
     {
-        $tm_pendapatan = Tm_pendapatan::all();
+        $tm_pendapatan = Tm_pendapatan::with('tmmasterAset.tmJenisAset')->get();
 
         return DataTables::of($tm_pendapatan)
             ->addColumn('action', function ($p) {
