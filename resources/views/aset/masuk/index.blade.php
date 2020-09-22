@@ -268,7 +268,10 @@ $(document).ready(function () {
         $.ajax({
             url: url,
             cache:false,
-            data: function
+            data: function(data){
+                data.id_jenis_aset = $('#id_jenis_aset').val();
+                data.id_rincian_jenis_aset = $('#id_rincian_jenis_asset').val();
+            },
             success: function (data) {
                 window.open(url,'_blank');
             },
