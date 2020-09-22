@@ -266,7 +266,7 @@ $('#id_jenis_aset, #id_rincian_jenis_asset').on("select2:select", function(){ fi
     $('#laporan').on('click', function (e) {
         var $this = $(this);
         $.ajax({
-            url: {{ route('aset.masuk.laporan') }},
+            url: "{{ route('aset.masuk.laporan') }}",
             async: false,
             success: function (url) {
                 $this.attr("href", url);
