@@ -70,9 +70,9 @@ Route::group(['middleware' => ['permission:master-aset']], function () {
 
 
         route::get('masuk/showDetail/{id}', 'AsetMasukController@showDetail')->name('masuk.showDetail');
-        Route::post('masuk/storeDetailAsset', 'AsetMasukController@storeDetailAsset')->name('masuk.storeDetailAsset');
-        Route::get('masuk/editDetailAsset', 'AsetMasukController@editDetailAsset')->name('masuk.editDetailAsset');
-        Route::patch('masuk/updateDetailAsset', 'AsetMasukController@updateDetailAsset')->name('masuk.updateDetailAsset');
+        Route::post('masuk/storeDetailAsset', 'AsetMasukController@storeDetail')->name('masuk.storeDetailAsset');
+        Route::get('masuk/editDetailAsset', 'AsetMasukController@editDetail')->name('masuk.editDetailAsset');
+        Route::patch('masuk/updateDetailAsset', 'AsetMasukController@updateDetail')->name('masuk.updateDetailAsset');
         Route::delete('masuk/{id}/hapusAssetKendaraan', 'AsetMasukController@destroyAssetKendaraan')->name('masuk.destroyAssetKendaraan');
 
         // Detail asset
