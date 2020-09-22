@@ -69,7 +69,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <a id="laporan" class="btn btn-primary" target="_blank">Laporan</a>
+                <a id="laporan" class="btn btn-primary" target="_blank"><span id="btn_laporan">Laporan</span></a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -265,15 +265,17 @@ $('#id_jenis_aset, #id_rincian_jenis_asset').on("select2:select", function(){ fi
 $(document).ready(function () {
     $('#laporan').on('click', function (e) {
         url = "{{ route('aset.masuk.laporan') }}";
+        $('#btn_laporan').html('Tunggu sebentar ...');
         $.ajax({
             url: url,
-            cache:false,
-            data: function(data){
-                data.id_jenis_aset = $('#id_jenis_aset').val();
-                data.id_rincian_jenis_aset = $('#id_rincian_jenis_asset').val();
+            data: {
+                'id_jenis_aset' : $('#id_jenis_aset').val(),
+                'id_rincian_jenis_aset' : $('#id_rincian_jenis_asset').val(),
             },
             success: function (data) {
-                window.open(url,'_blank');
+                $('#btn_laporan').html('Laporan');
+                url2 = url + '?id_jenis_aset=' + $('#id_jenis_aset').val() + '&id_rincian_jenis_aset=' + $('#id_rincian_jenis_asset').val();
+                window.open(url2,'_blank');
             },
             error: function () {
                 e.preventDefault();
