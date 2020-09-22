@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
+use PDF;
 
 class AsetMasukController extends Controller
 {
@@ -612,5 +613,29 @@ class AsetMasukController extends Controller
             'success' => true,
             'message' => 'Data berhasil dihapus.'
         ]);
+    }
+
+    public function laporanPdf(Request $request)
+    {
+        $tmaset = DB::table('tmmaster_asset')
+            ->select(
+                'tmmaster_asset.id',
+                'tmmaster_asset.date',
+                'tmmaster_asset.pemilik_sebelumnya',
+                'tmmaster_asset.nilai',
+                'tmmaster_asset.tahun',
+                'tmmaster_asset.status',
+                'tmmaster_asset.kondisi',
+                'tmjenis_asets.n_jenis_aset',
+                'tmjenis_aset_rincians.n_rincian'
+            )
+            ->join('tmjenis_asets', 'tmmaster_asset.id_jenis_asset', '=', 'tmjenis_asets.id')
+
+            ->join('tmjenis_aset_rincians', 'tmmaster_asset.id_rincian_jenis_asset', 'tmjenis_aset_rincians.id')
+            ->groupBy('tmmaster_asset.id')->get();
+
+        $pdf = PDF::loadview('aset.masuk.report_pdf', ['tmasets' => $tmaset]);
+        // return $pdf->download('laporan_pendapatan');
+        return $pdf->stream();
     }
 }

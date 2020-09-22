@@ -69,6 +69,9 @@
                 </div>
             </div>
             <div class="card-body">
+                <a id="laporan" class="btn btn-primary" target="_blank">Laporan</a>
+            </div>
+            <div class="card-body">
                 <div class="table-responsive">
                     <table id="asetmasuk-table" class="table table-striped no-b" style="width:100%">
                         <thead>
@@ -107,16 +110,6 @@
     });
 
 var table = $('#asetmasuk-table').dataTable({
-     dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'pdfHtml5',
-                text: 'PDF',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6]
-                }
-            },
-        ],
     processing: true,
     serverSide: true,
     ordering: false,
@@ -266,6 +259,27 @@ $('#id_jenis_aset, #id_rincian_jenis_asset').on("select2:select", function(){ fi
             $('#action').removeAttr('disabled', true);
         });
     }
+
+
+
+    $(document).ready(function () {
+    $('#laporan').on('click', function (e) {
+        var $this = $(this);
+        $.ajax({
+            url: {{ route('aset.masuk.laporan') }},
+            async: false,
+            success: function (url) {
+                $this.attr("href", url);
+                $this.attr("target", "_blank");
+            },
+            error: function () {
+                e.preventDefault();
+            }
+        });
+    })
+
+})
+
 
 </script>
 @endsection

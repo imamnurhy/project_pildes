@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+
+
 Route::get('/', function () {
     return redirect('login');
 });
@@ -64,6 +66,8 @@ Route::group(['middleware' => ['permission:master-aset']], function () {
         Route::get('masuk/{kecamatan_id}/getKelurahan', 'AsetMasukController@getKelurahan')->name('masuk.getKelurahan');
         Route::delete('masuk/{id}/hapusBerkas', 'AsetMasukController@hapusBerkas')->name('masuk.hapusBerkas');
         Route::get('masuk/{id}/download_berkas', 'AsetMasukController@download_berkas')->name('masuk.download_berkas');
+        Route::get('masuk/laporan', 'AsetMasukController@laporanPdf')->name('masuk.laporan');
+
 
         route::get('masuk/showDetail/{id}', 'AsetMasukController@showDetail')->name('masuk.showDetail');
         Route::post('masuk/storeDetailAsset', 'AsetMasukController@storeDetailAsset')->name('masuk.storeDetailAsset');
