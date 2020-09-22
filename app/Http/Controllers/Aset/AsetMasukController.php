@@ -412,10 +412,10 @@ class AsetMasukController extends Controller
                 'latitude'      => 'required',
                 'longitude'     => 'required',
                 'longitude'     => 'required',
-                'provinsi_id'   => 'required',
-                'kota_id'       => 'required',
-                'kecamatan_id'  => 'required',
-                'kelurahan_id'  => 'required',
+                // 'provinsi_id'   => 'required',
+                // 'kota_id'       => 'required',
+                // 'kecamatan_id'  => 'required',
+                // 'kelurahan_id'  => 'required',
                 'luas_tanah'    => 'required',
                 'berkas.*' => 'mimes:doc,pdf,docx,jpg,jpeg,png'
             ]);

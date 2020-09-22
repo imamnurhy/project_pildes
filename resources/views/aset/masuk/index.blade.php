@@ -268,6 +268,7 @@ $(document).ready(function () {
         $.ajax({
             url: url,
             cache:false,
+            data: function
             success: function (data) {
                 window.open(url,'_blank');
             },
