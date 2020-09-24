@@ -76,6 +76,12 @@
             <i class="icon icon-arrow_back red-text s-18"></i><span>Pendistribusian</span>
         </a>
     </li>
+
+    <li>
+        <a href="#">
+            <i class="icon icon-report blue-text s-18"></i> <span>Laporan</span>
+        </a>
+    </li>
     @endcan
 
     @can('master-income')
@@ -96,8 +102,14 @@
             <i class="icon icon-money-1 blue-text s-18"></i> <span>Rincian Aset</span>
         </a>
     </li>
-
     @endcan
 
-
+    @can('master-report')
+    <li class="header light"><strong>Laporan</strong></li>
+    <li>
+        <a href="#">
+            <i class="icon icon-report blue-text s-18"></i> <span>Pendapatan Aset<span>
+        </a>
+    </li>
+    @endcan
 </ul>

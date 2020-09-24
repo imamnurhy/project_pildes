@@ -19,6 +19,8 @@ Route::prefix('home')->group(function () {
 });
 
 
+
+
 /* MASTER INCOME */
 Route::namespace('Income')->group(function () {
     Route::get('pendapatanAset/api', 'PendapatanAsetController@api')->name('pendapatanAset.api');
