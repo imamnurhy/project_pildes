@@ -22,19 +22,25 @@ Route::prefix('home')->group(function () {
 
 
 /* MASTER INCOME */
-Route::namespace('Income')->group(function () {
-    Route::get('pendapatanAset/api', 'PendapatanAsetController@api')->name('pendapatanAset.api');
-    Route::get('pendapatanAset/getJenisAset/{id}', 'PendapatanAsetController@getJenisAset')->name('pendapatanAset.getJenisAset');
-    Route::resource('pendapatanAset', 'PendapatanAsetController');
+Route::prefix('pendapatan')->namespace('Income')->name('pendapatan.')->group(function () {
+    Route::get('personal/api', 'PendapatanPersonalController@api')->name('personal.api');
+    Route::get('Personal/getJenisAset/{id}', 'PendapatanPersonalController@getJenisAset')->name('personal.getJenisAset');
 
-    Route::get('pendapatanNonAset/api', 'PendapatanNonAsetController@api')->name('pendapatanNonAset.api');
-    Route::get('pendapatanNonAset/getJenisAset/{id}', 'PendapatanNonAsetController@getJenisAset')->name('pendapatanNonAset.getJenisAset');
-    Route::resource('pendapatanNonAset', 'PendapatanNonAsetController');
+    Route::resource('personal', 'PendapatanPersonalController');
+
+    Route::get('aset/api', 'PendapatanAsetController@api')->name('aset.api');
+    Route::get('aset/getJenisAset/{id}', 'PendapatanAsetController@getJenisAset')->name('aset.getJenisAset');
+    Route::resource('aset', 'PendapatanAsetController');
 
     Route::get('pendapatanRincianAset/api', 'PendapatanRincianAsetController@api')->name('pendapatanRincianAset.api');
     Route::resource('pendapatanRincianAset', 'PendapatanRincianAsetController');
 });
 
+/* MASTER REPORT */
+Route::namespace('Report')->name('report.')->group(function () {
+    Route::get('reportAset', 'ReportController@reportAset')->name('aset');
+    Route::get('reportAset/api', 'ReportController@reportAsetApi')->name('aset.api');
+});
 
 /* MASTER JENIS ASET */
 Route::namespace('JenisAset')->middleware('permission:master-jenisAset')->group(function () {

@@ -3,14 +3,8 @@
 namespace App\Http\Controllers\Income;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pegawai;
-use App\Models\Tm_asset_kendaraan;
-use App\Models\Tm_master_aset;
-use App\Models\Tm_pendapatan;
-use App\Models\Tmaset_barang;
-use App\Models\Tmaset_tanah;
+use App\Models\Tm_penghasilan_aset;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
@@ -34,9 +28,7 @@ class PendapatanAsetController extends Controller
             ->join('tmjenis_aset_rincians', 'tmmaster_asset.id_rincian_jenis_asset', 'tmjenis_aset_rincians.id')
             ->get();
 
-        $pegawais = Pegawai::all();
-
-        return view('income.aset.index', compact('id', 'tmmaster_asets', 'pegawais'));
+        return view('income.aset.index', compact('id', 'tmmaster_asets'));
     }
 
     /**
@@ -49,26 +41,27 @@ class PendapatanAsetController extends Controller
     {
         $request->validate([
             'tmmaster_aset_id' => 'required',
-            'n_aset'           => 'required',
-            'nilai'           => 'required',
+            'n_aset'            => 'required',
+            'tahun'             => 'required',
+            'tgl_pendapatan'    => 'required',
+            'nilai'             => 'required',
         ]);
 
-        $pegawai = Pegawai::find($request->pegawai_id);
-
-        Tm_pendapatan::create([
-            'pegawai_id'       => $request->pegawai_id,
-            'n_pegawai'        => $pegawai->n_pegawai,
-            'tmmaster_aset_id' => $request->tmmaster_aset_id,
-            'n_aset'           => $request->n_aset,
-            'nilai'            => $request->nilai
-        ]);
+        foreach ($request->tahun as $key => $value) {
+            Tm_penghasilan_aset::create([
+                'tmmaster_aset_id' => $request->tmmaster_aset_id,
+                'n_aset' => $request->n_aset,
+                'tahun' => $request->tahun[$key],
+                'tgl_pendapatan' => $request->tgl_pendapatan[$key],
+                'nilai' => $request->nilai[$key],
+            ]);
+        }
 
         return response()->json([
             'success' => 1,
             'message' => 'Data berhasil disimpan.'
         ]);
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -78,7 +71,7 @@ class PendapatanAsetController extends Controller
      */
     public function edit($id)
     {
-        return Tm_pendapatan::find($id);
+        return Tm_penghasilan_aset::whereid($id)->with('tmMasterAset')->first();
     }
 
     /**
@@ -92,17 +85,20 @@ class PendapatanAsetController extends Controller
     {
         $request->validate([
             'tmmaster_aset_id' => 'required',
-            'nilai'           => 'required',
+            'n_aset'           => 'required',
+            'tahun_e'          => 'required',
+            'tgl_pendapatan_e' => 'required',
+            'nilai_e'          => 'required',
         ]);
 
-        $tm_pendapatan = Tm_pendapatan::find($id);
+        $tm_penghasillan_aset = Tm_penghasilan_aset::find($id);
 
-        $tm_pendapatan->update([
-            'pegawai_id'       => Auth::user()->pegawai->id,
-            'n_pegawai'        => Auth::user()->pegawai->n_pegawai,
+        $tm_penghasillan_aset->update([
             'tmmaster_aset_id' => $request->tmmaster_aset_id,
             'n_aset'           => $request->n_aset,
-            'nilai'            => $request->nilai
+            'tahun'            => $request->tahun_e,
+            'tgl_pendapatan'   => $request->tgl_pendapatan_e,
+            'nilai'            => $request->nilai_e,
         ]);
 
         return response()->json([
@@ -119,7 +115,7 @@ class PendapatanAsetController extends Controller
      */
     public function destroy($id)
     {
-        Tm_pendapatan::destroy($id);
+        Tm_penghasilan_aset::destroy($id);
 
         return response()->json([
             'success' => 1,
@@ -134,9 +130,11 @@ class PendapatanAsetController extends Controller
      */
     public function api()
     {
-        $tm_pendapatan = Tm_pendapatan::with('tmmasterAset.tmJenisAset')->get();
+        $tm_penghasillan_aset = Tm_penghasilan_aset::with(['tmMasterAset.tmJenisAset'])->get();
 
-        return DataTables::of($tm_pendapatan)
+        // dd($tm_penghasillan_aset);
+
+        return DataTables::of($tm_penghasillan_aset)
             ->addColumn('action', function ($p) {
                 $btnEdit = "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Merek'><i class='icon-pencil mr-1'></i></a>";
                 $btnRemove = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Merek'><i class='icon-remove'></i></a>";
@@ -145,6 +143,8 @@ class PendapatanAsetController extends Controller
             ->rawColumns(['action'])
             ->toJson();
     }
+
+
 
     public function getJenisAset($id)
     {

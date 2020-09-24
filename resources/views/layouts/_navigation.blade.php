@@ -85,29 +85,29 @@
     @endcan
 
     @can('master-income')
-    <li class="header light"><strong>PENDAPATAN</strong></li>
+    <li class="header light"><strong>PENDAPATAN PEMILIK</strong></li>
     <li>
-        <a href="{{ route('pendapatanAset.index')}}">
-            <i class="icon icon-money-2 blue-text s-18"></i> <span>Aset<span>
+        <a href="{{ route('pendapatan.personal.index')}}">
+            <i class="icon icon-money-2 blue-text s-18"></i> <span>Pendapatan personal<span>
         </a>
     </li>
     <li>
-        <a href="{{ route('pendapatanNonAset.index') }}">
-            <i class="icon icon-money-1 blue-text s-18"></i> <span>Non Aset</span>
+        <a href="{{ route('pendapatan.aset.index') }}">
+            <i class="icon icon-money-1 blue-text s-18"></i> <span>Pendapatan Aset</span>
         </a>
     </li>
-
+    {{--
     <li>
         <a href="{{ route('pendapatanRincianAset.index')}}">
-            <i class="icon icon-money-1 blue-text s-18"></i> <span>Rincian Aset</span>
-        </a>
-    </li>
+    <i class="icon icon-money-1 blue-text s-18"></i> <span>Rincian Aset</span>
+    </a>
+    </li> --}}
     @endcan
 
     @can('master-report')
-    <li class="header light"><strong>Laporan</strong></li>
+    <li class="header light"><strong>LAPORAN</strong></li>
     <li>
-        <a href="#">
+        <a href="{{ route('report.aset') }}">
             <i class="icon icon-report blue-text s-18"></i> <span>Pendapatan Aset<span>
         </a>
     </li>
