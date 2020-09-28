@@ -22,7 +22,7 @@ class ReportController extends Controller
 
     public function reportAsetApi(Request $request)
     {
-        $tm_pendapatan = Tm_pendapatan::with('tmmasterAset');
+        $tm_pendapatan = Tm_pendapatan::with('tmmasterAset.tmJenisAset', 'tmmasterAset.tmJenisAsetRincian');
 
         if ($request->pegawai_id != '99') {
             $tm_pendapatan->where('pegawai_id', $request->pegawai_id);

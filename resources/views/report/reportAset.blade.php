@@ -96,7 +96,9 @@
                             <table id="report-table" class="table table-striped no-b" style="width:100%">
                                 <thead>
                                     <th width="30">No</th>
-                                    <th>Pemilik</th>
+                                    <th width="150">Pemilik</th>
+                                    <th>Jenis Aset</th>
+                                    <th>Ricinan Aset</th>
                                     <th>Aset</th>
                                     <th>Nilai</th>
                                     <th>Tanggal</th>
@@ -147,6 +149,14 @@
             {
                 data: 'n_pegawai',
                 name: 'n_pegawai'
+            },
+            {
+                data: 'tmmaster_aset.tm_jenis_aset.n_jenis_aset',
+                name: 'tmmaster_aset.tm_jenis_aset.n_jenis_aset',
+            },
+            {
+                data: 'tmmaster_aset.tm_jenis_aset_rincian.n_rincian',
+                name: 'tmmaster_aset.tm_jenis_aset_rincian.n_rincian',
             },
             {
                 data: 'n_aset',

@@ -31,8 +31,8 @@
                                 <thead>
                                     <th width="30">No</th>
                                     <th>Pemilik</th>
-                                    <th>Asset</th>
-                                    <th>Jenis Aset</th>
+                                    <th>Jenis Asset</th>
+                                    <th>Aset</th>
                                     <th>Nilai</th>
                                     <th>Tgl</th>
                                     <th width="40"></th>
@@ -71,7 +71,8 @@
                                     </div>
 
                                     <div class="form-group mb-1">
-                                        <label for="tmmaster_aset_id" class="col-form-label s-12 col-md-4">Asset</label>
+                                        <label for="tmmaster_aset_id" class="col-form-label s-12 col-md-4">Jenis
+                                            Asset</label>
                                         <select name="tmmaster_aset_id" id="tmmaster_aset_id" placeholder=""
                                             class="form-control  r-0 s-12 col-md-8" autocomplete="off" required
                                             onchange="getJenisAset()">
@@ -85,7 +86,7 @@
                                     </div>
 
                                     <div class="form-group mb-1">
-                                        <label for="n_aset" class="col-form-label s-12 col-md-4">Jenis aset</label>
+                                        <label for="n_aset" class="col-form-label s-12 col-md-4">aset</label>
                                         <select name="n_aset" id="n_aset" placeholder=""
                                             class="form-control  r-0 s-12 col-md-8" autocomplete="off" required>
                                             <option value="">Pilih</option>

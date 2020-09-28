@@ -30,8 +30,8 @@
                             <table id="table" class="table table-striped no-b" style="width:100%">
                                 <thead>
                                     <th width="30">No</th>
-                                    <th>Aset</th>
                                     <th>jenis Aset</th>
+                                    <th>Aset</th>
                                     <th>Pendapatan</th>
                                     <th>Tahun</th>
                                     <th>Nilai</th>
@@ -58,7 +58,8 @@
                             <div class="form-row form-inline">
                                 <div class="col-md-8">
                                     <div class="form-group mb-1">
-                                        <label for="tmmaster_aset_id" class="col-form-label s-12 col-md-4">Asset</label>
+                                        <label for="tmmaster_aset_id" class="col-form-label s-12 col-md-4">Jenis
+                                            Asset</label>
                                         <select name="tmmaster_aset_id" id="tmmaster_aset_id" placeholder=""
                                             class="form-control  r-0 s-12 col-md-8" autocomplete="off" required
                                             onchange="getJenisAset()">
@@ -72,7 +73,7 @@
                                     </div>
 
                                     <div class="form-group mb-1">
-                                        <label for="n_aset" class="col-form-label s-12 col-md-4">Jenis aset</label>
+                                        <label for="n_aset" class="col-form-label s-12 col-md-4">aset</label>
                                         <select name="n_aset" id="n_aset" placeholder=""
                                             class="form-control  r-0 s-12 col-md-8" autocomplete="off" required>
                                             <option value="">Pilih</option>
@@ -133,11 +134,6 @@
                                                 class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
                                         </div>
                                     </div>
-
-
-                                    
-
-
 
 
                                     <div class="card-body offset-md-3">

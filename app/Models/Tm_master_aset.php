@@ -12,4 +12,9 @@ class Tm_master_aset extends Model
     {
         return $this->belongsTo(Tmjenis_aset::class, 'id_jenis_asset');
     }
+
+    public function tmJenisAsetRincian()
+    {
+        return $this->belongsTo(Tmjenis_aset_rincian::class, 'id_rincian_jenis_asset');
+    }
 }
