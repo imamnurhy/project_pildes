@@ -36,13 +36,17 @@ class PendapatanPersonalController extends Controller
             // ->groupBy('tmmaster_asset.id_jenis_asset')
             ->get();
 
+
         $tmJenisAsets = Tmjenis_aset::all();
-
-
 
         $pegawais = Pegawai::all();
 
-        return view('income.personal.index', compact('id', 'tmmaster_asets', 'pegawais'));
+        return view('income.personal.index', compact(
+            'id',
+            'tmmaster_asets',
+            'pegawais',
+            'tmJenisAsets'
+        ));
     }
 
     /**
@@ -159,11 +163,31 @@ class PendapatanPersonalController extends Controller
         $tmmaster_aset = Tm_master_aset::with('tmJenisAset')->whereid($id)->first();
 
         if ($tmmaster_aset->tmJenisAset->kode == 'tanah') {
-            return Tmaset_tanah::select('nm_lahan as n_aset')->where('id_master_aset', $tmmaster_aset->id)->get();
+            return Tmaset_tanah::select('nm_lahan as n_aset')
+                ->where('id_master_aset', $tmmaster_aset->id)
+                ->get();
         } else if ($tmmaster_aset->tmJenisAset->kode == 'barang') {
-            return Tmaset_barang::select('jenis as n_aset')->where('id_master_aset', $tmmaster_aset->id)->get();
+            return Tmaset_barang::select('jenis as n_aset')
+                ->where('id_master_aset', $tmmaster_aset->id)
+                ->get();
         } else if ($tmmaster_aset->tmJenisAset->kode == 'kendaraan') {
-            return Tm_asset_kendaraan::select('merek as n_aset', 'no_polisi')->where('tmmaster_asset_id', $tmmaster_aset->id)->get();
+            return Tm_asset_kendaraan::select('merek as n_aset', 'no_polisi as detail')
+                ->where('tmmaster_asset_id', $tmmaster_aset->id)
+                ->get();
+        } else {
+            return response()->json([]);
         }
+    }
+
+    public function getMasterAset($id)
+    {
+        return DB::table('tmmaster_asset')
+            ->select(
+                'tmmaster_asset.id',
+                'tmjenis_aset_rincians.n_rincian'
+            )
+            ->join('tmjenis_aset_rincians', 'tmmaster_asset.id_rincian_jenis_asset', 'tmjenis_aset_rincians.id')
+            ->where('tmmaster_asset.id_jenis_asset', $id)
+            ->get();
     }
 }

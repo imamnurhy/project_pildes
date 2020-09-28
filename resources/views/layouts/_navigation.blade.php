@@ -96,19 +96,19 @@
             <i class="icon icon-money-1 blue-text s-18"></i> <span>Pendapatan Aset</span>
         </a>
     </li>
-    {{--
+
     <li>
-        <a href="{{ route('pendapatanRincianAset.index')}}">
-    <i class="icon icon-money-1 blue-text s-18"></i> <span>Rincian Aset</span>
-    </a>
-    </li> --}}
+        <a href="{{ route('pendapatan.rincianAset.index')}}">
+            <i class="icon icon-money-1 blue-text s-18"></i> <span>Rincian Aset</span>
+        </a>
+    </li>
     @endcan
 
     @can('master-report')
     <li class="header light"><strong>LAPORAN</strong></li>
     <li>
         <a href="{{ route('report.aset') }}">
-            <i class="icon icon-report blue-text s-18"></i> <span>Pendapatan Aset<span>
+            <i class="icon icon-report blue-text s-18"></i> <span>Pendapatan Personal<span>
         </a>
     </li>
     @endcan

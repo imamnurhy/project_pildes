@@ -65,7 +65,7 @@
                                             <option value="">Pilih</option>
                                             @foreach ($tmmaster_asets as $tmmaster_aset)
                                             <option value="{{ $tmmaster_aset->id }}">
-                                                {{ $tmmaster_aset->n_jenis_aset }}
+                                                {{ $tmmaster_aset->n_jenis_aset . '/' . $tmmaster_aset->n_rincian }}
                                             </option>
                                             @endforeach
                                         </select>
@@ -135,6 +135,11 @@
                                     </div>
 
 
+                                    
+
+
+
+
                                     <div class="card-body offset-md-3">
                                         <button type="submit" class="btn btn-primary btn-sm" id="action"><i
                                                 class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
@@ -149,9 +154,13 @@
 
         </div>
 
+
+
     </div>
 </div>
 @endsection
+
+
 
 @section('script')
 <script src="{{ asset('assets/js/jquery-confirm.min.js') }}"></script>
@@ -405,6 +414,7 @@
         $('#n_aset').html("<option value=''>Loading...</option>");
         url = "{{ route('pendapatan.aset.getJenisAset', ':id') }}".replace(':id', $('#tmmaster_aset_id').val());
         $.get(url, function (data) {
+            console.log(data);
             $.each(data, function (index, value) {
                 option += "<option value='" + value.n_aset + "'>" + value.n_aset + "</li>";
             });
@@ -413,6 +423,5 @@
             $('#n_aset').val(n_aset);
         });
     }
-
 </script>
 @endsection

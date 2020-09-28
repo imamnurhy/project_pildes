@@ -12,7 +12,7 @@
         <div class="container-fluid text-white">
             <div class="row">
                 <div class="col">
-                    <h4 id="header">
+                <h4 id="header">
                         <i class="icon icon-notebook-list"></i> Tambah Aset Masuk
                     </h4>
                 </div>

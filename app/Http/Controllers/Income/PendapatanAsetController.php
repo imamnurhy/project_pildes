@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Income;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tm_penghasilan_aset;
+use App\Models\Tm_asset_kendaraan;
+use App\Models\Tmaset_barang;
+use App\Models\Tmaset_tanah;
+use App\Models\Tm_master_aset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;

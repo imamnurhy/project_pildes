@@ -25,6 +25,7 @@ Route::prefix('home')->group(function () {
 Route::prefix('pendapatan')->namespace('Income')->name('pendapatan.')->group(function () {
     Route::get('personal/api', 'PendapatanPersonalController@api')->name('personal.api');
     Route::get('Personal/getJenisAset/{id}', 'PendapatanPersonalController@getJenisAset')->name('personal.getJenisAset');
+    Route::get('Personal/getMasterAset/{id}', 'PendapatanPersonalController@getMasterAset')->name('personal.getMasterAset');
 
     Route::resource('personal', 'PendapatanPersonalController');
 
@@ -32,13 +33,14 @@ Route::prefix('pendapatan')->namespace('Income')->name('pendapatan.')->group(fun
     Route::get('aset/getJenisAset/{id}', 'PendapatanAsetController@getJenisAset')->name('aset.getJenisAset');
     Route::resource('aset', 'PendapatanAsetController');
 
-    Route::get('pendapatanRincianAset/api', 'PendapatanRincianAsetController@api')->name('pendapatanRincianAset.api');
-    Route::resource('pendapatanRincianAset', 'PendapatanRincianAsetController');
+    Route::get('rincianAset/api', 'PendapatanRincianAsetController@api')->name('rincianAset.api');
+    Route::resource('rincianAset', 'PendapatanRincianAsetController');
 });
 
 /* MASTER REPORT */
 Route::namespace('Report')->name('report.')->group(function () {
     Route::get('reportAset', 'ReportController@reportAset')->name('aset');
+    Route::get('reportAset/getAsetRincian/{id}', 'ReportController@getAsetRincian')->name('getAsetRincian');
     Route::get('reportAset/api', 'ReportController@reportAsetApi')->name('aset.api');
 });
 

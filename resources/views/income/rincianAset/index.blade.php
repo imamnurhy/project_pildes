@@ -99,7 +99,7 @@ var table = $('#table').dataTable({
     processing: true,
     serverSide: true,
     order: [1, 'desc'],
-    ajax: "{{ route('pendapatanRincianAset.api')}}",
+    ajax: "{{ route('pendapatan.rincianAset.api')}}",
     columns: [{
             data: 'id',
             name: 'id',
@@ -147,9 +147,9 @@ $('#form').on('submit', function (e) {
             $('#alert').html('');
             $('#action').attr('disabled', true);
             if (save_method == 'add'){
-                url = "{{ route('pendapatanRincianAset.store') }}";
+                url = "{{ route('pendapatan.rincianAset.store') }}";
             }else{
-                url = "{{ route('pendapatanRincianAset.update', ':id') }}".replace(':id', $('#id').val());
+                url = "{{ route('pendapatan.rincianAset.update', ':id') }}".replace(':id', $('#id').val());
             }
             $.ajax({
                     url: url,
@@ -190,7 +190,7 @@ function edit(id) {
         $('#form input[name=_method]').val('PATCH');
         $('#span').removeAttr('hidden');
         $.ajax({
-            url: "{{ route('pendapatanRincianAset.edit', ':id') }}".replace(':id', id),
+            url: "{{ route('pendapatan.rincianAset.edit', ':id') }}".replace(':id', id),
             type: "GET",
             dataType: "JSON",
             success: function (data) {
@@ -219,7 +219,7 @@ function edit(id) {
                             btnClass: 'btn-primary',
                             keys: ['enter'],
                             action: function () {
-                                document.location.href = "{{ route('pendapatanRincianAset.index') }}";
+                                document.location.href = "{{ route('pendapatan.rincianAset.index') }}";
                             }
                         }
                     }
@@ -245,7 +245,7 @@ function remove(id) {
                 action: function () {
                     var csrf_token = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: "{{ route('pendapatanRincianAset.destroy', ':id') }}".replace(':id', id),
+                        url: "{{ route('pendapatan.rincianAset.destroy', ':id') }}".replace(':id', id),
                         type: "POST",
                         data: {
                             '_method': 'DELETE',
