@@ -13,7 +13,9 @@ class Tm_pendapatan extends Model
         'n_aset',
         'tmmaster_aset_id',
         'nilai',
-        'tgl_pendapatan'
+        'tgl_pendapatan',
+        'tmjenis_aset_id',
+        'tmjenis_aset_rincian_id'
     ];
 
     public function pegawai()
@@ -24,5 +26,15 @@ class Tm_pendapatan extends Model
     public function tmmasterAset()
     {
         return $this->belongsTo(Tm_master_aset::class);
+    }
+
+    public function tmJenisAset()
+    {
+        return $this->belongsTo(Tmjenis_aset::class, 'tmjenis_aset_id');
+    }
+
+    public function tmJenisAsetRincian()
+    {
+        return $this->belongsTo(Tmjenis_aset_rincian::class, 'tmjenis_aset_rincian_id');
     }
 }

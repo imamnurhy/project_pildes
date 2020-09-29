@@ -24,13 +24,14 @@ Route::prefix('home')->group(function () {
 /* MASTER INCOME */
 Route::prefix('pendapatan')->namespace('Income')->name('pendapatan.')->group(function () {
     Route::get('personal/api', 'PendapatanPersonalController@api')->name('personal.api');
-    Route::get('Personal/getJenisAset/{id}', 'PendapatanPersonalController@getJenisAset')->name('personal.getJenisAset');
-    Route::get('Personal/getMasterAset/{id}', 'PendapatanPersonalController@getMasterAset')->name('personal.getMasterAset');
+    Route::get('personal/getJenisAset/{id}', 'PendapatanPersonalController@getJenisAset')->name('personal.getJenisAset');
+    Route::get('personal/getRincianAset/{id}', 'PendapatanPersonalController@getRincianAset')->name('personal.getRincianAset');
 
     Route::resource('personal', 'PendapatanPersonalController');
 
     Route::get('aset/api', 'PendapatanAsetController@api')->name('aset.api');
     Route::get('aset/getJenisAset/{id}', 'PendapatanAsetController@getJenisAset')->name('aset.getJenisAset');
+    Route::get('aset/getRincianAset/{id}', 'PendapatanAsetController@getRincianAset')->name('aset.getRincianAset');
     Route::resource('aset', 'PendapatanAsetController');
 
     Route::get('rincianAset/api', 'PendapatanRincianAsetController@api')->name('rincianAset.api');
@@ -39,9 +40,15 @@ Route::prefix('pendapatan')->namespace('Income')->name('pendapatan.')->group(fun
 
 /* MASTER REPORT */
 Route::namespace('Report')->name('report.')->group(function () {
-    Route::get('reportAset', 'ReportController@reportAset')->name('aset');
-    Route::get('reportAset/getAsetRincian/{id}', 'ReportController@getAsetRincian')->name('getAsetRincian');
-    Route::get('reportAset/api', 'ReportController@reportAsetApi')->name('aset.api');
+    Route::get('report/aset', 'ReportController@reportAset')->name('aset.index');
+    Route::get('report/aset/getAsetRincian/{id}', 'ReportController@getAsetRincian')->name('getAsetRincian');
+    Route::get('report/aset/detail/{id}', 'ReportController@reportAsetDetail')->name('aset.detail');
+    Route::get('report/aset/detail/api/{id}', 'ReportController@reportAsetDetailApi')->name('aset.detail.api');
+    Route::get('report/aset/api', 'ReportController@reportAsetApi')->name('aset.api');
+
+    Route::get('report/pemilik', 'ReportController@reportPemilik')->name('pemilik.index');
+    Route::get('report/pemilik/api', 'ReportController@reportPemilikApi')->name('pemilik.api');
+    Route::get('report/aset/exportPdf', 'ReportController@reportPemilikExportPdf')->name('pemilik.exportPdf');
 });
 
 /* MASTER JENIS ASET */

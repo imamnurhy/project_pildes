@@ -34,24 +34,12 @@
                                         <strong><i class="icon-filter"></i> FILTER</strong>
                                     </div>
                                 </div>
-                                <div class="col-md-2 pr-0">
-                                    <div class="bg-light" width="100%">
-                                        <select name="pegawai_id" id="pegawai_id" placeholder="Semua"
-                                            class="form-control r-0 light s-12 col-md-12 custom-select select2"
-                                            autocomplete="off">
-                                            <option value="99">Pemilik : Semua</option>
-                                            @foreach ($pegawais as $item)
-                                            <option value="{{ $item->id }}">{{ $item->n_pegawai }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
 
                                 <div class="col-md-2 pr-0">
                                     <div class="bg-light" width="100%">
                                         <select name="tmjenis_aset_id" id="tmjenis_aset_id" placeholder="Semua"
                                             class="form-control r-0 light s-12 col-md-12 custom-select select2"
-                                            autocomplete="off" onchange="getAsetRincian()">
+                                            autocomplete="off">
                                             <option value="99">Jenis Aset : Semua</option>
                                             @foreach ($tmJenisAsets as $item)
                                             <option value="{{ $item->id }}">{{ $item->n_jenis_aset }}</option>
@@ -60,29 +48,6 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-2 pr-0">
-                                    <div class="bg-light" width="100%">
-                                        <select name="tmjenis_aset_rincian_id" id="tmjenis_aset_rincian_id"
-                                            placeholder="Semua"
-                                            class="form-control r-0 light s-12 col-md-12 custom-select select2"
-                                            autocomplete="off">
-                                            <option value="99">Rincian Aset : Semua</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2 pr-0">
-                                    <div class="bg-light" width="100%">
-                                        <select name="tgl_pendapatan" id="tgl_pendapatan" placeholder="Semua"
-                                            class="form-control r-0 light s-12 col-md-12 custom-select select2"
-                                            autocomplete="off">
-                                            <option value="99">Tahun Pendapatan : Semua</option>
-                                            <option value="2018">2018</option>
-                                            <option value="2019">2019</option>
-                                            <option value="2020">2020</option>
-                                        </select>
-                                    </div>
-                                </div>
 
                                 <div class="col-md-1">
                                     <a class="btn btn-sm" id="btnFilter" title="Reset Filter" style="display:none"
@@ -95,13 +60,10 @@
                         <div class="table-responsive">
                             <table id="report-table" class="table table-striped no-b" style="width:100%">
                                 <thead>
-                                    <th width="30">No</th>
-                                    <th width="150">Pemilik</th>
+                                    <th width="10">No</th>
                                     <th>Jenis Aset</th>
-                                    <th>Ricinan Aset</th>
-                                    <th>Aset</th>
-                                    <th>Nilai</th>
-                                    <th>Tanggal</th>
+                                    <th>Jumlah Aset</th>
+                                    <th>Total Pendapatan</th>
                                 </thead>
                                 <tbody></tbody>
                             </table>
@@ -130,14 +92,11 @@
             url: "{{ route('report.aset.api')}}",
             method: 'GET',
             data: function (data) {
-                data.pegawai_id = $('#pegawai_id').val();
                 data.tmjenis_aset_id = $('#tmjenis_aset_id').val();
-                data.tmjenis_aset_rincian_id = $('#tmjenis_aset_rincian_id').val();
-                data.tgl_pendapatan = $('#tgl_pendapatan').val();
             },
         },
         dom: 'Bfrtip',
-        buttons: ['excel', 'pdf'],
+        buttons: ['excelHtml5' , 'pdfHtml5'],
         columns: [
             {
             data: 'id',
@@ -147,28 +106,19 @@
             className: 'text-center',
             },
             {
-                data: 'n_pegawai',
-                name: 'n_pegawai'
+                data: 'tm_jenis_aset.n_jenis_aset',
+                name: 'tm_jenis_aset.n_jenis_aset',
+                width: '50%'
             },
             {
-                data: 'tmmaster_aset.tm_jenis_aset.n_jenis_aset',
-                name: 'tmmaster_aset.tm_jenis_aset.n_jenis_aset',
+                data: 'jml_aset',
+                name: 'jml_aset',
+                width: '25%'
             },
             {
-                data: 'tmmaster_aset.tm_jenis_aset_rincian.n_rincian',
-                name: 'tmmaster_aset.tm_jenis_aset_rincian.n_rincian',
-            },
-            {
-                data: 'n_aset',
-                name: 'n_aset'
-            },
-            {
-                data: 'nilai',
-                name: 'nilai'
-            },
-            {
-                data: 'tgl_pendapatan',
-                name: 'tgl_pendapatan'
+                data: 'ttl_pendapatan',
+                name: 'ttl_pendapatan',
+                width: '25%'
             }
          ]
     });
@@ -182,7 +132,7 @@
         });
     });
 
-    $('#pegawai_id, #tmjenis_aset_id, #tmjenis_aset_rincian_id, #tgl_pendapatan').change(function(){
+    $('#tmjenis_aset_id').change(function(){
         if ($(this).val() == '99') {
             $('.formFilter').removeClass('active');
             $('#btnFilter').hide();
@@ -194,24 +144,22 @@
     });
 
     function filterReset() {
-        $('#pegawai_id').val('99').change();
         $('#tmjenis_aset_id').val('99').change();
-        $('#tmjenis_aset_rincian_id').val('99').change();
-        $('#tgl_pendapatan').val('99').change();
         table.api().draw();
     }
 
     function getAsetRincian(id) {
-        var id = $('#tmjenis_aset_id').val();
         option = "<option value='99'>Rincian Aset : semua</li>";
         $('#tmjenis_aset_rincian_id').html("<option value=''>Loading...</option>");
-        url = "{{ route('report.getAsetRincian', ':id') }}".replace(':id', id);
+        url = "{{ route('report.getAsetRincian', ':id') }}".replace(':id', $('#tmjenis_aset_id').val());
         $.get(url, function (data) {
             $.each(data, function (index, value) {
                 option += "<option value='" + value.id + "'>" + value.n_rincian + "</li>";
             });
             $('#tmjenis_aset_rincian_id').html(option);
-        }, 'JSON');
+        }, 'JSON').done(function(){
+            $('#tmjenis_aset_rincian_id').val(id);
+        });
     }
 
 </script>

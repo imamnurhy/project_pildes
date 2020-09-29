@@ -71,24 +71,26 @@
                                     </div>
 
                                     <div class="form-group mb-1">
-                                        <label for="tmmaster_aset_id" class="col-form-label s-12 col-md-4">Jenis
+                                        <label for="tmjenis_aset_id" class="col-form-label s-12 col-md-4">Jenis
                                             Asset</label>
-                                        <select name="tmmaster_aset_id" id="tmmaster_aset_id" placeholder=""
+                                        <select name="tmjenis_aset_id" id="tmjenis_aset_id" placeholder=""
                                             class="form-control  r-0 s-12 col-md-8" autocomplete="off" required
-                                            onchange="getJenisAset()">
+                                            onchange="getRincianAset()">
                                             <option value="">Pilih</option>
-                                            @foreach ($tmmaster_asets as $tmmaster_aset)
-                                            <option value="{{ $tmmaster_aset->id }}">
-                                                {{ $tmmaster_aset->n_jenis_aset . '/' . $tmmaster_aset->n_rincian }}
+                                            @foreach ($tmJenisAsets as $item)
+                                            <option value="{{ $item->id }}">
+                                                {{ $item->n_jenis_aset }}
                                             </option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <div class="form-group mb-1">
-                                        <label for="n_aset" class="col-form-label s-12 col-md-4">aset</label>
-                                        <select name="n_aset" id="n_aset" placeholder=""
-                                            class="form-control  r-0 s-12 col-md-8" autocomplete="off" required>
+                                        <label for="tmjenis_aset_rincian_id"
+                                            class="col-form-label s-12 col-md-4">aset</label>
+                                        <select name="tmjenis_aset_rincian_id" id="tmjenis_aset_rincian_id"
+                                            placeholder="" class="form-control  r-0 s-12 col-md-8" autocomplete="off"
+                                            required>
                                             <option value="">Pilih</option>
                                         </select>
                                     </div>
@@ -147,12 +149,12 @@
                 name: 'n_pegawai'
             },
             {
-                data: 'tmmaster_aset.tm_jenis_aset.n_jenis_aset',
-                name: 'tmmaster_aset.tm_jenis_aset.n_jenis_aset'
+                data: 'tm_jenis_aset.n_jenis_aset',
+                name: 'tm_jenis_aset.n_jenis_aset'
             },
             {
-                data: 'n_aset',
-                name: 'n_aset'
+                data: 'tm_jenis_aset_rincian.n_rincian',
+                name: 'tm_jenis_aset_rincian.n_rincian'
             },
             {
                 data: 'nilai',
@@ -227,110 +229,110 @@
         }
         $(this).addClass('was-validated');
     });
-        function edit(id) {
-            save_method = 'edit';
-            $('#alert').html('');
-            $('#formTitle').html("Mohon tunggu beberapa saat...");
-            $('#txtAction').html(" Perubahan");
-            $('#reset').hide();
-            $('#form input[name=_method]').val('PATCH');
-            $('#span').removeAttr('hidden');
-            $.ajax({
-                url: "{{ route('pendapatan.personal.edit', ':id') }}".replace(':id', id),
-                type: "GET",
-                dataType: "JSON",
-                success: function (data) {
-                    console.log(data);
-                    $('#formTitle').html("Edit Data <a href='#' onclick='add()' class='btn btn-outline-primary btn-xs pull-right'>Batal</a>");
-                    $('#form').show();
-                    $('#id').val(data.id);
-                    $('#pegawai_id').val(data.pegawai_id);
-                    $('#tmmaster_aset_id').val(data.tmmaster_aset_id);
-                    getJenisAset(data.n_aset);
-                    $('#nilai').val(data.nilai);
-                    $('#tgl_pendapatan').val(data.tgl_pendapatan);
-                },
-                error: function () {
-                    console.log("Nothing Data");
-                    $.confirm({
-                        title: '',
-                        content: 'Terdapat kesalahan saat mengirim data.',
-                        icon: 'icon icon-all_inclusive',
-                        theme: 'supervan',
-                        closeIcon: true,
-                        animation: 'scale',
-                        type: 'orange',
-                        autoClose: 'ok|10000',
-                        escapeKey: 'cancelAction',
-                        buttons: {
-                            ok: {
-                                text: "ok!",
-                                btnClass: 'btn-primary',
-                                keys: ['enter'],
-                                action: function () {
-                                    document.location.href = "{{ route('pendapatan.personal.index') }}";
-                                }
+
+    function edit(id) {
+        save_method = 'edit';
+        $('#alert').html('');
+        $('#formTitle').html("Mohon tunggu beberapa saat...");
+        $('#txtAction').html(" Perubahan");
+        $('#reset').hide();
+        $('#form input[name=_method]').val('PATCH');
+        $('#span').removeAttr('hidden');
+        $.ajax({
+            url: "{{ route('pendapatan.personal.edit', ':id') }}".replace(':id', id),
+            type: "GET",
+            dataType: "JSON",
+            success: function (data) {
+                console.log(data);
+                $('#formTitle').html("Edit Data <a href='#' onclick='add()' class='btn btn-outline-primary btn-xs pull-right'>Batal</a>");
+                $('#form').show();
+                $('#id').val(data.id);
+                $('#pegawai_id').val(data.pegawai_id);
+                $('#tmjenis_aset_id').val(data.tmjenis_aset_id);
+                getRincianAset(data.tmjenis_aset_rincian_id);
+                $('#nilai').val(data.nilai);
+                $('#tgl_pendapatan').val(data.tgl_pendapatan);
+            },
+            error: function () {
+                console.log("Nothing Data");
+                $.confirm({
+                    title: '',
+                    content: 'Terdapat kesalahan saat mengirim data.',
+                    icon: 'icon icon-all_inclusive',
+                    theme: 'supervan',
+                    closeIcon: true,
+                    animation: 'scale',
+                    type: 'orange',
+                    autoClose: 'ok|10000',
+                    escapeKey: 'cancelAction',
+                    buttons: {
+                        ok: {
+                            text: "ok!",
+                            btnClass: 'btn-primary',
+                            keys: ['enter'],
+                            action: function () {
+                                document.location.href = "{{ route('pendapatan.personal.index') }}";
                             }
                         }
-                    });
-                }
-            })
-        }
-
-        function remove(id) {
-            $.confirm({
-                title: '',
-                content: 'Apakah Anda yakin akan menghapus data ini?',
-                icon: 'icon icon-question amber-text',
-                theme: 'modern',
-                closeIcon: true,
-                animation: 'scale',
-                type: 'red',
-                buttons: {
-                    ok: {
-                        text: "ok!",
-                        btnClass: 'btn-primary',
-                        keys: ['enter'],
-                        action: function () {
-                            var csrf_token = $('meta[name="csrf-token"]').attr('content');
-                            $.ajax({
-                                url: "{{ route('pendapatan.personal.destroy', ':id') }}".replace(':id', id),
-                                type: "POST",
-                                data: {
-                                    '_method': 'DELETE',
-                                    '_token': csrf_token
-                                },
-                                success: function (data) {
-                                    table.api().ajax.reload();
-                                    $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success! </strong>" + data.message + "</div>");
-                                },
-                                error: function () {
-                                    console.log('Opssss...');
-                                    reload();
-                                }
-                            });
-                        }
-                    },
-                    cancel: function () {
-                        console.log('the user clicked cancel');
                     }
-                }
-            });
-        }
-
-        function getJenisAset(n_aset) {
-            var id = $('#tmmaster_aset_id').val();
-            option = " <option value=''> Pilih </option>";
-            $('#n_aset').html("<option value=''>Loading...</option>");
-            url = "{{ route('pendapatan.personal.getJenisAset', ':id') }}".replace(':id', id);
-            $.get(url, function (data) {
-                $.each(data, function (index, value) {
-                    option += "<option value='" + value.n_aset + "'>" + value.n_aset + "</li>";
                 });
-                $('#n_aset').html(option);
-            }, 'JSON').done(function () {
-                $('#n_aset').val(n_aset);
+            }
+        })
+    }
+
+    function remove(id) {
+        $.confirm({
+            title: '',
+            content: 'Apakah Anda yakin akan menghapus data ini?',
+            icon: 'icon icon-question amber-text',
+            theme: 'modern',
+            closeIcon: true,
+            animation: 'scale',
+            type: 'red',
+            buttons: {
+                ok: {
+                    text: "ok!",
+                    btnClass: 'btn-primary',
+                    keys: ['enter'],
+                    action: function () {
+                        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                        $.ajax({
+                            url: "{{ route('pendapatan.personal.destroy', ':id') }}".replace(':id', id),
+                            type: "POST",
+                            data: {
+                                '_method': 'DELETE',
+                                '_token': csrf_token
+                            },
+                            success: function (data) {
+                                table.api().ajax.reload();
+                                $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success! </strong>" + data.message + "</div>");
+                            },
+                            error: function () {
+                                console.log('Opssss...');
+                                reload();
+                            }
+                        });
+                    }
+                },
+                cancel: function () {
+                    console.log('the user clicked cancel');
+                }
+            }
+        });
+    }
+
+    function getRincianAset(id) {
+        option = " <option value=''> Pilih </option>";
+        $('#tmjenis_aset_rincian_id').html("<option value=''>Loading...</option>");
+        url = "{{ route('pendapatan.personal.getRincianAset', ':id') }}".replace(':id', $('#tmjenis_aset_id').val());
+        $.get(url, function (data) {
+            $.each(data, function (index, value) {
+                option += "<option value='" + value.id + "'>" + value.n_rincian + "</li>";
             });
-        }
+            $('#tmjenis_aset_rincian_id').html(option);
+        }, 'JSON').done(function () {
+            $('#tmjenis_aset_rincian_id').val(id);
+        });
+    }
 </script>
 @endsection

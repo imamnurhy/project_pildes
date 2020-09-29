@@ -107,8 +107,13 @@
     @can('master-report')
     <li class="header light"><strong>LAPORAN</strong></li>
     <li>
-        <a href="{{ route('report.aset') }}">
-            <i class="icon icon-report blue-text s-18"></i> <span>Pendapatan Personal<span>
+        <a href="{{ route('report.pemilik.index') }}">
+            <i class="icon icon-report blue-text s-18"></i> <span>Pendapatan Pemilik<span>
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('report.aset.index') }}">
+            <i class="icon icon-report blue-text s-18"></i> <span>Pendapatan Jenis Aset<span>
         </a>
     </li>
     @endcan

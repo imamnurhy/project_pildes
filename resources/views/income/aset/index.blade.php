@@ -57,28 +57,38 @@
 
                             <div class="form-row form-inline">
                                 <div class="col-md-8">
+
                                     <div class="form-group mb-1">
-                                        <label for="tmmaster_aset_id" class="col-form-label s-12 col-md-4">Jenis
-                                            Asset</label>
-                                        <select name="tmmaster_aset_id" id="tmmaster_aset_id" placeholder=""
+                                        <label for="tmjenis_aset_id" class="col-form-label s-12 col-md-4">Jenis
+                                            Aset</label>
+                                        <select name="tmjenis_aset_id" id="tmjenis_aset_id" placeholder=""
                                             class="form-control  r-0 s-12 col-md-8" autocomplete="off" required
-                                            onchange="getJenisAset()">
+                                            onchange="getRincianAset()">
                                             <option value="">Pilih</option>
-                                            @foreach ($tmmaster_asets as $tmmaster_aset)
-                                            <option value="{{ $tmmaster_aset->id }}">
-                                                {{ $tmmaster_aset->n_jenis_aset . '/' . $tmmaster_aset->n_rincian }}
-                                            </option>
+                                            @foreach ($tmJenisAsets as $item)
+                                            <option value="{{ $item->id }}">{{ $item->n_jenis_aset }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <div class="form-group mb-1">
+                                        <label for="tmjenis_aset_rincian_id" class="col-form-label s-12 col-md-4">
+                                            Rincian Asset</label>
+                                        <select name="tmjenis_aset_rincian_id" id="tmjenis_aset_rincian_id"
+                                            placeholder="" class="form-control  r-0 s-12 col-md-8" autocomplete="off"
+                                            required>
+                                            <option value="">Pilih</option>
+                                        </select>
+                                    </div>
+
+                                    {{-- <div class="form-group mb-1">
                                         <label for="n_aset" class="col-form-label s-12 col-md-4">aset</label>
                                         <select name="n_aset" id="n_aset" placeholder=""
                                             class="form-control  r-0 s-12 col-md-8" autocomplete="off" required>
                                             <option value="">Pilih</option>
                                         </select>
-                                    </div>
+                                    </div> --}}
+
                                     <hr>
 
                                     <div id="input_form" style="display: block">
@@ -177,12 +187,12 @@
                 className: 'text-center'
             },
             {
-                data: 'tm_master_aset.tm_jenis_aset.n_jenis_aset',
-                name: 'tm_master_aset.tm_jenis_aset.n_jenis_aset'
+                data: 'tm_jenis_aset.n_jenis_aset',
+                name: 'tm_jenis_aset.n_jenis_aset'
             },
             {
-                data: 'n_aset',
-                name: 'n_aset'
+                data: 'tm_jenis_aset_rincian.n_rincian',
+                name: 'tm_jenis_aset_rincian.n_rincian'
             },
             {
                 data: 'tgl_pendapatan',
@@ -403,6 +413,21 @@
         $('.addBtnFrm').hide();
         $('#input_form'+id).remove();
         $('.addBtnFrm').last().show();
+    }
+
+    function getRincianAset(id) {
+        option = " <option value=''> Pilih </option>";
+        $('#tmjenis_aset_rincian_id').html("<option value=''>Loading...</option>");
+        url = "{{ route('pendapatan.aset.getRincianAset', ':id') }}".replace(':id', $('#tmjenis_aset_id').val());
+        $.get(url, function (data) {
+            console.log(data);
+            $.each(data, function (index, value) {
+                option += "<option value='" + value.id + "'>" + value.n_rincian + "</li>";
+            });
+            $('#tmjenis_aset_rincian_id').html(option);
+        }, 'JSON').done(function (){
+            $('#tmjenis_aset_rincian_id').val(id);
+        });
     }
 
     function getJenisAset(n_aset) {

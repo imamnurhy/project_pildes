@@ -10,6 +10,7 @@ use App\Models\Tm_pendapatan;
 use App\Models\Tmaset_barang;
 use App\Models\Tmaset_tanah;
 use App\Models\Tmjenis_aset;
+use App\Models\Tmjenis_aset_rincian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -58,20 +59,21 @@ class PendapatanPersonalController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tmmaster_aset_id' => 'required',
-            'n_aset'           => 'required',
-            'nilai'           => 'required',
+            'tmjenis_aset_id'         => 'required',
+            'tmjenis_aset_rincian_id' => 'required',
+            'nilai'                   => 'required',
+            'tmjenis_aset_id'         => 'required'
         ]);
 
         $pegawai = Pegawai::find($request->pegawai_id);
 
         Tm_pendapatan::create([
-            'pegawai_id'       => $request->pegawai_id,
-            'n_pegawai'        => $pegawai->n_pegawai,
-            'tmmaster_aset_id' => $request->tmmaster_aset_id,
-            'n_aset'           => $request->n_aset,
-            'nilai'            => $request->nilai,
-            'tgl_pendapatan'   => $request->tgl_pendapatan
+            'pegawai_id'              => $request->pegawai_id,
+            'n_pegawai'               => $pegawai->n_pegawai,
+            'tmjenis_aset_id'         => $request->tmjenis_aset_id,
+            'tmjenis_aset_rincian_id' => $request->tmjenis_aset_rincian_id,
+            'nilai'                   => $request->nilai,
+            'tgl_pendapatan'          => $request->tgl_pendapatan,
         ]);
 
         return response()->json([
@@ -102,19 +104,24 @@ class PendapatanPersonalController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'tmmaster_aset_id' => 'required',
+            'tmjenis_aset_id' => 'required',
             'nilai'           => 'required',
+            'tmjenis_aset_id' => 'required',
         ]);
 
         $tm_pendapatan = Tm_pendapatan::find($id);
+        $pegawai = Pegawai::find($request->pegawai_id);
+
 
         $tm_pendapatan->update([
-            'pegawai_id'       => Auth::user()->pegawai->id,
-            'n_pegawai'        => Auth::user()->pegawai->n_pegawai,
-            'tmmaster_aset_id' => $request->tmmaster_aset_id,
-            'n_aset'           => $request->n_aset,
-            'nilai'            => $request->nilai,
-            'tgl_pendapatan'   => $request->tgl_pendapatan
+            'pegawai_id'              => $request->pegawai_id,
+            'n_pegawai'               => $pegawai->n_pegawai,
+            'tmjenis_aset_id'         => $request->tmjenis_aset_id,
+            'tmjenis_aset_rincian_id' => $request->tmjenis_aset_rincian_id,
+            'nilai'                   => $request->nilai,
+            'tgl_pendapatan'          => $request->tgl_pendapatan,
+            'tmjenis_aset_id'         => $request->tmjenis_aset_id,
+
         ]);
 
         return response()->json([
@@ -146,7 +153,7 @@ class PendapatanPersonalController extends Controller
      */
     public function api()
     {
-        $tm_pendapatan = Tm_pendapatan::with('tmmasterAset.tmJenisAset')->get();
+        $tm_pendapatan = Tm_pendapatan::with('tmJenisAset', 'tmJenisAsetRincian')->get();
 
         return DataTables::of($tm_pendapatan)
             ->addColumn('action', function ($p) {
@@ -179,15 +186,17 @@ class PendapatanPersonalController extends Controller
         }
     }
 
-    public function getMasterAset($id)
+    public function getRincianAset($id)
     {
-        return DB::table('tmmaster_asset')
-            ->select(
-                'tmmaster_asset.id',
-                'tmjenis_aset_rincians.n_rincian'
-            )
-            ->join('tmjenis_aset_rincians', 'tmmaster_asset.id_rincian_jenis_asset', 'tmjenis_aset_rincians.id')
-            ->where('tmmaster_asset.id_jenis_asset', $id)
-            ->get();
+        // return DB::table('tmmaster_asset')
+        //     ->select(
+        //         'tmmaster_asset.id',
+        //         'tmjenis_aset_rincians.n_rincian'
+        //     )
+        //     ->join('tmjenis_aset_rincians', 'tmmaster_asset.id_rincian_jenis_asset', 'tmjenis_aset_rincians.id')
+        //     ->where('tmmaster_asset.id_jenis_asset', $id)
+        //     ->get();
+
+        return Tmjenis_aset_rincian::where('tmjenis_aset_id', $id)->get();
     }
 }
