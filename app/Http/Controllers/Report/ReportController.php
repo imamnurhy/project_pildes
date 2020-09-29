@@ -25,17 +25,15 @@ class ReportController extends Controller
 
     public function reportAsetApi(Request $request)
     {
-        $tm_pendapatan = Tm_pendapatan::select('id', DB::raw('sum(nilai) nilai'), 'tmjenis_aset_id')->with('tmJenisAset')->groupBy('tmjenis_aset_id');
-
+        $tm_pendapatan = Tm_pendapatan::select('id', DB::raw('sum(nilai) nilai'), 'tmjenis_aset_id', 'tmjenis_aset_rincian_id', DB::raw('count(*) as total'))->with('tmJenisAset')->groupBy('tmjenis_aset_id');
 
         if ($request->tmjenis_aset_id != '99') {
-            $tm_pendapatan->whereHas('tmmasterAset', function ($q) use ($request) {
-                return $q->where('id_jenis_asset', '=', $request->tmjenis_aset_id);
-            });
+            $tm_pendapatan->where('tmjenis_aset_id', $request->tmjenis_aset_id);
         }
+
         return DataTables::of($tm_pendapatan)
             ->editColumn('jml_aset', function ($p) {
-                return $p->count();
+                return $p->total;
             })
             ->editColumn('ttl_pendapatan', function ($p) {
                 $ttl_nilai = 0;
