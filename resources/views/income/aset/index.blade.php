@@ -290,8 +290,8 @@
                 $('#formTitle').html("Edit Data  <a href='#' onclick='add()' class='btn btn-outline-primary btn-xs pull-right'>Batal</a>");
                 $('#form').show();
                 $('#id').val(data.id);
-                $('#tmmaster_aset_id').val(data.tmmaster_aset_id).trigger('change');
-                getJenisAset(data.n_aset);
+                $('#tmjenis_aset_id').val(data.tmjenis_aset_id);
+                getRincianAset(data.tmjenis_aset_rincian_id);
                 $('#tahun_e').val(data.tahun);
                 $('#tgl_pendapatan_e').val(data.tgl_pendapatan);
                 $('#nilai_e').val(data.nilai);
@@ -418,7 +418,6 @@
         $('#tmjenis_aset_rincian_id').html("<option value=''>Loading...</option>");
         url = "{{ route('pendapatan.aset.getRincianAset', ':id') }}".replace(':id', $('#tmjenis_aset_id').val());
         $.get(url, function (data) {
-            console.log(data);
             $.each(data, function (index, value) {
                 option += "<option value='" + value.id + "'>" + value.n_rincian + "</li>";
             });
@@ -426,8 +425,10 @@
         }, 'JSON').done(function (){
             $('#tmjenis_aset_rincian_id').val(id);
         });
+    }
 
-        if($('#tmjenis_aset_id').val() ==  29){
+    $('#tmjenis_aset_id').on('change', function(){
+        if ($(this).val() == 29) {
             $('#input_form').hide();
             $('#input_form_pt').show();
             $('#form_type').val(2);
@@ -436,7 +437,7 @@
             $('#input_form_pt').hide();
             $('#form_type').val(1);
         }
-    }
+    });
 
     function getJenisAset(n_aset) {
         option = " <option value=''> Pilih </option>";

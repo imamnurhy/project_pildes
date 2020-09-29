@@ -48,8 +48,6 @@ class PendapatanAsetController extends Controller
      */
     public function store(Request $request)
     {
-
-
         if ($request->form_type == 1) {
             $request->validate([
                 'tmjenis_aset_id'         => 'required',
@@ -71,10 +69,15 @@ class PendapatanAsetController extends Controller
                 'tmjenis_aset_rincian_id' => 'required',
                 'no_index'                => 'required',
             ]);
+
+            $tmPenghasilanAset = Tm_penghasilan_aset::create([
+                'tmjenis_aset_id'         => $request->tmjenis_aset_id,
+                'tmjenis_aset_rincian_id' => $request->tmjenis_aset_rincian_id,
+            ]);
+
             foreach ($request->no_index as $key => $value) {
-                Tm_penghasilan_aset::create([
-                    'tmjenis_aset_id'         => $request->tmjenis_aset_id,
-                    'tmjenis_aset_rincian_id' => $request->tmjenis_aset_rincian_id,
+                $tmPenghasilanAset->tmPenghasilanAsetPt()->create([
+                    'tm_penghasilan_aset_id'  => $tmPenghasilanAset->id,
                     'no_index'                => $request->no_index[$key],
                     'jenis_doc'               => $request->jenis_doc[$key],
                     'nm_pekerjaan'            => $request->nm_pekerjaan[$key],
@@ -90,8 +93,6 @@ class PendapatanAsetController extends Controller
                 ]);
             }
         }
-
-
 
         return response()->json([
             'success' => 1,

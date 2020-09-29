@@ -22,4 +22,9 @@ class Tm_penghasilan_aset extends Model
     {
         return $this->belongsTo(Tmjenis_aset_rincian::class, 'tmjenis_aset_rincian_id');
     }
+
+    public function tmPenghasilanAsetPt()
+    {
+        return $this->belongsTo(Tm_penghasilan_aset_pt::class, 'tm_penghasilan_aset_id');
+    }
 }
