@@ -14,7 +14,7 @@
         }
     </style>
     <center>
-        <h5>Laporan pendapatan</h4>
+        <h5>PENGHASILAN TERKAIT PEKERJAAN/JABATAN</h4>
         </h5>
     </center>
 

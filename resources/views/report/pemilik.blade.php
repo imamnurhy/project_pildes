@@ -54,11 +54,11 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="card-body">
+                    <div class="card-body">
                         <a id="btn_report" class="btn btn-primary">
-                            Laporan
+                            <span id="btn_report_text">Laporan</span>
                         </a>
-                    </div> --}}
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="report-table" class="table table-striped no-b" style="width:100%">
@@ -104,8 +104,6 @@
                 data.pegawai_id = $('#pegawai_id').val();
             },
         },
-        dom: 'Bfrtip',
-        buttons: ['excel', 'pdf'],
         columns: [
             {
             data: 'id',
@@ -130,7 +128,6 @@
         drawCallback: function () {
                 var api = this.api(),
                     data;
-                console.log(api);
                 // Remove the formatting to get integer data for summation
                 var intVal = function (i) {
                     return typeof i === 'string' ?
@@ -187,6 +184,7 @@
     }
 
     $('#btn_report').on('click', function (e) {
+        $('#btn_report_text').html('Tunggu sebentar ...');
         $.ajax({
             url: "{{ route('report.pemilik.exportPdf') }}",
             method: 'GET',
@@ -194,6 +192,7 @@
                 pegawai_id: $('#pegawai_id').val(),
             },
             success: function (data) {
+                $('#btn_report_text').html('Laporan');
                 window.open(data,'_blank');
             },
             error: function () {

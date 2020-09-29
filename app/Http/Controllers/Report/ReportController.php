@@ -8,6 +8,7 @@ use App\Models\Pegawai;
 use App\Models\Tm_pendapatan;
 use App\Models\Tmjenis_aset;
 use App\Models\Tmjenis_aset_rincian;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Yajra\DataTables\Facades\DataTables;
@@ -103,10 +104,9 @@ class ReportController extends Controller
         }
 
         $pdf = PDF::loadview('report._export._pemilik', ['tm_pendapatan' => $tm_pendapatan]);
-        $pdf_file = 'ex.pdf';
-
-        $pdf_path = $pdf_file;
-
+        $date = Carbon::now();
+        $pdf_file = $date . '_report_pemilik.pdf';
+        $pdf_path = 'pdf/' . $pdf_file;
         $pdf->save($pdf_path);
 
         return asset($pdf_path);

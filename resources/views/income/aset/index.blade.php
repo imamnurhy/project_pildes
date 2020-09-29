@@ -52,17 +52,18 @@
                             @csrf
                             {{ method_field('POST') }}
                             <input type="hidden" id="id" name="id" />
+                            <input type="hidden" name="form_type" id="form_type" value="1">
                             <h4 id="formTitle">Tambah Data</h4>
                             <hr>
 
                             <div class="form-row form-inline">
-                                <div class="col-md-8">
+                                <div class="col-md-6">
 
                                     <div class="form-group mb-1">
                                         <label for="tmjenis_aset_id" class="col-form-label s-12 col-md-4">Jenis
                                             Aset</label>
                                         <select name="tmjenis_aset_id" id="tmjenis_aset_id" placeholder=""
-                                            class="form-control  r-0 s-12 col-md-8" autocomplete="off" required
+                                            class="form-control  r-0 s-12 col-md-6" autocomplete="off" required
                                             onchange="getRincianAset()">
                                             <option value="">Pilih</option>
                                             @foreach ($tmJenisAsets as $item)
@@ -75,27 +76,17 @@
                                         <label for="tmjenis_aset_rincian_id" class="col-form-label s-12 col-md-4">
                                             Rincian Asset</label>
                                         <select name="tmjenis_aset_rincian_id" id="tmjenis_aset_rincian_id"
-                                            placeholder="" class="form-control  r-0 s-12 col-md-8" autocomplete="off"
+                                            placeholder="" class="form-control  r-0 s-12 col-md-6" autocomplete="off"
                                             required>
                                             <option value="">Pilih</option>
                                         </select>
                                     </div>
 
-                                    {{-- <div class="form-group mb-1">
-                                        <label for="n_aset" class="col-form-label s-12 col-md-4">aset</label>
-                                        <select name="n_aset" id="n_aset" placeholder=""
-                                            class="form-control  r-0 s-12 col-md-8" autocomplete="off" required>
-                                            <option value="">Pilih</option>
-                                        </select>
-                                    </div> --}}
-
-                                    <hr>
-
                                     <div id="input_form" style="display: block">
                                         <div class="form-group mb-1">
                                             <label for="tahun" class="col-form-label s-12 col-md-4">Tahun</label>
                                             <input type="text" name="tahun[]" id="tahun" placeholder=""
-                                                class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
+                                                class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
                                         </div>
 
                                         <div class="form-group mb-1">
@@ -103,14 +94,14 @@
                                                 Tgl Pendapatan
                                             </label>
                                             <input type="date" name="tgl_pendapatan[]" id="tgl_pendapatan"
-                                                placeholder="" class="form-control  r-0 s-12 col-md-8"
+                                                placeholder="" class="form-control  r-0 s-12 col-md-6"
                                                 autocomplete="off" />
                                         </div>
 
                                         <div class="form-group mb-1">
                                             <label for="nilai" class="col-form-label s-12 col-md-4"> Nilai </label>
                                             <input type="text" name="nilai[]" id="nilai" placeholder=""
-                                                class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
+                                                class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
                                         </div>
 
                                         <div class="form-group mb-1">
@@ -144,13 +135,19 @@
                                                 class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
                                         </div>
                                     </div>
+                                </div>
 
-
-                                    <div class="card-body offset-md-3">
-                                        <button type="submit" class="btn btn-primary btn-sm" id="action"><i
-                                                class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
-                                        <a class="btn btn-sm" onclick="add()" id="reset">Reset</a>
+                                <div class="col-md-12">
+                                    <div id="input_form_pt" style="display: none">
+                                        @include('income.aset._form_pt')
                                     </div>
+                                </div>
+
+
+                                <div class="card-body offset-md-3">
+                                    <button type="submit" class="btn btn-primary btn-sm" id="action"><i
+                                            class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
+                                    <a class="btn btn-sm" onclick="add()" id="reset">Reset</a>
                                 </div>
                             </div>
                         </form>
@@ -374,9 +371,10 @@
 
         htmlAdd = `
         <div id="input_form`+input_form+`">
+        <hr>
         <div class="form-group mb-1">
             <label for="tahun" class="col-form-label s-12 col-md-4">Tahun</label>
-            <input type="text" name="tahun[]" id="tahun" placeholder="" class="form-control  r-0 s-12 col-md-8"
+            <input type="text" name="tahun[]" id="tahun" placeholder="" class="form-control  r-0 s-12 col-md-6"
                 autocomplete="off" />
         </div>
 
@@ -385,12 +383,12 @@
                 Tgl Pendapatan
             </label>
             <input type="date" name="tgl_pendapatan[]" id="tgl_pendapatan" placeholder=""
-                class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
+                class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
         </div>
 
         <div class="form-group mb-1">
             <label for="nilai" class="col-form-label s-12 col-md-4"> Nilai </label>
-            <input type="text" name="nilai[]" id="nilai" placeholder="" class="form-control  r-0 s-12 col-md-8"
+            <input type="text" name="nilai[]" id="nilai" placeholder="" class="form-control  r-0 s-12 col-md-6"
                 autocomplete="off" />
         </div>
         <div class="form-group">
@@ -428,6 +426,16 @@
         }, 'JSON').done(function (){
             $('#tmjenis_aset_rincian_id').val(id);
         });
+
+        if($('#tmjenis_aset_id').val() ==  29){
+            $('#input_form').hide();
+            $('#input_form_pt').show();
+            $('#form_type').val(2);
+        } else {
+            $('#input_form').show();
+            $('#input_form_pt').hide();
+            $('#form_type').val(1);
+        }
     }
 
     function getJenisAset(n_aset) {
@@ -443,6 +451,119 @@
         }, 'JSON').done(function (){
             $('#n_aset').val(n_aset);
         });
+    }
+
+     var input_form_pt = 1;
+    function addFormPt(){
+        $('.addBtnFrmPt').hide();
+        input_form_pt++;
+
+        htmlAddPt = `
+        <div id="input_form_pt`+input_form_pt+`">
+        <hr>
+        <div class="form-row form-inline">
+            <div class="col-md-6">
+                <div class="form-group mb-1">
+                    <label for="no_index" class="col-form-label s-12 col-md-4">No Index</label>
+                    <input type="text" name="no_index[]" id="no_index" placeholder="" class="form-control  r-0 s-12 col-md-6"
+                        autocomplete="off" />
+                </div>
+
+                <div class="form-group mb-1">
+                    <label for="jenis_doc" class="col-form-label s-12 col-md-4">
+                        Rincian Asset</label>
+                    <select name="jenis_doc[]" id="jenis_doc" placeholder="" class="form-control  r-0 s-12 col-md-6"
+                        autocomplete="off" required>
+                        <option value="">Pilih</option>
+                        <option value="Copy kontrak">Copy kontrak</option>
+                        <option value="Copy SPPD">Copy SPPD</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-1">
+                    <label for="nm_pekerjaan" class="col-form-label s-12 col-md-4">Nm Pekerjaan</label>
+                    <input type="text" name="nm_pekerjaan[]" id="nm_pekerjaan" placeholder=""
+                        class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
+                </div>
+
+                <div class="form-group mb-1">
+                    <label for="klasifikasi" class="col-form-label s-12 col-md-4">Klasifikasi</label>
+                    <input type="text" name="klasifikasi[]" id="klasifikasi" placeholder=""
+                        class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
+                </div>
+
+                <div class="form-group mb-1">
+                    <label for="dinas" class="col-form-label s-12 col-md-4">Dinas</label>
+                    <input type="text" name="dinas[]" id="dinas" placeholder="" class="form-control  r-0 s-12 col-md-6"
+                        autocomplete="off" />
+                </div>
+
+                <div class="form-group mb-1">
+                    <label for="nilai_kontrak" class="col-form-label s-12 col-md-4">Nilai kontrak</label>
+                    <input type="text" name="nilai_kontrak[]" id="nilai_kontrak" placeholder=""
+                        class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group mb-1">
+                    <label for="ppn" class="col-form-label s-12 col-md-4">PPN</label>
+                    <input type="text" name="ppn[]" id="ppn" placeholder="" class="form-control  r-0 s-12 col-md-6"
+                        autocomplete="off" />
+                </div>
+
+                <div class="form-group mb-1">
+                    <label for="nilai_kontrak_exc_ppn" class="col-form-label s-12 col-md-4">nilai Kontrak Exc Ppn</label>
+                    <input type="text" name="nilai_kontrak_exc_ppn[]" id="nilai_kontrak_exc_ppn" placeholder=""
+                        class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
+                </div>
+
+                <div class="form-group mb-1">
+                    <label for="pph" class="col-form-label s-12 col-md-4">PPH</label>
+                    <input type="text" name="pph[]" id="pph" placeholder="" class="form-control  r-0 s-12 col-md-6"
+                        autocomplete="off" />
+                </div>
+
+                <div class="form-group mb-1">
+                    <label for="nilai_kontrak_bersih" class="col-form-label s-12 col-md-4">Nilai Kontrak bersih</label>
+                    <input type="text" name="nilai_kontrak_bersih[]" id="nilai_kontrak_bersih" placeholder=""
+                        class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
+                </div>
+
+                <div class="form-group mb-1">
+                    <label for="nm_perusahaan" class="col-form-label s-12 col-md-4">Perusahaan</label>
+                    <input type="text" name="nm_perusahaan[]" id="nm_perusahaan" placeholder=""
+                        class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
+                </div>
+
+                <div class="form-group mb-1">
+                    <label for="jml_pendapatan" class="col-form-label s-12 col-md-4">Pendapatan</label>
+                    <input type="text" name="jml_pendapatan[]" id="jml_pendapatan" placeholder=""
+                        class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for=""></label>
+            <a class="btn-fab btn-fab-sm shadow btn-danger" style="" onclick="deleteFormPt(`+input_form_pt+`);">
+                <i class="icon-minus"></i>
+            </a>
+            <a class="btn-fab btn-fab-sm shadow btn-primary addBtnFrmPt" id="addBtnPt`+input_form_pt+`" onclick="addFormPt();">
+                <i class="icon-plus"></i>
+            </a>
+        </div>
+        </div>
+        `;
+        $('#input_form_pt').append(htmlAddPt);
+
+        $('.addBtnFrmPt').last().show();
+    }
+
+    function deleteFormPt(id){
+        $('.addBtnFrmPt').hide();
+        $('#input_form_pt'+id).remove();
+        $('.addBtnFrmPt').last().show();
     }
 </script>
 @endsection

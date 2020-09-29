@@ -48,23 +48,50 @@ class PendapatanAsetController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'tmjenis_aset_id'        => 'required',
-            'tmjenis_aset_rincian_id' => 'required',
-            'tahun'                   => 'required',
-            'tgl_pendapatan'          => 'required',
-            'nilai'                   => 'required',
-        ]);
 
-        foreach ($request->tahun as $key => $value) {
-            Tm_penghasilan_aset::create([
-                'tmjenis_aset_id'        => $request->tmjenis_aset_id,
-                'tmjenis_aset_rincian_id' => $request->tmjenis_aset_rincian_id,
-                'tahun'                   => $request->tahun[$key],
-                'tgl_pendapatan'          => $request->tgl_pendapatan[$key],
-                'nilai'                   => $request->nilai[$key],
+
+        if ($request->form_type == 1) {
+            $request->validate([
+                'tmjenis_aset_id'         => 'required',
+                'tmjenis_aset_rincian_id' => 'required',
+                'tahun'                   => 'required',
             ]);
+            foreach ($request->tahun as $key => $value) {
+                Tm_penghasilan_aset::create([
+                    'tmjenis_aset_id'        => $request->tmjenis_aset_id,
+                    'tmjenis_aset_rincian_id' => $request->tmjenis_aset_rincian_id,
+                    'tahun'                   => $request->tahun[$key],
+                    'tgl_pendapatan'          => $request->tgl_pendapatan[$key],
+                    'nilai'                   => $request->nilai[$key],
+                ]);
+            }
+        } else {
+            $request->validate([
+                'tmjenis_aset_id'         => 'required',
+                'tmjenis_aset_rincian_id' => 'required',
+                'no_index'                => 'required',
+            ]);
+            foreach ($request->no_index as $key => $value) {
+                Tm_penghasilan_aset::create([
+                    'tmjenis_aset_id'         => $request->tmjenis_aset_id,
+                    'tmjenis_aset_rincian_id' => $request->tmjenis_aset_rincian_id,
+                    'no_index'                => $request->no_index[$key],
+                    'jenis_doc'               => $request->jenis_doc[$key],
+                    'nm_pekerjaan'            => $request->nm_pekerjaan[$key],
+                    'klasifikasi'             => $request->klasifikasi[$key],
+                    'dinas'                   => $request->dinas[$key],
+                    'nilai_kontrak'           => $request->nilai_kontrak[$key],
+                    'ppn'                     => $request->ppn[$key],
+                    'nilai_kontrak_exc_ppn'   => $request->nilai_kontrak_exc_ppn[$key],
+                    'pph'                     => $request->pph[$key],
+                    'nilai_kontrak_bersih'    => $request->nilai_kontrak_bersih[$key],
+                    'nm_perusahaan'           => $request->nm_perusahaan[$key],
+                    'jml_pendapatan'          => $request->jml_pendapatan[$key]
+                ]);
+            }
         }
+
+
 
         return response()->json([
             'success' => 1,
@@ -166,8 +193,6 @@ class PendapatanAsetController extends Controller
 
         return Tmjenis_aset_rincian::where('tmjenis_aset_id', $id)->get();
     }
-
-
 
     public function getJenisAset($id)
     {
