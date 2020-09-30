@@ -25,6 +25,6 @@ class Tm_penghasilan_aset extends Model
 
     public function tmPenghasilanAsetPt()
     {
-        return $this->belongsTo(Tm_penghasilan_aset_pt::class, 'tm_penghasilan_aset_id');
+        return $this->hasMany(Tm_penghasilan_aset_pt::class);
     }
 }

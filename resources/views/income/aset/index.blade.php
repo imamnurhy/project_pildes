@@ -117,7 +117,7 @@
                                         <div class="form-group mb-1">
                                             <label for="tahun_e" class="col-form-label s-12 col-md-4">Tahun</label>
                                             <input type="text" name="tahun_e" id="tahun_e" placeholder=""
-                                                class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
+                                                class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
                                         </div>
 
                                         <div class="form-group mb-1">
@@ -125,22 +125,20 @@
                                                 Tgl Pendapatan
                                             </label>
                                             <input type="date" name="tgl_pendapatan_e" id="tgl_pendapatan_e"
-                                                placeholder="" class="form-control  r-0 s-12 col-md-8"
+                                                placeholder="" class="form-control  r-0 s-12 col-md-6"
                                                 autocomplete="off" />
                                         </div>
 
                                         <div class="form-group mb-1">
                                             <label for="nilai_e" class="col-form-label s-12 col-md-4"> Nilai </label>
                                             <input type="text" name="nilai_e" id="nilai_e" placeholder=""
-                                                class="form-control  r-0 s-12 col-md-8" autocomplete="off" />
+                                                class="form-control  r-0 s-12 col-md-6" autocomplete="off" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <div id="input_form_pt" style="display: none">
-                                        @include('income.aset._form_pt')
-                                    </div>
+                                    @include('income.aset._form_pt')
                                 </div>
 
 
@@ -223,10 +221,11 @@
     });
 
     function add() {
-        $('#form').trigger('reset');
         save_method = 'add';
+        $('#form').trigger('reset');
         $('#input_form').show();
         $('#input_form_edit').hide();
+        $('#edit_form_pt').hide();
     }
 
     $('#form').on('submit', function (e) {
@@ -279,19 +278,22 @@
         $('#reset').hide();
         $('#form input[name=_method]').val('PATCH');
         $('#span').removeAttr('hidden');
-        $('#input_form').hide();
+        $('#edit_form_pt').hide();
         $('#input_form_edit').show();
+
         $.ajax({
             url: "{{ route('pendapatan.aset.edit', ':id') }}".replace(':id', id),
             type: "GET",
-            dataType: "JSON",
             success: function (data) {
-                console.log(data.n_aset);
-                $('#formTitle').html("Edit Data  <a href='#' onclick='add()' class='btn btn-outline-primary btn-xs pull-right'>Batal</a>");
+                console.log(data);
+
+                $('#formTitle').html("Edit Data <a href='#' onclick='add()'class='btn btn-outline-primary btn-xs pull-right'>Batal</a>");
                 $('#form').show();
                 $('#id').val(data.id);
                 $('#tmjenis_aset_id').val(data.tmjenis_aset_id);
                 getRincianAset(data.tmjenis_aset_rincian_id);
+                $('#input_form').hide();
+                $('#input_form_pt').hide();
                 $('#tahun_e').val(data.tahun);
                 $('#tgl_pendapatan_e').val(data.tgl_pendapatan);
                 $('#nilai_e').val(data.nilai);
@@ -454,7 +456,7 @@
         });
     }
 
-     var input_form_pt = 1;
+    var input_form_pt = 1;
     function addFormPt(){
         $('.addBtnFrmPt').hide();
         input_form_pt++;

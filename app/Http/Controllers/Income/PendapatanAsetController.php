@@ -8,10 +8,12 @@ use App\Models\Tm_asset_kendaraan;
 use App\Models\Tmaset_barang;
 use App\Models\Tmaset_tanah;
 use App\Models\Tm_master_aset;
+use App\Models\Tm_penghasilan_aset_pt;
 use App\Models\Tmjenis_aset;
 use App\Models\Tmjenis_aset_rincian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Svg\Tag\Rect;
 use Yajra\DataTables\DataTables;
 
 class PendapatanAsetController extends Controller
@@ -108,7 +110,7 @@ class PendapatanAsetController extends Controller
      */
     public function edit($id)
     {
-        return Tm_penghasilan_aset::whereid($id)->with('tmMasterAset')->first();
+        return Tm_penghasilan_aset::whereid($id)->first();
     }
 
     /**
@@ -169,15 +171,20 @@ class PendapatanAsetController extends Controller
     {
         $tm_penghasillan_aset = Tm_penghasilan_aset::with('tmJenisAset', 'tmJenisAsetRincian')->get();
 
-        // dd($tm_penghasillan_aset);
-
         return DataTables::of($tm_penghasillan_aset)
+            ->editColumn('tm_jenis_aset.n_jenis_aset', function ($p) {
+                if ($p->tmjenis_aset_id == 29) {
+                    return "<a href='" . route('pendapatan.aset.showDetailPt', $p->id) . "'>" . $p->tmJenisAset->n_jenis_aset . "</a>";
+                } else {
+                    return $p->tmJenisAset->n_jenis_aset;
+                }
+            })
             ->addColumn('action', function ($p) {
                 $btnEdit = "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Merek'><i class='icon-pencil mr-1'></i></a>";
-                $btnRemove = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Merek'><i class='icon-remove'></i></a>";
+                $btnRemove = "</input><a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Merek'><i class='icon-remove'></i></a>";
                 return $btnEdit . $btnRemove;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['tm_jenis_aset.n_jenis_aset', 'action'])
             ->toJson();
     }
 
@@ -206,5 +213,69 @@ class PendapatanAsetController extends Controller
         } else if ($tmmaster_aset->tmJenisAset->kode == 'kendaraan') {
             return Tm_asset_kendaraan::select('merek as n_aset')->where('tmmaster_asset_id', $tmmaster_aset->id)->get();
         }
+    }
+
+
+    // Detail pt
+    public function showDetailPt($id)
+    {
+        return view('income.aset._detail_pt', compact('id'));
+    }
+
+    public function editDetailPt($id)
+    {
+        return Tm_penghasilan_aset_pt::find($id);
+    }
+
+    public function updateDetailPt(Request $request, $id)
+    {
+        $request->validate([
+            'no_index'                => 'required',
+            'jenis_doc'               => 'required',
+            'nm_pekerjaan'            => 'required',
+            'klasifikasi'             => 'required',
+            'dinas'                   => 'required',
+            'nilai_kontrak'           => 'required',
+            'ppn'                     => 'required',
+            'nilai_kontrak_exc_ppn'   => 'required',
+            'pph'                     => 'required',
+            'nilai_kontrak_bersih'    => 'required',
+            'nm_perusahaan'           => 'required',
+            'jml_pendapatan'          => 'required',
+        ]);
+
+        $tmPenghasilanAsetPt = Tm_penghasilan_aset_pt::find($id);
+        $tmPenghasilanAsetPt->update([
+            'no_index'                => $request->no_index,
+            'jenis_doc'               => $request->jenis_doc,
+            'nm_pekerjaan'            => $request->nm_pekerjaan,
+            'klasifikasi'             => $request->klasifikasi,
+            'dinas'                   => $request->dinas,
+            'nilai_kontrak'           => $request->nilai_kontrak,
+            'ppn'                     => $request->ppn,
+            'nilai_kontrak_exc_ppn'   => $request->nilai_kontrak_exc_ppn,
+            'pph'                     => $request->pph,
+            'nilai_kontrak_bersih'    => $request->nilai_kontrak_bersih,
+            'nm_perusahaan'           => $request->nm_perusahaan,
+            'jml_pendapatan'          => $request->jml_pendapatan
+        ]);
+
+        return response()->json([
+            'message' => 'Data berhasil diperbaharui.'
+        ]);
+    }
+
+    public function apiDetailPt($id)
+    {
+        $tmPenghasilanAsetPt = Tm_penghasilan_aset_pt::where('tm_penghasilan_aset_id', $id)->get();
+
+        return DataTables::of($tmPenghasilanAsetPt)
+            ->addColumn('action', function ($p) {
+                $btnEdit = "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Merek'><i class='icon-pencil mr-1'></i></a>";
+                $btnRemove = "</input><a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Merek'><i class='icon-remove'></i></a>";
+                return $btnEdit . $btnRemove;
+            })
+            ->rawColumns(['action'])
+            ->toJson();
     }
 }

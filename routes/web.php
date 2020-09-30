@@ -32,6 +32,10 @@ Route::prefix('pendapatan')->namespace('Income')->name('pendapatan.')->group(fun
     Route::get('aset/api', 'PendapatanAsetController@api')->name('aset.api');
     Route::get('aset/getJenisAset/{id}', 'PendapatanAsetController@getJenisAset')->name('aset.getJenisAset');
     Route::get('aset/getRincianAset/{id}', 'PendapatanAsetController@getRincianAset')->name('aset.getRincianAset');
+    Route::get('aset/showDetailPt/{id}', 'PendapatanAsetController@showDetailPt')->name('aset.showDetailPt');
+    Route::get('aset/apiDetailPt/{id}', 'PendapatanAsetController@apiDetailPt')->name('aset.apiDetailPt');
+    Route::get('aset/editDetailPt/{id}', 'PendapatanAsetController@editDetailPt')->name('aset.editDetailPt');
+    Route::patch('aset/updateDetailPt/{id}', 'PendapatanAsetController@updateDetailPt')->name('aset.updateDetailPt');
     Route::resource('aset', 'PendapatanAsetController');
 
     Route::get('rincianAset/api', 'PendapatanRincianAsetController@api')->name('rincianAset.api');
