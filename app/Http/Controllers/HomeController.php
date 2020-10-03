@@ -43,10 +43,10 @@ class HomeController extends Controller
     {
         $pelanggan = Pelanggan::with('layanan', 'tmPembayaran');
 
-        // if ($request->tgl_pembayaran != null) {
-        //     $pelanggan->whereDay('tgl_daftar', Carbon::parse($request->tgl_pembayaran)->format('d'));
-        //     $pelanggan->whereMonth('tgl_daftar', '!=', Carbon::parse($request->tgl_pembayaran)->format('m'));
-        // }
+        if ($request->tgl_pembayaran != null) {
+            $pelanggan->whereDay('tgl_daftar', Carbon::parse($request->tgl_pembayaran)->format('d'));
+            $pelanggan->whereMonth('tgl_daftar', '!=', Carbon::parse($request->tgl_pembayaran)->format('m'));
+        }
 
         if ($request->layanan_id != 99) {
             $pelanggan->where('layanan_id', $request->layanan_id);
