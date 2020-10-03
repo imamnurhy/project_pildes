@@ -120,13 +120,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group m-0">
-                    <label for="kelurahan_id" class="col-form-label s-12 col-md-4">Kelurahan</label>
-                    <select name="kelurahan_id" id="kelurahan_id" placeholder=""
-                        class="form-control r-0 light s-12 col-md-8" required>
-                        <option value="">Pilih</option>
-                    </select>
-                </div>
+
                 <div class="form-group m-0">
                     <label for="kabupaten_id" class="col-form-label s-12 col-md-4">Kabupaten</label>
                     <select name="kabupaten_id" id="kabupaten_id" placeholder=""
@@ -138,6 +132,13 @@
                     <label for="kecamatan_id" class="col-form-label s-12 col-md-4">Kecamatan</label>
                     <select name="kecamatan_id" id="kecamatan_id" placeholder=""
                         class="form-control r-0 light s-12 col-md-8" onchange="getKelurahan()" required>
+                        <option value="">Pilih</option>
+                    </select>
+                </div>
+                <div class="form-group m-0">
+                    <label for="kelurahan_id" class="col-form-label s-12 col-md-4">Kelurahan</label>
+                    <select name="kelurahan_id" id="kelurahan_id" placeholder=""
+                        class="form-control r-0 light s-12 col-md-8" required>
                         <option value="">Pilih</option>
                     </select>
                 </div>

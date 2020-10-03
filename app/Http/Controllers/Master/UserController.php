@@ -157,7 +157,7 @@ class UserController extends Controller
         $pegawai = Pegawai::findOrFail($pegawai_id);
         if ($pegawai->user_id == 0) {
             $user = User::updateOrCreate([
-                'username' => $pegawai->nip,
+                'username' => $pegawai->n_pegawai,
                 'password' => bcrypt('123456'),
                 'lastlogin' => '',
                 'status' => 1
