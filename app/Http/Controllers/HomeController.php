@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tmasets;
-use App\Models\Tmjenis_aset;
+use App\Models\Layanan;
+use App\Models\Pelanggan;
+use App\Models\Tm_pembayaran;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Models\Tmlelang;
-use App\Models\Tmmerk;
-use App\Models\Tmopd_aset;
-use App\Models\Tmpelamar;
+use Yajra\DataTables\DataTables;
 
 class HomeController extends Controller
 {
@@ -29,11 +28,93 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $tmmerk = Tmmerk::all()->count();
-        $tmjenis_aset = Tmjenis_aset::all()->count();
-        $tmaset = Tmasets::all()->count();
-        $tmopd_aset = Tmopd_aset::all()->count();
+        $layanan = Layanan::all();
+        $ttl_layanan = $layanan->count();
+        $ttl_pelanggan = Pelanggan::count();
 
-        return view('home', compact('tmmerk', 'tmjenis_aset', 'tmaset', 'tmopd_aset'));
+        return view('home', compact(
+            'layanan',
+            'ttl_layanan',
+            'ttl_pelanggan'
+        ));
+    }
+
+    public function api(Request $request)
+    {
+        $pelanggan = Pelanggan::with('layanan', 'tmPembayaran');
+
+        // if ($request->tgl_pembayaran != null) {
+        //     $pelanggan->whereDay('tgl_daftar', Carbon::parse($request->tgl_pembayaran)->format('d'));
+        //     $pelanggan->whereMonth('tgl_daftar', '!=', Carbon::parse($request->tgl_pembayaran)->format('m'));
+        // }
+
+        if ($request->layanan_id != 99) {
+            $pelanggan->where('layanan_id', $request->layanan_id);
+        }
+
+        return DataTables::of($pelanggan)
+            ->editColumn('status', function ($p) use ($request) {
+                if ($p->tmPembayaran->count() > 0) {
+                    foreach ($p->tmPembayaran as $tmPembayaran) {
+                        if (Carbon::parse($tmPembayaran->tgl_bayar)->format('Y') == Carbon::parse($request->tgl_pembayaran)->format('Y') && Carbon::parse($tmPembayaran->tgl_bayar)->format('m') == Carbon::parse($request->tgl_pembayaran)->format('m')) {
+                            if ($tmPembayaran->status == 1) {
+                                return 'Lunas';
+                            } else {
+                                return 'Belum lunas';
+                            }
+                        } else {
+                            return 'Belum melakukan pembayaran pada bulan ini';
+                        }
+                    }
+                } else {
+                    return 'Belum melakukan pembayaran sama sekali';
+                }
+            })
+            ->editColumn('jml_bayar', function ($p) use ($request) {
+                if ($p->tmPembayaran->count() > 0) {
+                    foreach ($p->tmPembayaran as $tmPembayaran) {
+                        if (Carbon::parse($tmPembayaran->tgl_bayar)->format('Y') == Carbon::parse($request->tgl_pembayaran)->format('Y') && Carbon::parse($tmPembayaran->tgl_bayar)->format('m') == Carbon::parse($request->tgl_pembayaran)->format('m')) {
+                            return $tmPembayaran->jml_bayar;
+                        } else {
+                            return 0;
+                        }
+                    }
+                } else {
+                    return '-';
+                }
+            })
+            ->editColumn('tagihan', function ($p) use ($request) {
+                if ($p->tmPembayaran->count() > 0) {
+                    foreach ($p->tmPembayaran as $tmPembayaran) {
+                        if (Carbon::parse($tmPembayaran->tgl_bayar)->format('Y') == Carbon::parse($request->tgl_pembayaran)->format('Y') && Carbon::parse($tmPembayaran->tgl_bayar)->format('m') == Carbon::parse($request->tgl_pembayaran)->format('m')) {
+                            return $p->layanan->harga - $tmPembayaran->jml_bayar;
+                        } else {
+                            return 0;
+                        }
+                    }
+                } else {
+                    return '-';
+                }
+            })
+
+            ->addColumn('action', function ($p) {
+                return "<a onclick='paid(" . $p->id . ")' class='text-blue' title='Edit Layanan'><i class='icon-check-circle-o mr-1'></i></a>";
+            })
+            ->rawColumns(['status', 'jml_bayar', 'tagihan', 'action'])
+            ->toJson();
+    }
+
+    public function paid(Request $request)
+    {
+        $pelanggan = Pelanggan::where('id', $request->pelanggan_id)->with('layanan')->first();
+
+        Tm_pembayaran::create([
+            'pelanggan_id' => $request->pelanggan_id,
+            'tgl_bayar' => $request->tgl_pembayaran,
+            'jml_bayar' => $pelanggan->layanan->harga,
+            'status' => 1,
+        ]);
+
+        return response()->json(['message' => 'Pembayaran berhasil tersimpan']);
     }
 }

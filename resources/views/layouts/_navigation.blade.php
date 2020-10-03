@@ -13,27 +13,6 @@
             <i class="icon icon-users amber-text s-18"></i> <span>Pegawai</span>
         </a>
     </li>
-
-    <li class="treeview" id="menuConfig">
-        <a href="{{ route('pegawai.index') }}">
-            <i class="icon icon-settings2 s-18"></i> <span>Configurasi</span> <i
-                class="icon icon-angle-left s-18 pull-right"></i>
-        </a>
-        <ul class="treeview-menu">
-            <li>
-                <a href="{{ route('opd.index') }}">
-                    <i class="icon icon-building-o s-8"></i> <span>Pengguna</span>
-                </a>
-            </li>
-        </ul>
-        <ul class="treeview-menu">
-            <li>
-                <a href="{{ route('kategori.index') }}">
-                    <i class="icon icon-document-list blue-text s-8"></i> <span>Kategori</span>
-                </a>
-            </li>
-        </ul>
-    </li>
     @endcan
 
     @can('master-role')
@@ -50,70 +29,25 @@
     </li>
     @endcan
 
-    @can('master-jenisAset')
-    <li class="header light"><strong>JENIS ASET</strong></li>
+    @can('configurasi')
+    <li class="header light"><strong>CONFIGURASI</strong></li>
     <li>
-        <a href="{{ route('jenisAset.index')}}">
-            <i class="icon icon-document-text3 text-success s-18"></i> <span>Jenis</span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('rincianJenisAset.index')}}">
-            <i class="icon icon-branding_watermark amber-text s-18"></i> <span>Rincian Jenis</span>
+        <a href="{{ route('config.layanan.index')}}">
+            <i class="icon icon-notebook-list red-text s-18"></i> <span>Layanan</span>
         </a>
     </li>
     @endcan
 
-    @can('master-aset')
-    <li class="header light"><strong>ASSETS</strong></li>
+    @can('pelanggan')
+    <li class="header light"><strong>PELANGGAN</strong></li>
     <li>
-        <a href="{{ route('aset.masuk.index')}}">
-            <i class="icon icon-input blue-text s-18"></i> <span>Pendataan</span>
+        <a href="{{ route('pelanggan.index')}}">
+            <i class="icon icon-user-o blue-text s-18"></i> <span>Pelanggan</span>
         </a>
     </li>
     <li>
-        <a href="{{ route('aset.keluar.index')}}">
-            <i class="icon icon-arrow_back red-text s-18"></i><span>Pendistribusian</span>
-        </a>
-    </li>
-
-    <li>
-        <a href="#">
-            <i class="icon icon-report blue-text s-18"></i> <span>Laporan</span>
-        </a>
-    </li>
-    @endcan
-
-    @can('master-income')
-    <li class="header light"><strong>PENDAPATAN PEMILIK</strong></li>
-    <li>
-        <a href="{{ route('pendapatan.personal.index')}}">
-            <i class="icon icon-money-2 blue-text s-18"></i> <span>Pendapatan personal<span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('pendapatan.aset.index') }}">
-            <i class="icon icon-money-1 blue-text s-18"></i> <span>Pendapatan Aset</span>
-        </a>
-    </li>
-
-    <li>
-        <a href="{{ route('pendapatan.rincianAset.index')}}">
-            <i class="icon icon-money-1 blue-text s-18"></i> <span>Pendapatan Rincian Aset</span>
-        </a>
-    </li>
-    @endcan
-
-    @can('master-report')
-    <li class="header light"><strong>LAPORAN</strong></li>
-    <li>
-        <a href="{{ route('report.pemilik.index') }}">
-            <i class="icon icon-report blue-text s-18"></i> <span>Pendapatan Pemilik<span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('report.aset.index') }}">
-            <i class="icon icon-report blue-text s-18"></i> <span>Pendapatan Jenis Aset<span>
+        <a href="{{ route('pembayaran.index')}}">
+            <i class="icon  icon-payment red-text s-18"></i> <span>Pembayaran</span>
         </a>
     </li>
     @endcan

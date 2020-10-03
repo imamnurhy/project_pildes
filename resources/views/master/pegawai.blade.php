@@ -43,9 +43,7 @@
                                     <table id="pegawai-table" class="table table-striped" style="width:100%">
                                         <thead>
                                             <th width="30">No</th>
-                                            <th width="80px">NIP</th>
                                             <th>Nama</th>
-                                            <th width="100px">Pengguna</th>
                                             <th width="130px">Foto</th>
                                             <th width="120">Pengguna APP</th>
                                             <th width="40"></th>
@@ -77,13 +75,6 @@
         <div class="form-row form-inline" style="align-items: baseline">
             <div class="col-md-6">
                 <div class="form-group m-0">
-                    <label for="nik" class="col-form-label s-12 col-md-4">NIK</label>
-                    <input type="text" name="nik" id="nik" placeholder="" class="form-control r-0 light s-12 col-md-6"
-                        autocomplete="off" required />
-                    <a href="#" class="btn btn-xs col-md-2" onclick="getNik()" id="getNik"><i class="icon-search"></i>
-                        Cari</a>
-                </div>
-                <div class="form-group m-0">
                     <label for="n_pegawai" class="col-form-label s-12 col-md-4">Nama</label>
                     <input type="text" name="n_pegawai" id="n_pegawai" placeholder=""
                         class="form-control r-0 light s-12 col-md-8" autocomplete="off" required />
@@ -113,6 +104,13 @@
                         class="form-control r-0 light s-12 col-md-8" autocomplete="off" required />
                 </div>
                 <div class="form-group m-0">
+                    <label for="telp" class="col-form-label s-12 col-md-4">Telp</label>
+                    <input type="text" name="telp" id="telp" placeholder="" class="form-control r-0 light s-12 col-md-8"
+                        autocomplete="off" required />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group m-0">
                     <label for="provinsi_id" class="col-form-label s-12 col-md-4">Provinsi</label>
                     <select name="provinsi_id" id="provinsi_id" placeholder=""
                         class="form-control r-0 light s-12 col-md-8" onchange="getKabupaten()" required>
@@ -120,6 +118,13 @@
                         @foreach($provinsis as $key=>$provinsi)
                         <option value="{{ $provinsi->id }}">{{ $provinsi->n_provinsi }}</option>
                         @endforeach
+                    </select>
+                </div>
+                <div class="form-group m-0">
+                    <label for="kelurahan_id" class="col-form-label s-12 col-md-4">Kelurahan</label>
+                    <select name="kelurahan_id" id="kelurahan_id" placeholder=""
+                        class="form-control r-0 light s-12 col-md-8" required>
+                        <option value="">Pilih</option>
                     </select>
                 </div>
                 <div class="form-group m-0">
@@ -137,38 +142,9 @@
                     </select>
                 </div>
                 <div class="form-group m-0">
-                    <label for="kelurahan_id" class="col-form-label s-12 col-md-4">Kelurahan</label>
-                    <select name="kelurahan_id" id="kelurahan_id" placeholder=""
-                        class="form-control r-0 light s-12 col-md-8" required>
-                        <option value="">Pilih</option>
-                    </select>
-                </div>
-                <div class="form-group m-0">
                     <label for="alamat" class="col-form-label s-12 col-md-4">Alamat</label>
                     <textarea name="alamat" id="alamat" placeholder="" class="form-control r-0 light s-12 col-md-8"
                         required></textarea>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group m-0">
-                    <label for="nip" class="col-form-label s-12 col-md-4">NIP</label>
-                    <input type="text" name="nip" id="nip" placeholder="" class="form-control r-0 light s-12 col-md-8"
-                        autocomplete="off" required />
-                </div>
-                <div class="form-group m-0">
-                    <label for="telp" class="col-form-label s-12 col-md-4">Telp</label>
-                    <input type="text" name="telp" id="telp" placeholder="" class="form-control r-0 light s-12 col-md-8"
-                        autocomplete="off" required />
-                </div>
-                <div class="form-group m-0">
-                    <label for="tmopd_id" class="col-form-label s-12 col-md-4">Pengguna</label>
-                    <select name="tmopd_id" id="tmopd_id" placeholder="" class="form-control r-0 light s-12 col-md-8"
-                        required>
-                        <option value="">Pilih</option>
-                        @foreach($tmopds as $key=>$tmopd)
-                        <option value="{{ $tmopd->id }}">{{ $tmopd->n_lokasi }}</option>
-                        @endforeach
-                    </select>
                 </div>
                 <div class="card-body offset-md-3">
                     <button type="submit" class="btn btn-primary btn-sm" id="action" title="Simpan data"><i
@@ -221,9 +197,7 @@
         ajax: "{{ route('api.pegawai') }}",
         columns: [
             {data: 'id', name: 'id', orderable: false, searchable: false, className: 'text-center'},
-            {data: 'nip', name: 'nip'},
             {data: 'n_pegawai', name: 'n_pegawai'},
-            {data: 'tmopds.n_lokasi', name: 'n_lokasi'},
             {data: 'foto', name: 'foto', orderable: false, searchable: false, className: 'text-center'},
             {data: 'user_id', name: 'user_id'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
@@ -252,7 +226,7 @@
         save_method = 'edit';
         var id = id;
         $('#alert').html('');
-        // $('#form').trigger('reset');
+        $('#form').trigger('reset');
         $('#formTitle').html("Edit Data");
         $('#txtAction').html(" Perubahan");
         $('#reset').hide();
@@ -266,16 +240,10 @@
                 getWilayah(data);
                 data = data.pegawai;
                 $('#id').val(data.id);
-                $('#nip').val(data.nip).focus();
+
                 $('#n_pegawai').val(data.n_pegawai);
                 $('#telp').val(data.telp);
                 $('#alamat').val(data.alamat);
-                if($('#opd_id').val() == data.opd_id){
-                    $('#unitkerja_id').val(data.unitkerja_id);
-                }else{
-                    $('#opd_id').val(data.opd_id);
-                    changeOpd(data.unitkerja_id);
-                }
                 $('#nik').val(data.nik);
                 $('#t_lahir').val(data.t_lahir);
                 $('#d_lahir').val(data.d_lahir);
@@ -413,67 +381,6 @@
             backgroundDismiss: true,
         });
     });
-
-    $('#opd_id').change(function(){
-        if($(this).val() == ''){
-            option = "<option value=''>Pilih</option>";
-            $('#unitkerja_id').html(option);
-            $('#unitkerja_id').val();
-        }else{
-            changeOpd();
-        }
-    });
-
-    function changeOpd(id){
-        $('#unitkerja_id').html("<option value=''>Loading...</option>");
-        url = "{{ route('getUnitkerja.pegawai', ':id') }}".replace(':id', $('#opd_id').val());
-        $.get(url, function(data){
-            option = "<option value=''>Pilih</option>";
-            $.each(data, function( index, value ) {
-                option += "<option value='" + value.id + "'>" + value.n_unitkerja +"</li>";
-            });
-            $('#unitkerja_id').html(option);
-        }, 'JSON').done(function(){
-            $('#unitkerja_id').val(id);
-        });
-    }
-
-    function getNik(){
-        $('#getNik').addClass('disabled');
-        var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        $.ajax({
-            url : "{{ route('pegawai.getNik') }}",
-            type : "POST",
-            dataType : "JSON",
-            data : {'_method' : 'POST', '_token' : csrf_token, 'nik' : $('#nik').val()},
-            success : function(data) {
-                $('#alert').html('');
-                $('#n_pegawai').val(data.NAMA_LGKP);
-                $('#t_lahir').val(data.TMPT_LHR);
-                $('#d_lahir').val(data.TGL_LHR);
-                $('#jk').val(data.JENIS_KLMIN);
-                $('#pekerjaan').val(data.JENIS_PKRJN);
-                $('#alamat').val(data.ALAMAT + ' RT. ' + data.NO_RT + ' RW. ' + data.NO_RW);
-                getWilayah(data);
-
-                    //--- Error Wilayah
-                if(data.msg_err != ''){
-                    $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Aplikasi tidak dapat menemukan! </strong> " + data.msg_err + "<br/>Silahkan lakukan pembaharuan data wilayah tersebut.</div>");
-                }
-                $('#getNik').removeClass('disabled');
-                $('#nip').focus();
-            },
-            error : function(data){
-                $('#getNik').removeClass('disabled');
-                err = '';
-                respon = data.responseJSON;
-                $.each(respon.errors, function( index, value ) {
-                    err = err + "<li>" + value +"</li>";
-                });
-                $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
-            }
-        });
-    }
 
     function getKabupaten(id){
         val = $('#provinsi_id').val();

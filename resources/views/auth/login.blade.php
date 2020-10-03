@@ -61,7 +61,7 @@
                 <div class="col-lg-6 p-t-100">
                     <div class="text-white">
                         <h1>Selamat Datang</h1>
-                        <p class="s-18 p-t-b-20 font-weight-lighter">Di Aplikasi Assets </p>
+                        <p class="s-18 p-t-b-20 font-weight-lighter">Admin BCNetwork </p>
                     </div>
                     <form method="POST" action="{{ route('login') }}" autocomplete="off">
                         @csrf
