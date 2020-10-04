@@ -35,7 +35,8 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4 pr-0">
+                                <div class="col-md-6 pr-0 row">
+                                    <label class="col-form-label s-12 col-md-4">Tgl Daftar</label>
                                     <div class="bg-light" width="100%">
                                         <input type="text" id="tgl_daftar_filter"
                                             class="form-control r-0 light s-12 col-md-12" autocomplete="off" />
