@@ -23,6 +23,7 @@
         <div class="tab-content pb-3" id="v-pills-tabContent">
             <div class="tab-pane animated fadeInUpShort show active" id="v-pills-1">
 
+                {{-- Count --}}
                 <div class="row my-3">
 
                     <div class="col-md-3">
@@ -35,8 +36,9 @@
                                 <h5 class="sc-counter mt-3">{{ $ttl_layanan }}</h5>
                             </div>
                             <div class="progress progress-xs r-0">
-                                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
-                                    aria-valuemin="0" aria-valuemax="{{ $ttl_layanan }}"></div>
+                                <div class="progress-bar" role="progressbar" style="width: {{ $ttl_layanan }}%;"
+                                    aria-valuenow="{{ $ttl_layanan }}" aria-valuemin="0"
+                                    aria-valuemax="{{ $ttl_layanan }}"></div>
                             </div>
                         </div>
                     </div>
@@ -51,8 +53,9 @@
                                 <h5 class="sc-counter mt-3">{{ $ttl_pelanggan }}</h5>
                             </div>
                             <div class="progress progress-xs r-0">
-                                <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="25"
-                                    aria-valuemin="0" aria-valuemax="{{ $ttl_pelanggan }}"></div>
+                                <div class="progress-bar" role="progressbar" style="width: {{ $ttl_layanan }}%;"
+                                    aria-valuenow="{{ $ttl_layanan }}" aria-valuemin="0"
+                                    aria-valuemax="{{ $ttl_pelanggan }}"></div>
                             </div>
                         </div>
                     </div>
@@ -63,12 +66,13 @@
                                 <div class="float-right">
                                     <span class="icon icon-stop-watch3 s-48"></span>
                                 </div>
-                                <div class="counter-title">Support Requests</div>
-                                <h5 class="sc-counter mt-3">1228</h5>
+                                <div class="counter-title">Waiting List</div>
+                                <h5 class="sc-counter mt-3">{{ $ttl_registrasi }}</h5>
                             </div>
                             <div class="progress progress-xs r-0">
-                                <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="25"
-                                    aria-valuemin="0" aria-valuemax="128"></div>
+                                <div class="progress-bar" role="progressbar" style="width: {{ $ttl_layanan }}%;"
+                                    aria-valuenow="{{ $ttl_layanan }}" aria-valuemin="0"
+                                    aria-valuemax="{{ $ttl_registrasi }}"></div>
                             </div>
                         </div>
                     </div>
@@ -90,6 +94,7 @@
                     </div>
                 </div>
 
+                {{-- Filter --}}
                 <div class="row mt-1">
                     <div class="col-md-12">
                         <div class="white p-2 r-5">
@@ -141,6 +146,7 @@
                     </div>
                 </div>
 
+                {{-- Table --}}
                 <div class="row mt-1">
                     <div class="col-md-12">
                         <div class="white p-2 r-2">
@@ -173,6 +179,7 @@
                     </div>
                 </div>
 
+                {{-- Statistik --}}
                 <div class="row mt-2">
                     <div class="col-md-12">
                         <div class="white p-5 r-5">

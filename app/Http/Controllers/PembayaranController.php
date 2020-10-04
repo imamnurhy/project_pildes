@@ -28,14 +28,21 @@ class PembayaranController extends Controller
      */
     public function store(Request $request)
     {
+        $pelanggan = Pelanggan::with('layanan')->whereid($request->pelanggan_id)->first();
         $request->validate([
             'pelanggan_id' => 'required',
             'tgl_bayar'    => 'required',
-            'jml_bayar'    => 'required',
             'status'       => 'required'
         ]);
 
-        Tm_pembayaran::create($request->all());
+        // dd($pelanggan->layanan->harga);
+
+        Tm_pembayaran::create([
+            'pelanggan_id' => $request->pelanggan_id,
+            'tgl_bayar'    => $request->tgl_bayar,
+            'jml_bayar'    => $pelanggan->layanan->harga,
+            'status'       => $request->status,
+        ]);
 
         return response()->json(['message' => 'Pembayaran berhasil tersimpan']);
     }
@@ -63,7 +70,6 @@ class PembayaranController extends Controller
         $request->validate([
             'pelanggan_id' => 'required',
             'tgl_bayar'    => 'required',
-            'jml_bayar'    => 'required',
             'status'       => 'required'
         ]);
 

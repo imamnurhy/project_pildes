@@ -50,5 +50,10 @@
             <i class="icon  icon-payment red-text s-18"></i> <span>Pembayaran</span>
         </a>
     </li>
+    <li>
+        <a href="{{ route('registrasi.index')}}">
+            <i class="icon  icon-notebook-list red-text s-18"></i> <span>Waiting list</span>
+        </a>
+    </li>
     @endcan
 </ul>

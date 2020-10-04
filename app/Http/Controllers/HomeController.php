@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Layanan;
 use App\Models\Pelanggan;
+use App\Models\Registrasi;
 use App\Models\Tm_pembayaran;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,11 +32,13 @@ class HomeController extends Controller
         $layanan = Layanan::all();
         $ttl_layanan = $layanan->count();
         $ttl_pelanggan = Pelanggan::count();
+        $ttl_registrasi = Registrasi::where('status', 0)->count();
 
         return view('home', compact(
             'layanan',
             'ttl_layanan',
-            'ttl_pelanggan'
+            'ttl_pelanggan',
+            'ttl_registrasi'
         ));
     }
 

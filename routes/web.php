@@ -68,4 +68,7 @@ Route::middleware('permission:pelanggan')->group(function () {
 
     Route::get('pembayaran/api', 'PembayaranController@api')->name('pembayaran.api');
     Route::resource('pembayaran', 'PembayaranController');
+
+    Route::get('registrasi/api', 'RegistrasiController@api')->name('registrasi.api');
+    Route::resource('registrasi', 'RegistrasiController');
 });
