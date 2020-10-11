@@ -71,7 +71,7 @@
                                     <th width="30">No</th>
                                     <th>Pelanggan</th>
                                     <th>No hp</th>
-                                    <th>Tgl daftar</th>
+                                    <th width="15%">Tgl daftar</th>
                                     <th>Tgl pemasangan</th>
                                     <th>Alamat</th>
                                     <th>Status pemasangan</th>
@@ -106,6 +106,7 @@
 
                                     <div class="form-group m-0">
                                         <label for="status" class="col-form-label s-12 col-md-4">Status</label>
+
                                         <select name="status" id="status"
                                             class="form-control r-0 light s-12 col-md-6 custom-select select " required>
                                             <option value="">Plih</option>
@@ -172,7 +173,7 @@
             },
             {
                 data: 'tgl_daftar',
-                name: 'tgl_daftar'
+                name: 'tgl_daftar',
             },
             {
                 data: 'tgl_pemasangan',
@@ -188,8 +189,10 @@
                 render: function(data){
                     if(data == 0){
                         return 'Tidak';
-                    } else {
+                    } else if(data == 1) {
                         return 'Ya';
+                    } else {
+                        return '-';
                     }
                 }
             },

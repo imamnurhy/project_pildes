@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Date;
 use App\Models\Pelanggan;
 use App\Models\Tm_pembayaran;
 use Illuminate\Http\Request;
@@ -17,7 +18,8 @@ class PembayaranController extends Controller
     public function index()
     {
         $pelanggan = Pelanggan::all();
-        return view('pembayaran.index', compact('pelanggan'));
+        $months = Date::month();
+        return view('pembayaran.index', compact('pelanggan', 'months'));
     }
 
     /**
@@ -92,9 +94,21 @@ class PembayaranController extends Controller
         return response()->json(['message' => 'Pembayaran berhasil dihapus']);
     }
 
-    public function api()
+    public function api(Request $request)
     {
-        $tm_pembayaran = Tm_pembayaran::with('pelanggan')->get();
+        $tm_pembayaran = Tm_pembayaran::with('pelanggan');
+
+        if ($request->thn_pembayaran != '99') {
+            $tm_pembayaran->whereYear('tgl_bayar', $request->thn_pembayaran);
+        }
+
+        if ($request->bln_pembayaran != '99') {
+            $tm_pembayaran->whereMonth('tgl_bayar', $request->bln_pembayaran);
+        }
+
+        if ($request->status_pembayaran != '99') {
+            $tm_pembayaran->where('status', $request->status_pembayaran);
+        }
 
         return DataTables::of($tm_pembayaran)
             ->addColumn('action', function ($p) {

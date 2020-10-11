@@ -25,6 +25,69 @@
 
             <div class="col-md-8">
                 <div class="card no-b">
+
+
+                    <div class="formFilter">
+                        <div class="card-body">
+                            <form id="formFilter">
+                                <div class="row col-md-12">
+
+                                    <div class="col-md-2 pr-0">
+                                        <div class="mt-1">
+                                            <strong><i class="icon-filter"></i>FILTER</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 pr-0">
+                                        <div class="bg-light" width="100%">
+                                            <select name="thn_pembayaran" id="thn_pembayaran" placeholder="Semua"
+                                                class="form-control r-0 light s-12 col-md-12 custom-select"
+                                                autocomplete="off">
+                                                <option value="99">Tahun : Semua</option>
+                                                <option value="2019">2019</option>
+                                                <option value="2020">2020</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 pr-0">
+                                        <div class="bg-light" width="100%">
+                                            <select name="bln_pembayaran" id="bln_pembayaran" placeholder="Semua"
+                                                class="form-control r-0 light s-12 col-md-12 custom-select select"
+                                                autocomplete="off">
+                                                <option value="99">Bulan : Semua</option>
+                                                @foreach ($months as $key => $month)
+                                                <option value="{{ $key }}">{{ $month }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 pr-0">
+                                        <div class="bg-light" width="100%">
+                                            <select name="status_pembayaran" id="status_pembayaran" placeholder="Semua"
+                                                class="form-control r-0 light s-12 col-md-12 custom-select select"
+                                                autocomplete="off">
+                                                <option value="99">Status : Semua</option>
+                                                <option value="1">Lunas</option>
+                                                <option value="0">Belum lunas</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-1">
+                                        <a class="btn btn-sm" id="btnFilter" title="Reset Filter" style="display:none"
+                                            onclick="reset()">Reset</a>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="pembayaran-table" class="table table-striped" style="width:100%">
@@ -37,6 +100,11 @@
                                     <th width="60"></th>
                                 </thead>
                                 <tbody></tbody>
+                                <tfoot>
+                                    <th colspan="2"></th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -119,7 +187,14 @@
         processing: true,
         serverSide: true,
         order: [ 1, 'asc' ],
-        ajax: "{{ route('pembayaran.api') }}",
+        ajax: {
+            url: "{{ route('pembayaran.api') }}",
+            data : function(data){
+                data.thn_pembayaran = $('#thn_pembayaran').val();
+                data.bln_pembayaran = $('#bln_pembayaran').val();
+                data.status_pembayaran = $('#status_pembayaran').val();
+            }
+        },
         columns: [
             {
                 data: 'id',
@@ -162,7 +237,19 @@
                 searchable: false,
                 className: 'text-center'
             }
-        ]
+        ],
+        drawCallback: function (data) {
+            var api = this.api();
+            total = api
+                .column(3)
+                .data()
+                .reduce(function (a, b) {
+                    return parseInt(a) + parseInt(b);
+                }, 0);
+            var numFormat = $.fn.dataTable.render.number( '\,', '.', 2, 'Rp ' ).display;
+            $(api.column(3).footer()).html(numFormat(total));
+
+        }
     });
 
     table.on('draw.dt', function () {
@@ -285,6 +372,24 @@
                 }
             }
         });
+    }
+
+    $('#thn_pembayaran, #bln_pembayaran, #status_pembayaran').on('change', function () {
+        if ($(this).val() == '99') {
+            $('.formFilter').removeClass('active');
+            $('#btnFilter').hide();
+        } else {
+            $('.formFilter').addClass('active');
+            $('#btnFilter').show();
+        }
+        table.api().draw();
+    });
+
+    function reset() {
+        $('#formFilter').trigger('reset');
+        $('.formFilter').removeClass('active');
+        $('#btnFilter').hide();
+        table.api().draw();
     }
 </script>
 @endsection

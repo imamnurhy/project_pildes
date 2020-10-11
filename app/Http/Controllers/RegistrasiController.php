@@ -85,6 +85,9 @@ class RegistrasiController extends Controller
 
 
         return DataTables::of($registrasi)
+            ->editColumn('tgl_daftar', function ($p) {
+                return Carbon::parse($p->tgl_daftar)->format('Y-m-d');
+            })
             ->addColumn('action', function ($p) {
                 $btnEdit = "<a onclick='edit(" . $p->id . ")' class='text-blue' title='Edit Layanan'><i class='icon-pencil mr-1'></i></a>";
                 $btnRemove = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus layanan'><i class='icon-remove'></i></a>";

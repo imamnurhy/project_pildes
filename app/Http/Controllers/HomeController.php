@@ -101,7 +101,17 @@ class HomeController extends Controller
             })
 
             ->addColumn('action', function ($p) {
-                return "<a onclick='paid(" . $p->id . ")' class='text-blue' title='Edit Layanan'><i class='icon-check-circle-o mr-1'></i></a>";
+                if ($p->tmPembayaran->count() > 0) {
+                    foreach ($p->tmPembayaran as $tmPembayaran) {
+                        if ($tmPembayaran->status == 1) {
+                            return "<a title='Pembayaran succes'><i class='icon-check-circle-o mr-1'></i></a>";
+                        } else {
+                            return "<a onclick='paid(" . $p->id . ")' class='text-blue' title='Bayar'><i class='icon-check-circle-o mr-1'></i></a>";
+                        }
+                    }
+                } else {
+                    return "<a onclick='paid(" . $p->id . ")' class='text-blue' title='Bayar'><i class='icon-check-circle-o mr-1'></i></a>";
+                }
             })
             ->rawColumns(['status', 'jml_bayar', 'tagihan', 'action'])
             ->toJson();
