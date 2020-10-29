@@ -150,6 +150,11 @@
                                 <h1 class="nav-title text-white">Login Sebagai {{ Auth::user()->pegawai->n_pegawai }}
                                 </h1>
                             </div>
+                            @else
+                            <div class="d-none d-md-block">
+                                <h1 class="nav-title text-white">Login Sebagai {{ Auth::user()->username }}
+                                </h1>
+                            </div>
                             @endif
 
                         </div>

@@ -3,16 +3,14 @@
 use Illuminate\Support\Facades\Route;
 
 
-// Route::get('/', function () {
-//     return redirect('login');
-// });
+Route::get('/', function () {
+    return redirect('login');
+});
 
 Auth::routes();
 
 Route::prefix('home')->group(function () {
     Route::get('/', 'HomeController@index')->name('home');
-    Route::get('api', 'HomeController@api')->name('home.api');
-    Route::post('paid', 'HomeController@paid')->name('home.paid');
 });
 
 Route::prefix('account')->group(function () {
@@ -31,7 +29,6 @@ Route::namespace('Master')->middleware('permission:master-pegawai')->group(funct
     Route::get('pegawai/{provinsi_id}/getKabupaten', 'PegawaiController@getKabupaten')->name('pegawai.getKabupaten');
     Route::get('pegawai/{kabupaten_id}/getKecamatan', 'PegawaiController@getKecamatan')->name('pegawai.getKecamatan');
     Route::get('pegawai/{kecamatan_id}/getKelurahan', 'PegawaiController@getKelurahan')->name('pegawai.getKelurahan');
-    Route::patch('pegawai/{id}/updateFoto', 'PegawaiController@updateFoto')->name('pegawai.updateFoto');
 
     Route::resource('user', 'UserController');
     Route::get('api/user', 'UserController@api')->name('api.user');
@@ -54,20 +51,9 @@ Route::namespace('Master')->middleware('permission:master-role')->group(function
     Route::get('api/permission', 'PermissionController@api')->name('api.permission');
 });
 
-/* CONFIGURASI */
-Route::name('config.')->middleware('permission:configurasi')->group(function () {
-    Route::get('layanan/api', 'LayananController@api')->name('layanan.api');
-    Route::resource('layanan', 'LayananController');
-});
-
-/* PELANGGAN */
-Route::middleware('permission:pelanggan')->group(function () {
-    Route::get('pelanggan/api', 'PelangganController@api')->name('pelanggan.api');
-    Route::resource('pelanggan', 'PelangganController');
-
-    Route::get('pembayaran/api', 'PembayaranController@api')->name('pembayaran.api');
-    Route::resource('pembayaran', 'PembayaranController');
-
-    Route::get('registrasi/api', 'RegistrasiController@api')->name('registrasi.api');
-    Route::resource('registrasi', 'RegistrasiController');
+/* MASTER OPRATOR */
+Route::namespace('Operator')->middleware('permission:master-operator')->group(function () {
+    Route::get('pemlih/api', 'PemilihController@api')->name('pemilih.api');
+    Route::get('pemlih', 'PemilihController@cetakUndangan')->name('pemilih.cetakUndangan');
+    Route::resource('pemilih', 'PemilihController');
 });

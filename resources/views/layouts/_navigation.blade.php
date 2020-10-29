@@ -29,31 +29,15 @@
     </li>
     @endcan
 
-    @can('configurasi')
-    <li class="header light"><strong>CONFIGURASI</strong></li>
+
+    @can('master-operator')
+    <li class="header light"><strong>MASTER OPRATOR</strong></li>
     <li>
-        <a href="{{ route('config.layanan.index')}}">
-            <i class="icon icon-notebook-list red-text s-18"></i> <span>Layanan</span>
+        <a href="{{ route('pemilih.index') }}">
+            <i class="icon icon-users green-text s-18"></i> <span>Pemilih</span>
         </a>
     </li>
+
     @endcan
 
-    @can('pelanggan')
-    <li class="header light"><strong>PELANGGAN</strong></li>
-    <li>
-        <a href="{{ route('pelanggan.index')}}">
-            <i class="icon icon-user-o blue-text s-18"></i> <span>Pelanggan</span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('pembayaran.index')}}">
-            <i class="icon  icon-payment red-text s-18"></i> <span>Pembayaran</span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('registrasi.index')}}">
-            <i class="icon  icon-notebook-list red-text s-18"></i> <span>Waiting list</span>
-        </a>
-    </li>
-    @endcan
 </ul>

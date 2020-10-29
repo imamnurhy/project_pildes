@@ -40,13 +40,15 @@ class PegawaiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'nik'          => 'required|min:16|max:16|unique:pegawais,nik',
             'n_pegawai'    => 'required',
             'telp'         => 'required|string|min:10|max:14|unique:pegawais,telp',
             'alamat'       => 'required',
             't_lahir'      => 'required',
             'd_lahir'      => 'required',
             'jk'           => 'required',
-            'pekerjaan'    => 'required',
+            'rt'           => 'required',
+            'rw'           => 'required',
             'kelurahan_id' => 'required',
         ]);
 
@@ -79,23 +81,22 @@ class PegawaiController extends Controller
             'kabupatens' => $kabupatens,
             'kecamatans' => $kecamatans,
             'kelurahans' => $kelurahans,
-            'tmopd_id' => $pegawai->tmopd_id
         ]);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nip' => 'required|string|min:18|max:18|unique:pegawais,nip,' . $id,
-            'n_pegawai' => 'required',
-            'telp' => 'required|string|min:10|max:14|unique:pegawais,telp,' . $id,
-            'nik' => 'required|string|min:16|max:16|unique:pegawais,nik,' . $id,
-            't_lahir' => 'required',
-            'd_lahir' => 'required',
-            'jk' => 'required',
-            'pekerjaan' => 'required',
+            'nik'          => 'required|min:16|max:16|unique:pegawais,nik' . $id,
+            'n_pegawai'    => 'required',
+            'telp'         => 'required|string|min:10|max:14|unique:pegawais,telp' . $id,
+            'alamat'       => 'required',
+            't_lahir'      => 'required',
+            'd_lahir'      => 'required',
+            'jk'           => 'required',
+            'rt'           => 'required',
+            'rw'           => 'required',
             'kelurahan_id' => 'required',
-            'alamat' => 'required',
         ]);
 
         $input = $request->all();
@@ -111,11 +112,6 @@ class PegawaiController extends Controller
     public function destroy($id)
     {
         $pegawai = Pegawai::findOrFail($id);
-        $lastFoto = $pegawai->foto;
-        if ($lastFoto != '') {
-            Storage::disk('sftp')->delete('foto/' . $lastFoto);
-        }
-
         User::destroy($pegawai->user_id);
         Pegawai::destroy($id);
         return response()->json([
@@ -135,20 +131,15 @@ class PegawaiController extends Controller
                     return "Ya <a href='" . route('user.edit', $p->user_id) . "' class='float-right' title='Edit akun user'><i class='icon-user'></i></a>";
                 }
             })
-            ->editColumn('foto', function ($p) {
-                if ($p->foto == "") {
-                    $img = "Tidak";
-                } else {
-                    $img = "<img src='" . 'http://103.219.112.114/asetgrup_storage/public/foto/' . $p->foto . "' alt='img' align='center' width='50%'/>";
-                }
-                return $img . "<br/><a onclick='editFoto(" . $p->id . ")' href='javascript:;' data-fancybox data-src='#formUpload' data-modal='true' title='Upload foto pegawai' class='btn btn-xs'>Unggah Foto <i class='icon-upload'></i></a>";
-            })
             ->addColumn('action', function ($p) {
                 return
-                    "<a onclick='edit(" . $p->id . ")' data-fancybox data-src='#formAdd' data-modal='true' href='javascript:;' title='Edit Pegawai'><i class='icon-pencil mr-1'></i></a>
+                    "<a  href='#' onclick='edit(" . $p->id . ")' title='Edit Pegawai'><i class='icon-pencil mr-1'></i></a>
                     <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Pegawai' id='del_" . $p->id . "'><i class='icon-remove'></i></a>";
             })
-            ->rawColumns(['foto', 'user_id', 'action'])
+            ->editColumn('rt_rw', function ($p) {
+                return $p->rt . ' / ' . $p->rw;
+            })
+            ->rawColumns(['user_id', 'action'])
             ->toJson();
     }
 
@@ -165,32 +156,5 @@ class PegawaiController extends Controller
     public function getKelurahan($kelurahan_id)
     {
         return Kelurahan::select('id', 'kode', 'n_kelurahan')->wherekecamatan_id($kelurahan_id)->get();
-    }
-
-    //--- Foto
-    public function updateFoto(Request $request, $id)
-    {
-        $request->validate([
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048'
-        ]);
-
-        // dd(config());
-
-        $pegawai = Pegawai::findOrFail($id);
-        $lastFoto = $pegawai->foto;
-        $foto = $request->file('foto');
-        $nameFoto = $pegawai->nip . '_' . rand() . '.' . $foto->getClientOriginalExtension();
-        $foto->storeAs('foto', $nameFoto, 'sftp', 'public');
-        $pegawai->foto = $nameFoto;
-        $pegawai->save();
-
-        if ($lastFoto != '') {
-            Storage::disk('sftp')->delete('foto/' . $lastFoto);
-        }
-
-        return response()->json([
-            'success'   => true,
-            'message' => $nameFoto
-        ]);
     }
 }
